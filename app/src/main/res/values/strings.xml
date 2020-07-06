@@ -1,3 +1,49 @@
-<resources>
-    <string name="app_name">eANMartAdmin</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">eANMart Admin</string>
+    <string name="app_version" tools:ignore="TypographyDashes">ev-1-01</string>
+    <string name="welcome_text">Welcome to <b>eAN Mart</b></string>
+    <string name="thank_you_order">Thank you for order from <i><b>eAN Mart</b></i> </string>
+
+    <string name="sample_heading">sample heading</string>
+    <string name="sample_name">Sample Mobile Name</string>
+    <string name="sample_price">Rs.599/-</string>
+    <string name="sample_off">15% Off</string>
+
+    <string name="sample_user_name">WackyCodes</string>
+    <string name="sample_email">wackycodes@gmail.com</string>
+    <string name="sample_mobile">+917999597410</string>
+    <string name="sample_address">Shop No.5, Ratnagiri Bypass</string>
+    <string name="sample_tag_line">\"We focus on quality not quantity.!\"</string>
+
+
+    <string name="navigation_Drawer_Open">Open Navigation Bar</string>
+    <string name="navigation_Drawer_close">Close Navigation Bar</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_order_text">You have not purchase anything till now from our
+        service.\n Please Do shopping</string>
+
+    <string-array name="city_list">
+        <item>Select City</item>
+        <item>Bhopal, M.P.</item>
+        <item>Indore, M.P.</item>
+    </string-array>
+
+    <string-array name="schedule_array">
+        <item>Today</item>
+        <item>Tomorrow</item>
+        <item>Daily</item>
+        <item>Within 3 days</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+        <item>Any Time</item>
+    </string-array>
+
+    <string-array name="banner_type">
+        <item>Banner Type</item>
+        <item>Link/Website Promotion</item>
+        <item>Shop Promotion</item>
+    </string-array>
+
+
 </resources>
