@@ -42,11 +42,13 @@ public class StaticValues {
     // Common Main Home Container...
     public static final int BANNER_SLIDER_LAYOUT_CONTAINER = 0;
     public static final int STRIP_AD_LAYOUT_CONTAINER = 1;
-    public static final int HORIZONTAL_ITEM_LAYOUT_CONTAINER = 2;
-    public static final int GRID_ITEM_LAYOUT_CONTAINER = 3;
-    public static final int BANNER_AD_LAYOUT_CONTAINER = 4;
-    public static final int CAT_ITEM_LAYOUT_CONTAINER = 5;
-    public static final int BANNER_SLIDER_CONTAINER_ITEM = 6;
+    public static final int CATEGORY_ITEMS_LAYOUT_CONTAINER = 3;
+    public static final int SHOP_ITEMS_LAYOUT_CONTAINER = 4;
+
+    public static final int GRID_PRODUCTS_LAYOUT_CONTAINNER = 5;
+    public static final int HORIZONTAL_PRODUCTS_LAYOUT_CONTAINER = 5;
+
+    public static final int BANNER_SLIDER_CONTAINER_ITEM = 20; // not stored in database...
 
     public static final int ADD_NEW_PRODUCT_ITEM = 7;
     public static final int ADD_NEW_STRIP_AD_LAYOUT = 8;

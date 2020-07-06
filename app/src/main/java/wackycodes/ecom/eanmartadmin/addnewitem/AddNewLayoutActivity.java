@@ -14,7 +14,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -48,6 +47,8 @@ import java.util.Map;
 
 import wackycodes.ecom.eanmartadmin.R;
 import wackycodes.ecom.eanmartadmin.UpdateImages;
+import wackycodes.ecom.eanmartadmin.category.ShopsViewActivity;
+import wackycodes.ecom.eanmartadmin.database.DBQuery;
 import wackycodes.ecom.eanmartadmin.other.CheckInternetConnection;
 import wackycodes.ecom.eanmartadmin.other.DialogsClass;
 import wackycodes.ecom.eanmartadmin.secondpage.BannerAndCatModel;
@@ -62,7 +63,7 @@ import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_SLIDER_CONT
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_SLIDER_LAYOUT_CONTAINER;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_CODE;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.GALLERY_CODE;
-import static wackycodes.ecom.eanmartadmin.other.StaticValues.GRID_ITEM_LAYOUT_CONTAINER;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.CATEGORY_ITEMS_LAYOUT_CONTAINER;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.READ_EXTERNAL_MEMORY_CODE;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.STRIP_AD_LAYOUT_CONTAINER;
 
@@ -118,10 +119,11 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
         isTaskIsUpdate = getIntent().getBooleanExtra( "TASK_UPDATE", false );
 
         if (isHomePage){
-            this.homePageList = SecondActivity.homePageList;
+            this.homePageList = DBQuery.homePageList;
         }else{
             // Assign Category List..
-
+            // TODO : ...
+            this.homePageList = DBQuery.categoryList.get( catIndex );
         }
 
         // Add New Banner in Slider....
@@ -152,7 +154,7 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
 
         switch (layoutType){
             case BANNER_SLIDER_LAYOUT_CONTAINER:
-            case GRID_ITEM_LAYOUT_CONTAINER:
+            case CATEGORY_ITEMS_LAYOUT_CONTAINER:
                 dialog.dismiss();
                 addNewLayout(layoutType);
                 break;
@@ -275,7 +277,6 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
     }
 
     public void setSpinnerList(){
-
         // Select Banner Type...
         ArrayAdapter<String> dataAdapter = new ArrayAdapter <String>(this,
                 android.R.layout.simple_spinner_item, getResources().getStringArray( R.array.banner_type ));
@@ -318,12 +319,12 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
         switch (type){
             case BANNER_SLIDER_LAYOUT_CONTAINER:           //-- 1
                 Map <String, Object> layoutMap = new HashMap <>();
-                layoutMap.put( "index", homePageList.size() );
-                layoutMap.put( "layout_id", layoutId);
-                layoutMap.put( "layout_bg", "#DADADA" );
-                layoutMap.put( "is_visible", false );
-                layoutMap.put( "no_of_banners", 0 );
-                layoutMap.put( "type", BANNER_SLIDER_LAYOUT_CONTAINER );
+                layoutMap.put( "index", homePageList.size() ); // int
+                layoutMap.put( "layout_id", layoutId); // String
+                layoutMap.put( "layout_bg", "#DADADA" ); // For sample
+                layoutMap.put( "is_visible", false ); // boolean
+                layoutMap.put( "no_of_banners", 0 ); // int
+                layoutMap.put( "type", BANNER_SLIDER_LAYOUT_CONTAINER ); // int
                 dialog.show();
                 uploadNewLayoutOnDatabase( layoutMap, BANNER_SLIDER_LAYOUT_CONTAINER, dialog );
                 break;
@@ -337,10 +338,10 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
                 int bannerNo =  homePageList.get( layoutIndex ).getBannerAndCatModelList().size();
 //                    bSliderItem.put( "index", layoutIndex );
                 bSliderItem.put( "layout_id", homePageList.get( layoutIndex ).getLayoutID() );
-                bSliderItem.put( "banner_"+ bannerNo, bannerImgLink );
-                bSliderItem.put( "banner_click_id_"+ bannerNo, bannerClickID );
-                bSliderItem.put( "banner_click_type_"+ bannerNo, bannerClickType );
-                bSliderItem.put( "delete_id_"+ bannerNo, "banner_"+fileCode );
+                bSliderItem.put( "banner_"+ bannerNo, bannerImgLink ); // String
+                bSliderItem.put( "banner_click_id_"+ bannerNo, bannerClickID ); // String
+                bSliderItem.put( "banner_click_type_"+ bannerNo, bannerClickType ); // int
+                bSliderItem.put( "delete_id_"+ bannerNo, "banner_"+fileCode ); // String
 //                    for (int bsInd = 1; bsInd <= bannerSliderModelList.size(); bsInd++){
 //                        bSliderItem.put( "banner_"+ bsInd, bannerSliderModelList.get( bsInd-1 ).getImageLink() );
 //                        bSliderItem.put( "banner_"+ bsInd + "_bg", "#20202f" );
@@ -364,8 +365,8 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
                 uploadNewLayoutOnDatabase( stripMap, STRIP_AD_LAYOUT_CONTAINER, dialog );
                 break;
 
-            case GRID_ITEM_LAYOUT_CONTAINER:            //-- 5
-//                    addNewHrGridLayout( GRID_ITEM_LAYOUT_CONTAINER );
+            case CATEGORY_ITEMS_LAYOUT_CONTAINER:            //-- 5
+//                    addNewHrGridLayout( CATEGORY_ITEMS_LAYOUT_CONTAINER );
                 break;
             default:
                 break;
@@ -448,11 +449,12 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
                                 dialog.dismiss();
                                 showToast( "Added Successfully..!" );
                                 if (isHomePage){
-                                    SecondActivity.homePageList = homePageList;
+                                    DBQuery.homePageList = homePageList;
                                     SecondActivity.homePageAdaptor.notifyDataSetChanged();
                                 }else{
                                     // Assign Category List..
-
+                                    DBQuery.categoryList.set( catIndex, homePageList );
+                                    ShopsViewActivity.shopsViewAdaptor.notifyDataSetChanged();
                                 }
                                 finish();
                             }else{

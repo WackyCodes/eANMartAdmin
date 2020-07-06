@@ -1,6 +1,7 @@
 package wackycodes.ecom.eanmartadmin.homepage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import wackycodes.ecom.eanmartadmin.R;
+import wackycodes.ecom.eanmartadmin.secondpage.SecondActivity;
 
 import static wackycodes.ecom.eanmartadmin.MainActivity.mainPageList;
 
@@ -54,9 +56,8 @@ public class MainActivityAdaopter extends BaseAdapter {
     }
 
     private void setOnClick(Context context, int ID){
-
-        Toast.makeText( context, "Code Not Found!", Toast.LENGTH_SHORT ).show();
-
+        Intent intent = new Intent( context, SecondActivity.class );
+        context.startActivity( intent );
     }
 
 

@@ -42,7 +42,7 @@ import wackycodes.ecom.eanmartadmin.secondpage.SecondActivity;
 import static wackycodes.ecom.eanmartadmin.database.DBQuery.firebaseFirestore;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_SLIDER_LAYOUT_CONTAINER;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_CODE;
-import static wackycodes.ecom.eanmartadmin.other.StaticValues.GRID_ITEM_LAYOUT_CONTAINER;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.SHOP_ITEMS_LAYOUT_CONTAINER;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.STRIP_AD_LAYOUT_CONTAINER;
 
 public class ShopsViewAdaptor extends RecyclerView.Adapter  {
@@ -64,12 +64,12 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
     public int getItemViewType(int position) {
         switch (homePageList.get( position ).getLayoutType()) {
 
-            case BANNER_SLIDER_LAYOUT_CONTAINER:           //-- 1
+            case BANNER_SLIDER_LAYOUT_CONTAINER:
                 return BANNER_SLIDER_LAYOUT_CONTAINER;
-            case STRIP_AD_LAYOUT_CONTAINER:         //-- 2
+            case STRIP_AD_LAYOUT_CONTAINER:
                 return STRIP_AD_LAYOUT_CONTAINER;
-            case GRID_ITEM_LAYOUT_CONTAINER:            //-- 5
-                return GRID_ITEM_LAYOUT_CONTAINER;
+            case SHOP_ITEMS_LAYOUT_CONTAINER:
+                return SHOP_ITEMS_LAYOUT_CONTAINER;
             // Add New Items...
             default:
                 return -1;
@@ -91,11 +91,11 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
                 View stripAdView = LayoutInflater.from( parent.getContext() ).inflate(
                         R.layout.strip_ad_item_layout, parent, false );
                 return new StripAdViewHolder( stripAdView );
-            case GRID_ITEM_LAYOUT_CONTAINER:
+            case SHOP_ITEMS_LAYOUT_CONTAINER:
                 // TODO : GridLayout viewHolder
                 View gridLayoutView = LayoutInflater.from( parent.getContext() ).inflate(
                         R.layout.grid_view_layout, parent, false );
-                return new GridLayoutViewHolder( gridLayoutView );
+                return new ShopsViewHolder( gridLayoutView );
 //                // Add New Item View...
             default:
                 return null;
@@ -121,11 +121,11 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
                 ((StripAdViewHolder)holder).setStripAdData( stripAdImg, layoutID, clickID, clickType, position );
                 break;
 
-            case GRID_ITEM_LAYOUT_CONTAINER:
+            case SHOP_ITEMS_LAYOUT_CONTAINER:
                 List <BannerAndCatModel> categoryList =
                         homePageList.get( position ).getBannerAndCatModelList();
                 String catLayoutID =   homePageList.get( position ).getLayoutID();
-                ((GridLayoutViewHolder)holder).setDataGridLayout( catLayoutID, categoryList,position );
+                ((ShopsViewHolder)holder).setDataGridLayout( catLayoutID, categoryList,position );
                 break;
             default:
                 return;
@@ -341,7 +341,7 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
     //============  Strip ad  View Holder ============
 
     //==============  GridProduct Grid Layout View Holder =================
-    public class GridLayoutViewHolder extends  RecyclerView.ViewHolder{
+    public class ShopsViewHolder extends  RecyclerView.ViewHolder{
         private GridLayout gridLayout;
         private TextView gridLayoutTitle;
         private TextView indexNo;
@@ -355,7 +355,7 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
         private Dialog dialog;
         private int layoutPosition;
         // Layout///
-        public GridLayoutViewHolder(@NonNull View itemView) {
+        public ShopsViewHolder(@NonNull View itemView) {
             super( itemView );
             gridLayout = itemView.findViewById( R.id.product_grid_layout );
             gridLayoutTitle = itemView.findViewById( R.id.gridLayoutTitle );
