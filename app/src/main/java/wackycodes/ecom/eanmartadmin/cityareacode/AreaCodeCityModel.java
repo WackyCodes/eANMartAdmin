@@ -1,4 +1,4 @@
-package wackycodes.ecom.eanmartadmin.admin;
+package wackycodes.ecom.eanmartadmin.cityareacode;
 
 public class AreaCodeCityModel {
     private String areaCode;

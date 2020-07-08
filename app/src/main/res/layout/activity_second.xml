@@ -175,4 +175,21 @@
         <include layout="@layout/dialog_add_new_layout" />
     </LinearLayout>
 
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/add_new_cat_item_layout"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:elevation="4dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        android:background="@color/colorRecyclerBack"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <include layout="@layout/dialog_add_cat_one_image_item" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

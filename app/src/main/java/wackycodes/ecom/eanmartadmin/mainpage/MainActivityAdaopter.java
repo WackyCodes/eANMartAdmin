@@ -1,4 +1,4 @@
-package wackycodes.ecom.eanmartadmin.homepage;
+package wackycodes.ecom.eanmartadmin.mainpage;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import wackycodes.ecom.eanmartadmin.R;
 import wackycodes.ecom.eanmartadmin.secondpage.SecondActivity;

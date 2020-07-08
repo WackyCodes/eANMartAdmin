@@ -7,7 +7,6 @@
     android:background="@drawable/back_rectangle_4dp_layout"
     android:backgroundTint="@color/colorRecyclerBack"
     android:elevation="3dp"
-    android:padding="8dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -16,6 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
         android:gravity="fill_horizontal"
@@ -77,13 +78,12 @@
 
     </LinearLayout>
 
-    <ImageView
+    <wackycodes.ecom.eanmartadmin.other.MyImageView
         android:id="@+id/strip_ad_image"
         android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:background="@drawable/back_rectangle_4dp_layout"
-        android:padding="12dp"
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/ic_panorama_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -1,4 +1,4 @@
-package wackycodes.ecom.eanmartadmin;
+package wackycodes.ecom.eanmartadmin.other;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -50,7 +50,9 @@ public class UpdateImages {
         if (imageUri != null){
             final StorageReference storageRef = storageReference.child( uploadPath + "/" + fileName + ".jpg" );
 
-            Glide.with( context ).asBitmap().load( imageUri ).optionalCenterCrop().into( new ImageViewTarget <Bitmap>( imageView ){
+//            Glide.with( context ).asBitmap().load( imageUri ).optionalCenterCrop().into( new ImageViewTarget <Bitmap>( imageView  ){});
+
+            Glide.with( context ).asBitmap().load( imageUri ).into( new ImageViewTarget <Bitmap>( imageView ){
                 @Override
                 public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition <? super Bitmap> transition) {
                     super.onResourceReady( resource, transition );
@@ -75,7 +77,7 @@ public class UpdateImages {
                                             isUploadSuccess = true;
 //                                                imageUri = task.getResult();
                                             uploadImageLink = task.getResult().toString();
-                                            Glide.with( context ).load( imageUri ).into( imageView );
+                                            Glide.with( context ).load( uploadImageLink ).into( imageView );
                                             dialog.dismiss();
                                         }else{
                                             // Failed Query to getDownload Link...

@@ -2,6 +2,7 @@ package wackycodes.ecom.eanmartadmin.database;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,12 +15,17 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import wackycodes.ecom.eanmartadmin.admin.AreaCodeCityModel;
+import wackycodes.ecom.eanmartadmin.MainActivity;
+import wackycodes.ecom.eanmartadmin.category.ShopListModel;
+import wackycodes.ecom.eanmartadmin.cityareacode.AreaCodeCityModel;
 import wackycodes.ecom.eanmartadmin.category.ShopsViewActivity;
 import wackycodes.ecom.eanmartadmin.secondpage.BannerAndCatModel;
 import wackycodes.ecom.eanmartadmin.secondpage.HomeListModel;
@@ -40,6 +46,7 @@ public class DBQuery {
     public static FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
     public static final ArrayList<AreaCodeCityModel> areaCodeCityModelList = new ArrayList <>();
+    public static final ArrayList<ShopListModel> shopListModelArrayList = new ArrayList <>();
 
     public static List<HomeListModel> homePageList = new ArrayList <>();
 
@@ -55,6 +62,7 @@ public class DBQuery {
         if (isHomePage){
             categoryIDList.clear();
             categoryList.clear();
+            homePageList.clear();
         }else{
             categoryList.get( index ).clear();
         }
@@ -66,7 +74,7 @@ public class DBQuery {
                 if (task.isSuccessful()){
                     // Load Data...
                     for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()){
-                        int viewType = Integer.parseInt( String.valueOf( documentSnapshot.getLong( "type" ) ) );
+                        int viewType = Integer.parseInt( String.valueOf( (long)documentSnapshot.get( "type" ) ) );
 
                         if (viewType == CATEGORY_ITEMS_LAYOUT_CONTAINER){
                             // This is only in Home page case...
@@ -118,7 +126,7 @@ public class DBQuery {
                             String deletedId = documentSnapshot.get("delete_id").toString(); // TODO : add a field in model
                             String banner_image = documentSnapshot.get("banner_image").toString();
                             String banner_click_id = documentSnapshot.get("banner_click_id").toString();
-                            Long banner_click_type = documentSnapshot.getLong("banner_click_type");
+                            long banner_click_type = (long)documentSnapshot.get("banner_click_type");
                             // Add Data in homeList...
                             if (isHomePage){
                                 homePageList.add( new HomeListModel( STRIP_AD_LAYOUT_CONTAINER, layout_id, banner_image, banner_click_id
@@ -169,6 +177,96 @@ public class DBQuery {
 
             }
         } );
+
+    }
+
+    public static void getCityListQuery(){
+        areaCodeCityModelList.clear();
+        firebaseFirestore.collection( "AREA_CODE" ).orderBy( "area_code" )
+                .get().addOnCompleteListener( new OnCompleteListener <QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task <QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                        String areaCode = String.valueOf( (long)documentSnapshot.get( "area_code" ) );
+                        String areaName = documentSnapshot.get( "area_name" ).toString();
+                        String cityName = documentSnapshot.get( "area_city" ).toString();
+                        String cityCode = documentSnapshot.get( "area_city_code" ).toString();
+
+                        areaCodeCityModelList.add( new AreaCodeCityModel( areaCode, areaName, cityName, cityCode ) );
+                    }
+                    if (MainActivity.selectAreaCityAdaptor != null){
+                        MainActivity.selectAreaCityAdaptor.notifyDataSetChanged();
+                    }
+
+                }else{
+
+                }
+            }
+        } );
+
+    }
+
+    public static void getShopListOfCurrentCity(){
+        shopListModelArrayList.clear();
+        getCollectionRef( "SHOPS" ).orderBy( "shop_id" ).get()
+                .addOnCompleteListener( new OnCompleteListener <QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task <QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                        shopListModelArrayList.add( new ShopListModel(
+                                documentSnapshot.getId(), documentSnapshot.get( "shop_name" ).toString()
+                        ) );
+                    }
+
+                }else{
+
+                }
+            }
+        } );
+
+    }
+
+
+    // Upload Query...
+    public static void setNewCategoryOnDataBase(final Context context, final Dialog dialog, String categoryID, String categoryName, final int layoutIndex
+            , final Map <String, Object> uploadMap ){
+
+        Map<String, Object> firstMap = new HashMap <>();
+        firstMap.put( "category_id", categoryID );
+        firstMap.put( "category_name", categoryName );
+        firstMap.put( "type", SHOP_ITEMS_LAYOUT_CONTAINER );
+        firstMap.put( "index", 1 );
+        firstMap.put( "layout_id", "shop_layout" );
+
+        getCollectionRef( categoryID ).document( "shop_layout" ).set( firstMap )
+                .addOnCompleteListener( new OnCompleteListener <Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task <Void> task) {
+                        if (task.isSuccessful()){
+                            getCollectionRef("HOME").document( "cat_layout" ).update( uploadMap )
+                                    .addOnCompleteListener( new OnCompleteListener <Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task <Void> task1) {
+                                            if (task1.isSuccessful()){
+                                                Toast.makeText( context, "Successfully added!", Toast.LENGTH_SHORT ).show();
+                                            }else{
+                                                Toast.makeText( context, "Failed!", Toast.LENGTH_SHORT ).show();
+                                                homePageList.get( layoutIndex ).getBannerAndCatModelList().remove(
+                                                        homePageList.get( layoutIndex ).getBannerAndCatModelList().size() - 1 );
+                                            }
+                                            dialog.dismiss();
+                                            SecondActivity.homePageAdaptor.notifyDataSetChanged();
+                                        }
+                                    } );
+
+                        }else{
+                            Toast.makeText( context, "Category ID not Created.!", Toast.LENGTH_SHORT ).show();
+                            dialog.dismiss();
+                        }
+                    }
+                } );
 
     }
 

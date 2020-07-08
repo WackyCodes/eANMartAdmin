@@ -23,11 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import wackycodes.ecom.eanmartadmin.admin.AreaCodeCityModel;
+import wackycodes.ecom.eanmartadmin.cityareacode.AreaCodeCityModel;
 import wackycodes.ecom.eanmartadmin.cityareacode.SelectAreaCityAdaptor;
 import wackycodes.ecom.eanmartadmin.database.DBQuery;
-import wackycodes.ecom.eanmartadmin.homepage.MainActivityAdaopter;
-import wackycodes.ecom.eanmartadmin.homepage.MainActivityGridModel;
+import wackycodes.ecom.eanmartadmin.mainpage.MainActivityAdaopter;
+import wackycodes.ecom.eanmartadmin.mainpage.MainActivityGridModel;
 import wackycodes.ecom.eanmartadmin.other.DialogsClass;
 
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_CODE;
@@ -101,6 +101,9 @@ public class MainActivity extends AppCompatActivity {
         homeGridView.setAdapter( mainActivityAdaopter );
         mainActivityAdaopter.notifyDataSetChanged();
 
+        // Get Shop List Of Current City...
+        DBQuery.getShopListOfCurrentCity();
+
     }
 
     // Select City Dialog...
@@ -121,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         areaCodeCityModelArrayList.addAll( DBQuery.areaCodeCityModelList );
 //        showToast( "Size : "+ areaCodeCityModelArrayList.size() );
         selectAreaCityAdaptor =
-                new SelectAreaCityAdaptor(MainActivity.this, R.layout.area_select_list_item, areaCodeCityModelArrayList);
+                new SelectAreaCityAdaptor(MainActivity.this, R.layout.select_area_list_item, areaCodeCityModelArrayList);
 
         cityText.setThreshold(1);
         cityText.setAdapter(selectAreaCityAdaptor);

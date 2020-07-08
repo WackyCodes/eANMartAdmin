@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,9 @@ import java.util.List;
 import java.util.Map;
 
 import wackycodes.ecom.eanmartadmin.R;
+import wackycodes.ecom.eanmartadmin.mainpage.ViewAllActivity;
 import wackycodes.ecom.eanmartadmin.other.DialogsClass;
+import wackycodes.ecom.eanmartadmin.other.MyImageView;
 import wackycodes.ecom.eanmartadmin.secondpage.BannerAndCatModel;
 import wackycodes.ecom.eanmartadmin.secondpage.BannerItemAdaptor;
 import wackycodes.ecom.eanmartadmin.secondpage.HomeListModel;
@@ -189,15 +192,14 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
             viewAllBtn.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    ViewAllActivity.bannerSliderListViewAll = bannerAndCatModelList;
-//                    Intent viewAllIntent = new Intent( itemView.getContext(), ViewAllActivity.class);
-//                    viewAllIntent.putExtra( "LAYOUT_CODE", VIEW_ALL_FOR_BANNER_PRODUCTS );
-//                    viewAllIntent.putExtra( "CAT_INDEX", catType );
-//                    viewAllIntent.putExtra( "CAT_TITLE", catTitle );
-//                    viewAllIntent.putExtra( "LIST_INDEX", index );
-//                    viewAllIntent.putExtra( "TITLE", layoutTitle );
-//                    itemView.getContext().startActivity( viewAllIntent );
-                    showToast( "Code Not Found", itemView.getContext() );
+                    ViewAllActivity.viewAllList = bannerAndCatModelList;
+                    Intent viewAllIntent = new Intent( itemView.getContext(), ViewAllActivity.class);
+                    viewAllIntent.putExtra( "TYPE", BANNER_SLIDER_LAYOUT_CONTAINER );
+                    viewAllIntent.putExtra( "CAT_COLL_ID", collectionID );
+                    viewAllIntent.putExtra( "CAT_INDEX", catType );
+                    viewAllIntent.putExtra( "LAY_INDEX", index );
+                    itemView.getContext().startActivity( viewAllIntent );
+//                    showToast( "Code Not Found", itemView.getContext() );
                 }
             } );
 
@@ -251,7 +253,7 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
 
     //============  Strip ad  View Holder ============
     public class StripAdViewHolder extends RecyclerView.ViewHolder{
-        private ImageView stripAdImage;
+        private MyImageView stripAdImage;
         private TextView indexNo;
         private ImageView editLayoutBtn;
         private int defaultColor;
@@ -370,7 +372,7 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
             visibleBtn.setVisibility( View.INVISIBLE );
         }
 
-        private void setDataGridLayout( final String layoutID, List<BannerAndCatModel> categoryList ,final int index){
+        private void setDataGridLayout(final String layoutID, final List<BannerAndCatModel> categoryList , final int index){
             layoutPosition = 1 + index;
             indexNo.setText( "position : " + layoutPosition );
             gridLayoutTitle.setText( "Total Cat : " + " (" + categoryList.size() + ")" );
@@ -450,24 +452,12 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
             gridLayoutViewAllBtn.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    gridViewModelListViewAll = new ArrayList <>();
-//                    gridViewModelListViewAll = gridLayoutList;
-//                    if (gridProductDetailsList.size() == 0){
-//                        ViewAllActivity.gridViewModelListViewAll = tempHrGridList;
-//                    }else{
-//                        ViewAllActivity.gridViewModelListViewAll = gridProductDetailsList;
-//                    }
-//                    ViewAllActivity.totalProductsIdViewAll = gridLayoutProductIdList;
-//                    Intent viewAllIntent = new Intent( itemView.getContext(), ViewAllActivity.class);
-//                    viewAllIntent.putExtra( "LAYOUT_CODE",VIEW_ALL_FOR_GRID_PRODUCTS );
-//                    viewAllIntent.putExtra( "CAT_INDEX", catType );
-//                    viewAllIntent.putExtra( "CAT_TITLE", catTitle );
-//                    viewAllIntent.putExtra( "LIST_INDEX", index );
-//                    viewAllIntent.putExtra( "TITLE", gridTitle );
-//                    itemView.getContext().startActivity( viewAllIntent );
+                    ViewAllActivity.viewAllList = categoryList;
+                    Intent viewAllIntent = new Intent( itemView.getContext(), ViewAllActivity.class);
+                    viewAllIntent.putExtra( "TYPE",SHOP_ITEMS_LAYOUT_CONTAINER );
+                    itemView.getContext().startActivity( viewAllIntent );
                 }
             } );
-
 
             // -------  Update Layout...
             setIndexUpDownVisibility( index, indexUpBtn, indexDownBtn ); // set Up and Down Btn Visibility...
@@ -593,8 +583,6 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
         } );
         alertD.show();
     }
-
-
 
 
 }

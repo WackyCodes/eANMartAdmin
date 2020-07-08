@@ -61,7 +61,9 @@ public class ShopsViewActivity extends AppCompatActivity {
 
         activityViewLayout = findViewById( R.id.activity_view_layout);
         addNewLayoutBtn = findViewById( R.id.add_new_layout);
-
+        // Get Intent Value...
+        categoryID = getIntent().getStringExtra( "CAT_ID" );
+        String catName = getIntent().getStringExtra( "CAT_NAME" );
         // Add Layout...
         dialogAddLayout = findViewById( R.id.dialog_add_layout );
         newBannerSlidderContainer = findViewById( R.id.add_banner_slider_layout );
@@ -73,12 +75,11 @@ public class ShopsViewActivity extends AppCompatActivity {
         closeAddLayout = findViewById( R.id.close_add_layout );
 
         //...
-        String toolTitle = "Shops View";
         toolbar = findViewById( R.id.appToolbar );
         setSupportActionBar( toolbar );
         try {
             getSupportActionBar().setDisplayShowTitleEnabled( true );
-            getSupportActionBar().setTitle( toolTitle );
+            getSupportActionBar().setTitle( catName );
         }catch (NullPointerException ignored){ }
 
         // -------------

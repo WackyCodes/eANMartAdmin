@@ -1,4 +1,4 @@
-package wackycodes.ecom.eanmartadmin.homepage;
+package wackycodes.ecom.eanmartadmin.mainpage;
 
 public class MainActivityGridModel {
 

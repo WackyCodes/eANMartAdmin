@@ -14,9 +14,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,7 +48,9 @@ import java.util.List;
 import java.util.Map;
 
 import wackycodes.ecom.eanmartadmin.R;
-import wackycodes.ecom.eanmartadmin.UpdateImages;
+import wackycodes.ecom.eanmartadmin.other.UpdateImages;
+import wackycodes.ecom.eanmartadmin.category.SelectShopAdaptor;
+import wackycodes.ecom.eanmartadmin.category.ShopListModel;
 import wackycodes.ecom.eanmartadmin.category.ShopsViewActivity;
 import wackycodes.ecom.eanmartadmin.database.DBQuery;
 import wackycodes.ecom.eanmartadmin.other.CheckInternetConnection;
@@ -77,7 +81,7 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
     private TextView bannerDialogAddImage;
     private EditText bannerClickLink;
     private Spinner bannerSelectType;
-    private Spinner bannerSelectShopID;
+    private AutoCompleteTextView bannerSelectShopID;
     private LinearLayout bannerClickLinkLayout;
     private LinearLayout bannerShopIDLayout;
     private TextView bannerDialogCancelBtn;
@@ -122,7 +126,6 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
             this.homePageList = DBQuery.homePageList;
         }else{
             // Assign Category List..
-            // TODO : ...
             this.homePageList = DBQuery.categoryList.get( catIndex );
         }
 
@@ -136,7 +139,7 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
         bannerDialogOkBtn = findViewById( R.id.banner_ok_txt );
 
         bannerSelectType = findViewById( R.id.select_banner_type_spinner );
-        bannerSelectShopID = findViewById( R.id.select_shop_id_spinner );
+        bannerSelectShopID = findViewById( R.id.select_shop_id_auto_text );
         bannerClickLinkLayout = findViewById( R.id.banner_link_layout );
         bannerShopIDLayout = findViewById( R.id.banner_shop_id_layout );
 
@@ -190,7 +193,6 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
         setSpinnerList();
 
     }
-
 
     @Override
     public void onBackPressed() {
@@ -246,22 +248,26 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
             if (UpdateImages.uploadImageLink != null && bannerClickType != -1  ){
                 switch (bannerClickType){
                     case BANNER_CLICK_TYPE_WEBSITE:
-                        bannerClickID = bannerClickLink.getText().toString().trim();
+                        if (TextUtils.isEmpty( bannerClickLink.getText().toString() )){
+                            bannerClickLink.setError( "Enter Link.!" );
+                        }else{
+                            bannerClickID = bannerClickLink.getText().toString().trim();
+                            // Upload Data on Database...
+                            addNewLayout( bannerDialogType );
+                        }
                         break;
                     case BANNER_CLICK_TYPE_SHOP:
+                        if ( bannerClickID != null ){
+                            // Upload Data on Database...
+                            addNewLayout( bannerDialogType );
+                        }else{
+                            bannerSelectShopID.setError( "Not Found!" );
+                            showToast( "Enter Shop ID.!" );
+                        }
                     default:
                         break;
                 }
-                if ( bannerClickID != null ){
-                    // Upload Data on Database...
-                    addNewLayout( bannerDialogType );
-                }else
-                if (bannerClickType == BANNER_CLICK_TYPE_WEBSITE ){
-                    showToast( "Please Enter link..!" );
-                }else
-                if(bannerClickType == BANNER_CLICK_TYPE_SHOP){
-                    showToast( "select Shop ID.!" );
-                }
+
 //                finish(); // Finish this Activity..
             } else
             if (UpdateImages.uploadImageLink == null){
@@ -291,11 +297,15 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
                             bannerClickLinkLayout.setVisibility( View.VISIBLE );
                             bannerShopIDLayout.setVisibility( View.GONE );
                             bannerClickType = BANNER_CLICK_TYPE_WEBSITE;
+                            bannerClickID = null;
+                            bannerClickLink.setText( "" );
                             break;
                         case 2:
                             bannerClickLinkLayout.setVisibility( View.GONE );
                             bannerShopIDLayout.setVisibility( View.VISIBLE );
                             bannerClickType = BANNER_CLICK_TYPE_SHOP;
+                            bannerClickID = null;
+                            bannerSelectShopID.setText( "" );
                             break;
                         default:
                                 break;
@@ -313,6 +323,25 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
         } );
         // Select Banner Type...
 
+        // Select Shop ID...
+        ArrayList<ShopListModel> shopListModelArrayList = new ArrayList <>();
+        shopListModelArrayList.addAll( DBQuery.shopListModelArrayList );
+//        showToast( "Size : "+ areaCodeCityModelArrayList.size() );
+        SelectShopAdaptor selectShopAdaptorl =
+                new SelectShopAdaptor( AddNewLayoutActivity.this, R.layout.select_shop_item_layout, shopListModelArrayList);
+
+        bannerSelectShopID.setThreshold(1);
+        bannerSelectShopID.setAdapter(selectShopAdaptorl);
+
+        // handle click event and set desc on textView
+        bannerSelectShopID.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                ShopListModel shopListModel = (ShopListModel) adapterView.getItemAtPosition(i);
+                bannerClickID = shopListModel.getShopID();
+            }
+        });
+
     }
 
     private void addNewLayout(int type){
@@ -321,7 +350,7 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
                 Map <String, Object> layoutMap = new HashMap <>();
                 layoutMap.put( "index", homePageList.size() ); // int
                 layoutMap.put( "layout_id", layoutId); // String
-                layoutMap.put( "layout_bg", "#DADADA" ); // For sample
+//                layoutMap.put( "layout_bg", "#DADADA" ); // For sample
                 layoutMap.put( "is_visible", false ); // boolean
                 layoutMap.put( "no_of_banners", 0 ); // int
                 layoutMap.put( "type", BANNER_SLIDER_LAYOUT_CONTAINER ); // int
@@ -342,12 +371,13 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
                 bSliderItem.put( "banner_click_id_"+ bannerNo, bannerClickID ); // String
                 bSliderItem.put( "banner_click_type_"+ bannerNo, bannerClickType ); // int
                 bSliderItem.put( "delete_id_"+ bannerNo, "banner_"+fileCode ); // String
+                bSliderItem.put( "no_of_banners", bannerNo ); // int
 //                    for (int bsInd = 1; bsInd <= bannerSliderModelList.size(); bsInd++){
 //                        bSliderItem.put( "banner_"+ bsInd, bannerSliderModelList.get( bsInd-1 ).getImageLink() );
 //                        bSliderItem.put( "banner_"+ bsInd + "_bg", "#20202f" );
 //                    }
                 dialog.show();
-                uploadNewLayoutOnDatabase( bSliderItem, BANNER_SLIDER_CONTAINER_ITEM, dialog );
+                updateLayoutOnDatabase( bSliderItem, BANNER_SLIDER_CONTAINER_ITEM, dialog );
                 ///
                 break;
             case STRIP_AD_LAYOUT_CONTAINER:         //-- 2
@@ -372,54 +402,6 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
                 break;
         }
     }
-
-  /*  private void addNewHrGridLayout(final int view_type){
-        /// Sample Button click...
-        final Dialog quantityDialog = new Dialog( this );
-        quantityDialog.requestWindowFeature( Window.FEATURE_NO_TITLE );
-        quantityDialog.setContentView( R.layout.dialog_single_edit_text );
-        quantityDialog.getWindow().setLayout( ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT );
-        quantityDialog.setCancelable( false );
-        final Button okBtn = quantityDialog.findViewById( R.id.dialog_ok_btn );
-        final Button CancelBtn = quantityDialog.findViewById( R.id.dialog_cancel_btn );
-        final EditText dialogEditText = quantityDialog.findViewById( R.id.dialog_editText );
-        final TextView dialogTitle = quantityDialog.findViewById( R.id.dialog_title );
-        dialogTitle.setText( "Enter Layout Title :" );
-        quantityDialog.show();
-
-        okBtn.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if ( TextUtils.isEmpty(dialogEditText.getText().toString().trim())) {
-                    dialogEditText.setError( "Please Fill Require field..!" );
-                }
-                else {
-                    quantityDialog.dismiss();
-                    final Dialog dialog = dialogsClass.progressDialog( AddNewLayoutActivity.this );
-                    dialog.show();
-                    final String layout_title = dialogEditText.getText().toString();
-                    Map<String, Object> layoutMap = new HashMap <>();
-                    layoutMap.put( "layout_title", layout_title );
-                    layoutMap.put( "no_of_products", 0 );
-                    layoutMap.put( "index", commonCatList.get( catIndex ).size() );
-                    layoutMap.put( "layout_id", layoutId );
-                    layoutMap.put( "layout_bg", "#DADADA" );
-                    layoutMap.put( "visibility", false );
-                    layoutMap.put( "view_type",view_type );
-                    uploadNewLayoutOnDatabase(layoutMap, view_type, dialog);
-                }
-            }
-        } );
-
-        CancelBtn.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                quantityDialog.dismiss();
-                finish();
-            }
-        } );
-
-    } */
 
     private void uploadNewLayoutOnDatabase(final Map<String, Object> layoutMap, final int view_type, final Dialog dialog ){
         // we are set our unique Id... Because we need this id to update data...
@@ -467,6 +449,57 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
                             }
                         }
                     } );
+//        }else{
+//            dialog.dismiss();
+//        }
+
+    }
+    private void updateLayoutOnDatabase(final Map<String, Object> layoutMap, final int view_type, final Dialog dialog ){
+        // we are set our unique Id... Because we need this id to update data...
+        final String documentId = layoutMap.get( "layout_id" ).toString();
+
+        firebaseFirestore.collection( "HOME_PAGE" ).document( CURRENT_CITY_CODE )
+                .collection( categoryID ).document( documentId ).update( layoutMap )
+                .addOnCompleteListener( new OnCompleteListener <Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task <Void> task) {
+                        if (task.isSuccessful()){
+                            switch (view_type){
+                                case BANNER_SLIDER_LAYOUT_CONTAINER:
+                                    homePageList.add( new HomeListModel( view_type, documentId, new ArrayList <BannerAndCatModel>() ) );
+                                    break;
+                                case BANNER_SLIDER_CONTAINER_ITEM:
+                                    // Notify Data Changed..  of Adaptor...
+                                    break;
+                                case STRIP_AD_LAYOUT_CONTAINER:
+                                    homePageList.add( new HomeListModel( view_type, documentId, layoutMap.get( "banner_image" ).toString()
+                                            , layoutMap.get( "banner_click_id").toString(), (Integer)layoutMap.get( "banner_click_type" )));
+                                    break;
+                                default:
+                                    break;
+                            }
+//                                CommonCatActivity.commonCatAdaptor.notifyDataSetChanged();
+                            dialog.dismiss();
+                            showToast( "Added Successfully..!" );
+                            if (isHomePage){
+                                DBQuery.homePageList = homePageList;
+                                SecondActivity.homePageAdaptor.notifyDataSetChanged();
+                            }else{
+                                // Assign Category List..
+                                DBQuery.categoryList.set( catIndex, homePageList );
+                                ShopsViewActivity.shopsViewAdaptor.notifyDataSetChanged();
+                            }
+                            finish();
+                        }else{
+                            dialog.dismiss();
+                            if (view_type == BANNER_SLIDER_CONTAINER_ITEM){
+//                                    commonCatList.get( catIndex ).get( layoutIndex ).getBannerAndCatModelList().remove(
+//                                            commonCatList.get( catIndex ).get( layoutIndex ).getBannerAndCatModelList().size()-1 );
+                            }
+                            showToast( "failed..! Error : " + task.getException().getMessage() );
+                        }
+                    }
+                } );
 //        }else{
 //            dialog.dismiss();
 //        }
@@ -530,7 +563,6 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
         Toast.makeText( this, msg, Toast.LENGTH_SHORT ).show();
     }
 
-
     // Permission...
     private boolean isPermissionGranted(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -557,7 +589,6 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
             }
         }
     }
-
 
     // Get Result of Image...
     @Override
@@ -626,8 +657,6 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
         Glide.with( this ).load( bannerImageUri ).into( bannerDialogBannerImage );
 
     }
-
-
 
     // Color Picker...Dialog.
     private void bannerDialogColorPicker(){

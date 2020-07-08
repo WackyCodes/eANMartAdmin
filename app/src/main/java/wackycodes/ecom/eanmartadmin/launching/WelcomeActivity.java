@@ -28,6 +28,8 @@ import static wackycodes.ecom.eanmartadmin.database.DBQuery.currentUser;
 import static wackycodes.ecom.eanmartadmin.database.DBQuery.firebaseAuth;
 import static wackycodes.ecom.eanmartadmin.database.DBQuery.firebaseFirestore;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.ADMIN_DATA_MODEL;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_CODE;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_NAME;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.DEFAULT_CITY_NAME;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.STORAGE_PERMISSION;
 
@@ -72,7 +74,9 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void checkCurrentUser(){
-//        DBQuery.getCityListQuery();
+        // Load Area List...
+        DBQuery.getCityListQuery();
+        // Load Shop List.. > In main Activity...
         if (currentUser != null){
             checkAdminPermission();
         }else{
@@ -90,9 +94,13 @@ public class WelcomeActivity extends AppCompatActivity {
                 if (task.isSuccessful()){
                     Boolean is_root_admin = task.getResult().getBoolean( "is_root_admin" );
                     int admin_code = Integer.parseInt( task.getResult().get( "admin_code" ).toString() );
+                    String current_city_code = task.getResult().get( "current_city_code" ).toString();
+                    String current_city_name = task.getResult().get( "current_city_name" ).toString();
                     if (is_root_admin){
                         // Forward to home page...
                         ADMIN_DATA_MODEL.setAdminCode( admin_code );
+                        CURRENT_CITY_CODE = current_city_code;
+                        CURRENT_CITY_NAME = current_city_name;
                         Intent intent = new Intent( WelcomeActivity.this, MainActivity.class );
                         startActivity( intent );
                         finish();

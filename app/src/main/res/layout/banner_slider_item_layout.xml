@@ -14,14 +14,14 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
+    <wackycodes.ecom.eanmartadmin.other.MyImageView
         android:id="@+id/banner_slider_Image"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="230dp"
-        android:scaleType="fitCenter"
+        android:scaleType="fitXY"
+        android:backgroundTintMode="src_over"
         app:srcCompat="@drawable/ic_panorama_black_24dp"
         android:background="@drawable/back_rectangle_4dp_layout"
-        android:padding="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

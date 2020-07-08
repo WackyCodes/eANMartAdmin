@@ -102,25 +102,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorSecondary"
                     android:textSize="12sp"
                     android:padding="4dp"
-                    android:textColor="@color/colorSecondary"
+                    android:paddingLeft="8dp"
                     android:text="Banner Link : "/>
                 <EditText
                     android:id="@+id/banner_link_edit_text"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="Enter Link or website"
                     android:inputType="text"
-                    android:paddingLeft="4dp"
-                    android:paddingTop="0dp"
-                    android:paddingBottom="0dp"
-                    android:scrollbars="none"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:padding="2dp"
                     android:background="@drawable/back_1dp_border_4dp_radius_no_color"
                     android:backgroundTint="@color/colorPrimary"
-                    android:textColor="@color/colorSecondary"
-                    android:textSize="16sp" />
+                    android:textColor="@color/colorSecondary"/>
 
             </LinearLayout>
 
@@ -136,31 +136,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
+                    android:gravity="center_vertical"
                     android:textColor="@color/colorSecondary"
                     android:textSize="12sp"
                     android:padding="4dp"
                     android:paddingLeft="8dp"
                     android:text="Shop ID : "/>
-
-                <LinearLayout
+                <AutoCompleteTextView
+                    android:id="@+id/select_shop_id_auto_text"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:maxLines="1"
                     android:background="@drawable/back_1dp_border_4dp_radius_no_color"
                     android:backgroundTint="@color/colorPrimary"
-                    android:layout_weight="1">
-                    <Spinner
-                        android:id="@+id/select_shop_id_spinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_color_lens_black_24dp"
-                        android:drawableTint="@color/colorPrimary"
-                        android:backgroundTint="@color/colorPrimary"
-                        android:layout_weight="1"
-                        android:padding="5dp"
-                        android:text="Banner Type"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorPrimary"/>
-                </LinearLayout>
+                    android:padding="2dp"
+                    android:hint="Enter Shop ID / Name"
+                    android:textColor="@color/colorPrimary"/>
 
             </LinearLayout>
 

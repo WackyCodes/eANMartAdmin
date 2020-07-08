@@ -23,6 +23,7 @@ import java.util.List;
 import wackycodes.ecom.eanmartadmin.R;
 import wackycodes.ecom.eanmartadmin.addnewitem.AddNewLayout;
 import wackycodes.ecom.eanmartadmin.addnewitem.AddNewLayoutActivity;
+import wackycodes.ecom.eanmartadmin.other.MyImageView;
 
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_SLIDER_CONTAINER_ITEM;
 
@@ -73,7 +74,7 @@ public class BannerItemAdaptor extends RecyclerView.Adapter<BannerItemAdaptor.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        private ImageView bannerImage;
+        private MyImageView bannerImage;
         private LinearLayout addNewItemLayout;
         private ImageView editBannerLayBtn;
         public ViewHolder(@NonNull View itemView) {
@@ -126,7 +127,6 @@ public class BannerItemAdaptor extends RecyclerView.Adapter<BannerItemAdaptor.Vi
         }
 
     }
-
 
     private void showToast(Context context, String msg){
         Toast.makeText( context, msg, Toast.LENGTH_SHORT ).show();

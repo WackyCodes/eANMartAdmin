@@ -1,4 +1,4 @@
-package wackycodes.ecom.eanmartadmin.cityareacode;
+package wackycodes.ecom.eanmartadmin.category;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,13 +16,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wackycodes.ecom.eanmartadmin.R;
+import wackycodes.ecom.eanmartadmin.cityareacode.AreaCodeCityModel;
 
-public class SelectAreaCityAdaptor  extends ArrayAdapter <AreaCodeCityModel> {
+public class SelectShopAdaptor extends ArrayAdapter <ShopListModel> {
 
     private Context context;
     private int resourceId;
-    private List <AreaCodeCityModel> items, tempItems, suggestions;
-    public SelectAreaCityAdaptor(@NonNull Context context, int resourceId, ArrayList<AreaCodeCityModel> items) {
+    private List <ShopListModel> items, tempItems, suggestions;
+
+    public SelectShopAdaptor(@NonNull Context context, int resourceId, ArrayList <ShopListModel> items) {
         super(context, resourceId, items);
         this.items = items;
         this.context = context;
@@ -30,6 +32,7 @@ public class SelectAreaCityAdaptor  extends ArrayAdapter <AreaCodeCityModel> {
         tempItems = new ArrayList <>(items);
         suggestions = new ArrayList<>();
     }
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -39,22 +42,21 @@ public class SelectAreaCityAdaptor  extends ArrayAdapter <AreaCodeCityModel> {
                 LayoutInflater inflater = ((Activity) context).getLayoutInflater();
                 view = inflater.inflate(resourceId, parent, false);
             }
-            AreaCodeCityModel areaCodeCityModel = getItem(position);
-            TextView cityName = (TextView) view.findViewById( R.id.area_city_name);
-            TextView areaPinCode = (TextView) view.findViewById( R.id.area_pin_code);
-            TextView areaName = (TextView) view.findViewById( R.id.area_name);
-            areaName.setText( areaCodeCityModel.getAreaName() );
-            areaPinCode.setText( areaCodeCityModel.getAreaCode() );
-            cityName.setText( areaCodeCityModel.getCityName() );
+            ShopListModel areaCodeCityModel = getItem(position);
+            TextView shopID = (TextView) view.findViewById( R.id.shop_id);
+            TextView shopName = (TextView) view.findViewById( R.id.shop_name);
+            shopID.setText( areaCodeCityModel.getShopID() );
+            shopName.setText( areaCodeCityModel.getShopName() );
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         return view;
     }
+
     @Nullable
     @Override
-    public AreaCodeCityModel getItem(int position) {
+    public ShopListModel getItem(int position) {
         return items.get(position);
     }
     @Override
@@ -73,23 +75,20 @@ public class SelectAreaCityAdaptor  extends ArrayAdapter <AreaCodeCityModel> {
     private Filter areaNameFilter = new Filter() {
         @Override
         public CharSequence convertResultToString(Object resultValue) {
-            AreaCodeCityModel areaCodeCityModel = (AreaCodeCityModel) resultValue;
-            return areaCodeCityModel.getAreaCode();
+            ShopListModel areaCodeCityModel = (ShopListModel) resultValue;
+            return areaCodeCityModel.getShopName();
 //            return (CharSequence) resultValue;
         }
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
             if (charSequence != null) {
                 suggestions.clear();
-                for (AreaCodeCityModel areaCodeCityModel: tempItems) {
-                    if (areaCodeCityModel.getCityName().toLowerCase().startsWith(charSequence.toString().toLowerCase())) {
-                        suggestions.add(areaCodeCityModel);
+                for (ShopListModel shopListModel: tempItems) {
+                    if (shopListModel.getShopName().toLowerCase().startsWith(charSequence.toString().toLowerCase())) {
+                        suggestions.add(shopListModel);
                     }else
-                    if (areaCodeCityModel.getAreaCode().startsWith(charSequence.toString())){
-                        suggestions.add(areaCodeCityModel);
-                    }else
-                    if (areaCodeCityModel.getAreaName().toLowerCase().startsWith(charSequence.toString().toLowerCase())){
-                        suggestions.add(areaCodeCityModel);
+                    if (shopListModel.getShopID().startsWith(charSequence.toString())){
+                        suggestions.add(shopListModel);
                     }
                 }
                 FilterResults filterResults = new FilterResults();
@@ -102,10 +101,10 @@ public class SelectAreaCityAdaptor  extends ArrayAdapter <AreaCodeCityModel> {
         }
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            ArrayList<AreaCodeCityModel> tempValues = (ArrayList<AreaCodeCityModel>) filterResults.values;
+            ArrayList<ShopListModel> tempValues = (ArrayList<ShopListModel>) filterResults.values;
             if (filterResults != null && filterResults.count > 0) {
                 clear();
-                for (AreaCodeCityModel areaCodeCityModel : tempValues) {
+                for (ShopListModel areaCodeCityModel : tempValues) {
                     add(areaCodeCityModel);
                 }
                 notifyDataSetChanged();
@@ -115,8 +114,5 @@ public class SelectAreaCityAdaptor  extends ArrayAdapter <AreaCodeCityModel> {
             }
         }
     };
-
-
-
 
 }
