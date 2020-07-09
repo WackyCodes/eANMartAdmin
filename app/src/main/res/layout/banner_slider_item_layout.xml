@@ -6,8 +6,8 @@
     android:orientation="vertical"
     android:background="@color/colorRecyclerBack"
     android:elevation="3dp"
-    android:paddingLeft="12dp"
-    android:paddingRight="12dp"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
     android:layout_width="match_parent"
@@ -15,7 +15,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <wackycodes.ecom.eanmartadmin.other.MyImageView
-        android:id="@+id/banner_slider_Image"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="230dp"
         android:scaleType="fitXY"
@@ -26,6 +26,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/banner_slider_Image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_photo_black_24dp"
+        android:scaleType="fitCenter"
+        app:riv_corner_radius="4dip"
+        app:riv_border_width="1dip"
+        app:riv_border_color="@color/colorPrimary"
+        app:riv_mutate_background="true"
+        app:riv_oval="false"
+        tools:ignore="VectorDrawableCompat" />
+<!--
+        app:riv_tile_mode="repeat"
+        -->
     <LinearLayout
         android:visibility="gone"
         android:id="@+id/add_new_item_Linearlayout"

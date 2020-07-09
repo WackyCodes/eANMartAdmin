@@ -26,11 +26,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import wackycodes.ecom.eanmartadmin.cityareacode.AreaCodeCityModel;
 import wackycodes.ecom.eanmartadmin.cityareacode.SelectAreaCityAdaptor;
 import wackycodes.ecom.eanmartadmin.database.DBQuery;
-import wackycodes.ecom.eanmartadmin.mainpage.MainActivityAdaopter;
+import wackycodes.ecom.eanmartadmin.mainpage.MainActivityAdaptor;
 import wackycodes.ecom.eanmartadmin.mainpage.MainActivityGridModel;
 import wackycodes.ecom.eanmartadmin.other.DialogsClass;
 
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_CODE;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_NAME;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.REQUEST_TO_ADD_SHOP;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.REQUEST_TO_VIEW_HOME;
 
 public class MainActivity extends AppCompatActivity {
     public static AppCompatActivity mainActivity;
@@ -47,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
     public static LinearLayout drawerCityLayout;
     public static TextView drawerCityTitle;
     public static TextView drawerCityName;
+
+
+    public static TextView toolCityName;
+    public static TextView toolUserName;
 
     public static SelectAreaCityAdaptor selectAreaCityAdaptor;
 
@@ -74,35 +81,48 @@ public class MainActivity extends AppCompatActivity {
         }catch (NullPointerException ignored){ }
 
         // Nav Header...
-//        drawerImage = navigationView.getHeaderView( 0 ).findViewById( R.id.drawer_Image );
-//        drawerName = navigationView.getHeaderView( 0 ).findViewById( R.id.drawer_UserName );
-//        drawerEmail = navigationView.getHeaderView( 0 ).findViewById( R.id.drawer_userEmail );
-//        drawerCityLayout = navigationView.getHeaderView( 0 ).findViewById( R.id.drawer_user_city_layout );
-//        drawerCityTitle = navigationView.getHeaderView( 0 ).findViewById( R.id.drawer_title_text );
-//        drawerCityName = navigationView.getHeaderView( 0 ).findViewById( R.id.drawer_user_city );
+        drawerImage = navigationView.getHeaderView( 0 ).findViewById( R.id.drawer_Image );
+        drawerName = navigationView.getHeaderView( 0 ).findViewById( R.id.drawer_UserName );
+        drawerEmail = navigationView.getHeaderView( 0 ).findViewById( R.id.drawer_userEmail );
+        drawerCityLayout = navigationView.getHeaderView( 0 ).findViewById( R.id.drawer_user_city_layout );
+        drawerCityTitle = navigationView.getHeaderView( 0 ).findViewById( R.id.drawer_title_text );
+        drawerCityName = navigationView.getHeaderView( 0 ).findViewById( R.id.drawer_user_city );
 
+        toolCityName = findViewById( R.id.tool_user_city );
+        toolUserName = findViewById( R.id.tool_user_name );
 
         // Home Main Page....
         homeGridView = findViewById( R.id.home_grid_view );
 
-        mainPageList.add( new MainActivityGridModel( R.drawable.ic_home_black_24dp, "View Shop", 1 ) );
-        mainPageList.add( new MainActivityGridModel( R.drawable.ic_person_pin_circle_black_24dp, "View Profile", 1 ) );
-        mainPageList.add( new MainActivityGridModel( R.drawable.ic_person_pin_circle_black_24dp, "View Profile", 1 ) );
-        mainPageList.add( new MainActivityGridModel( R.drawable.ic_color_lens_black_24dp, "View Sample", 1 ) );
+        mainPageList.add( new MainActivityGridModel( R.drawable.ic_home_black_24dp, "View Home", REQUEST_TO_VIEW_HOME ) );
+        mainPageList.add( new MainActivityGridModel( R.drawable.ic_store_mall_directory_black_24dp, "Add New Shop", REQUEST_TO_ADD_SHOP ) );
+        mainPageList.add( new MainActivityGridModel( R.drawable.ic_person_pin_circle_black_24dp, "View Profile", 4 ) );
+        mainPageList.add( new MainActivityGridModel( R.drawable.ic_color_lens_black_24dp, "View Sample", 4 ) );
 
-        mainPageList.add( new MainActivityGridModel( R.drawable.ic_person_pin_circle_black_24dp, "View Profile", 1 ) );
-        mainPageList.add( new MainActivityGridModel( R.drawable.ic_person_pin_circle_black_24dp, "View Profile", 1 ) );
 
-        mainPageList.add( new MainActivityGridModel( R.drawable.ic_person_pin_circle_black_24dp, "View Profile", 1 ) );
-        mainPageList.add( new MainActivityGridModel( R.drawable.ic_person_pin_circle_black_24dp, "View Profile", 1 ) );
-        mainPageList.add( new MainActivityGridModel( R.drawable.ic_color_lens_black_24dp, "View Sample", 1 ) );
+        MainActivityAdaptor mainActivityAdaptor = new MainActivityAdaptor();
+        homeGridView.setAdapter( mainActivityAdaptor );
+        mainActivityAdaptor.notifyDataSetChanged();
 
-        MainActivityAdaopter mainActivityAdaopter = new MainActivityAdaopter();
-        homeGridView.setAdapter( mainActivityAdaopter );
-        mainActivityAdaopter.notifyDataSetChanged();
 
+        dialog.show();
         // Get Shop List Of Current City...
         DBQuery.getShopListOfCurrentCity();
+        // Load Home Page...
+        DBQuery.getMainListDataQuery( this, dialog, null, null, "HOME", true, 0);
+
+        toolCityName.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectCityDialog();
+            }
+        } );
+        drawerCityLayout.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectCityDialog();
+            }
+        } );
 
     }
 
@@ -147,11 +167,14 @@ public class MainActivity extends AppCompatActivity {
                     cityDialog.dismiss();
                     drawerCityTitle.setText( "Your City" );
                     drawerCityName.setText( tempAreaCodeCityModel.getAreaCode() + ", " + tempAreaCodeCityModel.getCityName() );
+                    toolCityName.setText( tempAreaCodeCityModel.getCityName() );
+
 //                    showToast( "CityName : " +tempAreaCodeCityModel.getCityName() + " Code : " + tempAreaCodeCityModel.getAreaCode() );
                     //  : Reload Product...
                     if (tempAreaCodeCityModel.getCityCode()!=CURRENT_CITY_CODE){
                      // TODO   loadMainHomePageAgain(tempAreaCodeCityModel.getCityCode());
                         CURRENT_CITY_CODE = tempAreaCodeCityModel.getCityCode();
+                        CURRENT_CITY_NAME = tempAreaCodeCityModel.getCityName();
                     }
 
                 }else{

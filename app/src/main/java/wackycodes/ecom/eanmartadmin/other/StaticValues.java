@@ -60,5 +60,17 @@ public class StaticValues {
     public static final int BANNER_CLICK_TYPE_SHOP = 2;
 
 
+    // Shop Veg
+    public static final int SHOP_TYPE_VEG = 1;
+    public static final int SHOP_TYPE_NON_VEG = 2;
+    public static final int SHOP_TYPE_VEG_NON = 3;
+    public static final int SHOP_TYPE_NO_SHOW = 4;
+
+    // Main Page To another...
+    public static final int REQUEST_TO_ADD_SHOP = 1;
+    public static final int REQUEST_TO_EDIT_SHOP = 2;
+    public static final int REQUEST_TO_VIEW_SHOP = 3;
+    public static final int REQUEST_TO_VIEW_HOME = 4;
+
 
 }

@@ -45,5 +45,13 @@
         <item>Shop Promotion</item>
     </string-array>
 
+    <string-array name="shop_veg_non_type">
+        <item>Shop Type</item>
+        <item>Pure Veg</item>
+        <item>Non Veg</item>
+        <item>Veg + Non Veg</item>
+        <item>Others</item>
+    </string-array>
+
 
 </resources>

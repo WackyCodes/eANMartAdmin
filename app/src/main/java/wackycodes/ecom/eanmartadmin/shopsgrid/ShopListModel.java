@@ -1,4 +1,4 @@
-package wackycodes.ecom.eanmartadmin.category;
+package wackycodes.ecom.eanmartadmin.shopsgrid;
 
 public class ShopListModel {
 

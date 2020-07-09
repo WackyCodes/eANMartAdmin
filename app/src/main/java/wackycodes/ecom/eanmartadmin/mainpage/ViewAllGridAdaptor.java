@@ -16,9 +16,8 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
-import wackycodes.ecom.eanmartadmin.MainActivity;
 import wackycodes.ecom.eanmartadmin.R;
-import wackycodes.ecom.eanmartadmin.category.ShopsViewActivity;
+import wackycodes.ecom.eanmartadmin.shopsgrid.ShopsViewActivity;
 import wackycodes.ecom.eanmartadmin.secondpage.BannerAndCatModel;
 
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CATEGORY_ITEMS_LAYOUT_CONTAINER;
@@ -87,6 +86,7 @@ public class ViewAllGridAdaptor extends BaseAdapter {
                 context.startActivity( intent );
                 break;
             case SHOP_ITEMS_LAYOUT_CONTAINER:
+
                 break;
         }
 

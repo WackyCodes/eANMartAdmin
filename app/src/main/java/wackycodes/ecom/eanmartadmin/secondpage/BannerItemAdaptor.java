@@ -17,14 +17,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.List;
 
 import wackycodes.ecom.eanmartadmin.R;
 import wackycodes.ecom.eanmartadmin.addnewitem.AddNewLayout;
 import wackycodes.ecom.eanmartadmin.addnewitem.AddNewLayoutActivity;
+import wackycodes.ecom.eanmartadmin.multisection.ShopHomeActivity;
 import wackycodes.ecom.eanmartadmin.other.MyImageView;
+import wackycodes.ecom.eanmartadmin.other.StaticMethods;
 
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_CLICK_TYPE_SHOP;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_CLICK_TYPE_WEBSITE;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_SLIDER_CONTAINER_ITEM;
 
 public class BannerItemAdaptor extends RecyclerView.Adapter<BannerItemAdaptor.ViewHolder> {
@@ -74,7 +79,7 @@ public class BannerItemAdaptor extends RecyclerView.Adapter<BannerItemAdaptor.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        private MyImageView bannerImage;
+        private RoundedImageView bannerImage;
         private LinearLayout addNewItemLayout;
         private ImageView editBannerLayBtn;
         public ViewHolder(@NonNull View itemView) {
@@ -84,7 +89,7 @@ public class BannerItemAdaptor extends RecyclerView.Adapter<BannerItemAdaptor.Vi
             editBannerLayBtn = itemView.findViewById( R.id.update_item_lay_imgBtn );
         }
 
-        private void setData(String imgLink, final String clickID, int clickType ){
+        private void setData(String imgLink, final String clickID, final int clickType ){
             if (isViewAll){
                 editBannerLayBtn.setVisibility( View.VISIBLE );
             }
@@ -97,8 +102,17 @@ public class BannerItemAdaptor extends RecyclerView.Adapter<BannerItemAdaptor.Vi
             bannerImage.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO : Click..
-                    showToast( itemView.getContext(), "Code Not Found! "+ clickID );
+                    switch ( clickType ){
+                        case BANNER_CLICK_TYPE_WEBSITE:
+                            StaticMethods.gotoURL( itemView.getContext(), clickID );
+                            break;
+                        case BANNER_CLICK_TYPE_SHOP:
+                            Intent intent = new Intent( itemView.getContext(), ShopHomeActivity.class );
+                            intent.putExtra( "SHOP_ID", clickID );
+                            itemView.getContext().startActivity( intent );
+                            break;
+                    }
+
                 }
             } );
         }

@@ -8,15 +8,21 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import wackycodes.ecom.eanmartadmin.R;
+import wackycodes.ecom.eanmartadmin.addnewitem.AddNewShopActivity;
 import wackycodes.ecom.eanmartadmin.secondpage.SecondActivity;
 
 import static wackycodes.ecom.eanmartadmin.MainActivity.mainPageList;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.REQUEST_TO_ADD_SHOP;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.REQUEST_TO_EDIT_SHOP;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.REQUEST_TO_VIEW_HOME;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.REQUEST_TO_VIEW_SHOP;
 
-public class MainActivityAdaopter extends BaseAdapter {
+public class MainActivityAdaptor extends BaseAdapter {
 
-    public MainActivityAdaopter() {
+    public MainActivityAdaptor() {
     }
 
     @Override
@@ -55,9 +61,21 @@ public class MainActivityAdaopter extends BaseAdapter {
     }
 
     private void setOnClick(Context context, int ID){
-        Intent intent = new Intent( context, SecondActivity.class );
-        context.startActivity( intent );
+        switch (ID){
+            case REQUEST_TO_ADD_SHOP:
+                Intent addShopIntent = new Intent( context, AddNewShopActivity.class );
+                context.startActivity( addShopIntent );
+                break;
+            case REQUEST_TO_EDIT_SHOP:
+            case REQUEST_TO_VIEW_SHOP:
+            case REQUEST_TO_VIEW_HOME:
+                Intent viewHomeIntent = new Intent( context, SecondActivity.class );
+                context.startActivity( viewHomeIntent );
+                break;
+            default:
+                Toast.makeText( context, "Code not found!", Toast.LENGTH_SHORT ).show();
+                break;
+        }
     }
-
 
 }

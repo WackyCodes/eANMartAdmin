@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_gravity="center"
+    tools:context=".addnewitem.AddNewShopActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="4dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:tint="@color/colorSecondary"
+                app:srcCompat="@drawable/ic_store_mall_directory_black_24dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="Add New Shop"
+                android:textAlignment="center"
+                android:textColor="@color/colorDarkViolet"
+                android:textSize="18dp" />
+
+            <LinearLayout
+                android:id="@+id/banner_shop_id_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical"
+                    android:paddingLeft="4dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="1dp"
+                        android:text="Shop's Area Code : "
+                        android:textColor="@color/colorSecondary"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/current_city_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="1dp"
+                        android:text="( Bhopal )"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="10sp" />
+
+                </LinearLayout>
+
+
+                <AutoCompleteTextView
+                    android:id="@+id/shop_area_code_auto_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_1dp_border_4dp_radius_no_color"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:hint="Enter Area Code"
+                    android:maxLines="1"
+                    android:padding="2dp"
+                    android:singleLine="true"
+                    android:textColor="@color/colorPrimary" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:paddingLeft="4dp"
+                    android:text="Select Shop Category"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/back_1dp_border_4dp_radius_no_color"
+                    android:backgroundTint="@color/colorPrimary">
+
+                    <Spinner
+                        android:id="@+id/shop_category_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:drawableLeft="@drawable/ic_color_lens_black_24dp"
+                        android:drawableTint="@color/colorPrimary"
+                        android:text="Banner Type"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/banner_link_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:padding="4dp"
+                    android:paddingLeft="8dp"
+                    android:text="Enter Category : "
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="12sp" />
+
+                <EditText
+                    android:id="@+id/shop_category_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_1dp_border_4dp_radius_no_color"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:hint="Enter Your category"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:padding="2dp"
+                    android:singleLine="true"
+                    android:textColor="@color/colorSecondary" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:padding="4dp"
+                    android:paddingLeft="8dp"
+                    android:text="Shop ID : "
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/shop_id_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:background="@drawable/back_1dp_border_4dp_radius_no_color"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:hint="Shop ID"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:padding="2dp"
+                        android:singleLine="true"
+                        android:textColor="@color/colorSecondary" />
+
+                    <ImageButton
+                        android:id="@+id/shop_id_generate_img_btn"
+                        android:layout_width="32dp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorNoColor"
+                        android:padding="2dp"
+                        android:textColor="@color/colorSecondary"
+                        android:tint="@color/colorDarkViolet"
+                        app:srcCompat="@drawable/ic_refresh_black_24dp" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:padding="4dp"
+                    android:paddingLeft="8dp"
+                    android:text="Shop Name : "
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="12sp" />
+
+                <EditText
+                    android:id="@+id/shop_name_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_1dp_border_4dp_radius_no_color"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:hint="Enter Shop Name"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:padding="2dp"
+                    android:singleLine="true"
+                    android:textColor="@color/colorSecondary" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:paddingLeft="4dp"
+                    android:text="Select Veg/NonVeg"
+                    android:textColor="@color/colorSecondary"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/back_1dp_border_4dp_radius_no_color"
+                    android:backgroundTint="@color/colorPrimary">
+
+                    <Spinner
+                        android:id="@+id/shop_veg_non_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:drawableLeft="@drawable/ic_color_lens_black_24dp"
+                        android:drawableTint="@color/colorPrimary"
+                        android:text="Banner Type"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/shop_cancel_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:layout_margin="2dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_1dp_border_4dp_radius_no_color"
+                    android:backgroundTint="@color/colorSecondary"
+                    android:padding="2dp"
+                    android:text="CANCEL"
+                    android:textColor="@color/colorSecondary" />
+
+                <Button
+                    android:id="@+id/shop_add_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:layout_margin="2dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_1dp_border_4dp_radius_no_color"
+                    android:backgroundTint="@color/colorDarkViolet"
+                    android:padding="2dp"
+                    android:text="ADD SHOP"
+                    android:textColor="@color/colorDarkViolet" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/back_text"
+                android:layout_margin="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="&lt;&lt; Back"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20dp"
+                android:textAlignment="center"/>
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

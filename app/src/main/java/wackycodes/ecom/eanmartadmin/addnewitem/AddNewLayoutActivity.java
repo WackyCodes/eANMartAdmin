@@ -49,9 +49,8 @@ import java.util.Map;
 
 import wackycodes.ecom.eanmartadmin.R;
 import wackycodes.ecom.eanmartadmin.other.UpdateImages;
-import wackycodes.ecom.eanmartadmin.category.SelectShopAdaptor;
-import wackycodes.ecom.eanmartadmin.category.ShopListModel;
-import wackycodes.ecom.eanmartadmin.category.ShopsViewActivity;
+import wackycodes.ecom.eanmartadmin.shopsgrid.ShopListModel;
+import wackycodes.ecom.eanmartadmin.shopsgrid.ShopsViewActivity;
 import wackycodes.ecom.eanmartadmin.database.DBQuery;
 import wackycodes.ecom.eanmartadmin.other.CheckInternetConnection;
 import wackycodes.ecom.eanmartadmin.other.DialogsClass;
@@ -627,10 +626,20 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void startCropImageActivity(Uri imageUri) {
-        CropImage.activity(imageUri)
-                .setGuidelines( CropImageView.Guidelines.ON)
-                .setMultiTouchEnabled(true)
-                .start(this);
+
+        if (bannerDialogType == BANNER_SLIDER_CONTAINER_ITEM){
+            CropImage.activity(imageUri)
+                    .setGuidelines( CropImageView.Guidelines.ON)
+                    .setAspectRatio( 3,2 )
+                    .setMultiTouchEnabled(true)
+                    .start(this);
+        }else{
+            CropImage.activity(imageUri)
+                    .setGuidelines( CropImageView.Guidelines.ON)
+                    .setMultiTouchEnabled(true)
+                    .start(this);
+        }
+
     }
     public Uri getImageUri( Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();

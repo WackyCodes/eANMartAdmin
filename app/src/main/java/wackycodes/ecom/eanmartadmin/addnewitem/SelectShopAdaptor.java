@@ -1,4 +1,4 @@
-package wackycodes.ecom.eanmartadmin.category;
+package wackycodes.ecom.eanmartadmin.addnewitem;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wackycodes.ecom.eanmartadmin.R;
-import wackycodes.ecom.eanmartadmin.cityareacode.AreaCodeCityModel;
+import wackycodes.ecom.eanmartadmin.shopsgrid.ShopListModel;
 
 public class SelectShopAdaptor extends ArrayAdapter <ShopListModel> {
 

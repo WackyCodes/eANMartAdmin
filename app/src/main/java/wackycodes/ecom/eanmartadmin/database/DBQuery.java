@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,6 +18,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,12 +27,13 @@ import java.util.List;
 import java.util.Map;
 
 import wackycodes.ecom.eanmartadmin.MainActivity;
-import wackycodes.ecom.eanmartadmin.category.ShopListModel;
+import wackycodes.ecom.eanmartadmin.shopsgrid.ShopListModel;
 import wackycodes.ecom.eanmartadmin.cityareacode.AreaCodeCityModel;
-import wackycodes.ecom.eanmartadmin.category.ShopsViewActivity;
+import wackycodes.ecom.eanmartadmin.shopsgrid.ShopsViewActivity;
 import wackycodes.ecom.eanmartadmin.secondpage.BannerAndCatModel;
 import wackycodes.ecom.eanmartadmin.secondpage.HomeListModel;
 import wackycodes.ecom.eanmartadmin.secondpage.SecondActivity;
+import wackycodes.ecom.eanmartadmin.shopsgrid.ShopsViewAdaptor;
 
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_SLIDER_LAYOUT_CONTAINER;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_CODE;
@@ -44,6 +48,7 @@ public class DBQuery {
     public static FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
     public static FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    public  static StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
     public static final ArrayList<AreaCodeCityModel> areaCodeCityModelList = new ArrayList <>();
     public static final ArrayList<ShopListModel> shopListModelArrayList = new ArrayList <>();
@@ -57,8 +62,9 @@ public class DBQuery {
         return firebaseFirestore.collection( "HOME_PAGE" ).document( CURRENT_CITY_CODE ).collection( collectionName );
     }
 
-    public static void getMainListDataQuery(Context context, @Nullable final Dialog dialog, @Nullable final SwipeRefreshLayout refreshLayout,
-                                       String categoryID, final boolean isHomePage, final int index){
+    public static void getMainListDataQuery(Context context, @Nullable final Dialog dialog, @Nullable final RecyclerView recyclerView,
+                                            @Nullable final SwipeRefreshLayout refreshLayout,
+                                            final String categoryID, final boolean isHomePage, final int index){
         if (isHomePage){
             categoryIDList.clear();
             categoryList.clear();
@@ -67,7 +73,7 @@ public class DBQuery {
             categoryList.get( index ).clear();
         }
 
-        getCollectionRef(categoryID.toUpperCase()).orderBy( "index" )
+        getCollectionRef( categoryID ).orderBy( "index" )
                 .get().addOnCompleteListener( new OnCompleteListener <QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task <QuerySnapshot> task) {
@@ -96,6 +102,9 @@ public class DBQuery {
                             }
                             // Add Data in homeList...
                             homePageList.add( new HomeListModel( CATEGORY_ITEMS_LAYOUT_CONTAINER, layout_id, bannerAndCatModelList ) );
+                            if (SecondActivity.homePageAdaptor != null)
+                                SecondActivity.homePageAdaptor.notifyDataSetChanged();
+
                         }else
                         if (viewType == BANNER_SLIDER_LAYOUT_CONTAINER){
                             List<BannerAndCatModel> bannerAndCatModelList = new ArrayList <>();
@@ -115,8 +124,22 @@ public class DBQuery {
                             // Add Data in homeList...
                             if (isHomePage){
                                 homePageList.add( new HomeListModel( BANNER_SLIDER_LAYOUT_CONTAINER, layout_id, bannerAndCatModelList ) );
-                            }else{
+                                if (SecondActivity.homePageAdaptor != null)
+                                    SecondActivity.homePageAdaptor.notifyDataSetChanged();
+                            }
+                            else{
                                 categoryList.get( index ).add( new HomeListModel( BANNER_SLIDER_LAYOUT_CONTAINER, layout_id, bannerAndCatModelList ) );
+                                if (ShopsViewActivity.shopsViewAdaptor != null ){
+                                    ShopsViewActivity.shopsViewAdaptor.notifyDataSetChanged();
+                                }
+
+//                                if (recyclerView != null && ShopsViewActivity.shopsViewAdaptor == null ){
+//                                    ShopsViewActivity.shopsViewAdaptor = new ShopsViewAdaptor( categoryList.get( index ), index, "Name", categoryID );
+//                                    recyclerView.setAdapter( ShopsViewActivity.shopsViewAdaptor );
+//                                    ShopsViewActivity.shopsViewAdaptor.notifyDataSetChanged();
+//                                }else if (ShopsViewActivity.shopsViewAdaptor != null ){
+//                                    ShopsViewActivity.shopsViewAdaptor.notifyDataSetChanged();
+//                                }
                             }
 
                         }else
@@ -131,15 +154,31 @@ public class DBQuery {
                             if (isHomePage){
                                 homePageList.add( new HomeListModel( STRIP_AD_LAYOUT_CONTAINER, layout_id, banner_image, banner_click_id
                                         , Integer.parseInt( String.valueOf( banner_click_type ))) );
-                            }else{
+                                if (SecondActivity.homePageAdaptor != null)
+                                    SecondActivity.homePageAdaptor.notifyDataSetChanged();
+                            }
+                            else{
                                 categoryList.get( index ).add( new HomeListModel( STRIP_AD_LAYOUT_CONTAINER, layout_id, banner_image, banner_click_id
                                         , Integer.parseInt( String.valueOf( banner_click_type ))) );
+                                if (ShopsViewActivity.shopsViewAdaptor != null ){
+                                    ShopsViewActivity.shopsViewAdaptor.notifyDataSetChanged();
+                                }
+
+//                                if (recyclerView != null && ShopsViewActivity.shopsViewAdaptor == null ){
+//                                    ShopsViewActivity.shopsViewAdaptor = new ShopsViewAdaptor( categoryList.get( index ), index, "Name", categoryID );
+//                                    recyclerView.setAdapter( ShopsViewActivity.shopsViewAdaptor );
+//                                    ShopsViewActivity.shopsViewAdaptor.notifyDataSetChanged();
+//                                }else if (ShopsViewActivity.shopsViewAdaptor != null ){
+//                                    ShopsViewActivity.shopsViewAdaptor.notifyDataSetChanged();
+//                                }
                             }
+
                         }else
                         if (viewType == SHOP_ITEMS_LAYOUT_CONTAINER){
                             // This is only in shop View Case... but we have to check, cause.. to ad purpose we can use this in future...
-                            // TODO:
-
+                            String layout_id = documentSnapshot.getId();
+                            int layIndex = Integer.parseInt( String.valueOf( (long)documentSnapshot.get( "index" ) ) );
+                            getShopsItemQuery( recyclerView, categoryID, layout_id, layIndex, index);
                         }
                         // notifyDataChanged...
                         if (isHomePage){
@@ -178,6 +217,44 @@ public class DBQuery {
             }
         } );
 
+    }
+
+    public static void getShopsItemQuery( @Nullable final RecyclerView recyclerView, final String categoryID, final String layout_id, final int layIndex, final int index){
+        // One More Query Needed here...
+        getCollectionRef("SHOPS").whereArrayContains( "shop_categories", categoryID )
+                .get().addOnCompleteListener( new OnCompleteListener <QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task <QuerySnapshot> task1) {
+                if (task1.isSuccessful()) {
+                    // data is loaded...
+                    List<BannerAndCatModel> bannerAndCatModelList = new ArrayList <>();
+                    for (QueryDocumentSnapshot documentSnapshot1 : task1.getResult()) {
+                        String shop_id =  documentSnapshot1.get( "shop_id" ).toString();
+                        String shop_name =  documentSnapshot1.get( "shop_name" ).toString();
+                        String shop_logo =     documentSnapshot1.get( "shop_logo" ).toString();
+
+                        BannerAndCatModel bannerAndCatModel = new BannerAndCatModel(
+                                shop_id, shop_logo, shop_id, 0
+                                , shop_name, ""  );
+                        bannerAndCatModelList.add( bannerAndCatModel );
+                    }
+                    // Add Data in homeList...SHOP_ITEMS_LAYOUT_CONTAINER
+                    categoryList.get( index ).add( layIndex,  new HomeListModel( SHOP_ITEMS_LAYOUT_CONTAINER, layout_id, bannerAndCatModelList ) );
+                    if (ShopsViewActivity.shopsViewAdaptor != null ){
+                        ShopsViewActivity.shopsViewAdaptor.notifyDataSetChanged();
+                    }
+//                    if (recyclerView != null && ShopsViewActivity.shopsViewAdaptor == null ){
+//                        ShopsViewActivity.shopsViewAdaptor = new ShopsViewAdaptor( categoryList.get( index ), index, "Name", categoryID );
+//                        recyclerView.setAdapter( ShopsViewActivity.shopsViewAdaptor );
+//                        ShopsViewActivity.shopsViewAdaptor.notifyDataSetChanged();
+//                    }else if (ShopsViewActivity.shopsViewAdaptor != null ){
+//                        ShopsViewActivity.shopsViewAdaptor.notifyDataSetChanged();
+//                    }
+                }else{
+
+                }
+            }
+        } );
     }
 
     public static void getCityListQuery(){
@@ -228,7 +305,6 @@ public class DBQuery {
 
     }
 
-
     // Upload Query...
     public static void setNewCategoryOnDataBase(final Context context, final Dialog dialog, String categoryID, String categoryName, final int layoutIndex
             , final Map <String, Object> uploadMap ){
@@ -237,7 +313,7 @@ public class DBQuery {
         firstMap.put( "category_id", categoryID );
         firstMap.put( "category_name", categoryName );
         firstMap.put( "type", SHOP_ITEMS_LAYOUT_CONTAINER );
-        firstMap.put( "index", 1 );
+        firstMap.put( "index", 0 );
         firstMap.put( "layout_id", "shop_layout" );
 
         getCollectionRef( categoryID ).document( "shop_layout" ).set( firstMap )

@@ -1,10 +1,11 @@
-package wackycodes.ecom.eanmartadmin.category;
+package wackycodes.ecom.eanmartadmin.shopsgrid;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -13,14 +14,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import wackycodes.ecom.eanmartadmin.R;
 import wackycodes.ecom.eanmartadmin.addnewitem.AddNewLayoutActivity;
+import wackycodes.ecom.eanmartadmin.other.CheckInternetConnection;
 import wackycodes.ecom.eanmartadmin.other.DialogsClass;
-import wackycodes.ecom.eanmartadmin.secondpage.HomeListModel;
-import wackycodes.ecom.eanmartadmin.secondpage.HomePageAdaptor;
 import wackycodes.ecom.eanmartadmin.secondpage.SecondActivity;
 
 import static wackycodes.ecom.eanmartadmin.database.DBQuery.categoryIDList;
@@ -32,11 +29,11 @@ import static wackycodes.ecom.eanmartadmin.other.StaticValues.STRIP_AD_LAYOUT_CO
 public class ShopsViewActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-
+    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView shopsViewRecycler;
     public static ShopsViewAdaptor shopsViewAdaptor;
 
-    private String categoryID = "ID";
+    private String categoryID;
     private int catIndex = 0;
 
     private LinearLayout activityViewLayout;
@@ -64,7 +61,10 @@ public class ShopsViewActivity extends AppCompatActivity {
         // Get Intent Value...
         categoryID = getIntent().getStringExtra( "CAT_ID" );
         String catName = getIntent().getStringExtra( "CAT_NAME" );
+        catIndex = categoryIDList.indexOf( categoryID ); // Get Category Index...
+
         // Add Layout...
+        swipeRefreshLayout = findViewById( R.id.home_swipe_refresh_layout );
         dialogAddLayout = findViewById( R.id.dialog_add_layout );
         newBannerSlidderContainer = findViewById( R.id.add_banner_slider_layout );
         newGridLayoutContainer = findViewById( R.id.add_grid_layout );
@@ -83,24 +83,27 @@ public class ShopsViewActivity extends AppCompatActivity {
         }catch (NullPointerException ignored){ }
 
         // -------------
-        shopsViewRecycler = findViewById( R.id.shops_view_activity_recycler );
+        shopsViewRecycler = findViewById( R.id.shops_view_activity_recycler_view );
+
+        activityViewLayout.setVisibility( View.VISIBLE );
+        addNewLayoutBtn.setVisibility( View.VISIBLE );
         // Linear Layout...
         LinearLayoutManager homeCatLayoutManager = new LinearLayoutManager( this );
         homeCatLayoutManager.setOrientation( RecyclerView.VERTICAL );
         shopsViewRecycler.setLayoutManager( homeCatLayoutManager );
 
-        catIndex = categoryIDList.indexOf( categoryID ); // Get Category Index...
 //        categoryList.add( new ArrayList <HomeListModel>() ); // Add Items (Done At homeList time...
         shopsViewAdaptor = new ShopsViewAdaptor( categoryList.get( catIndex ), catIndex, "Name", categoryID );
         shopsViewRecycler.setAdapter( shopsViewAdaptor );
+        shopsViewAdaptor.notifyDataSetChanged();
 
         if (categoryList.get( catIndex ).size() == 0){
             //  Load List and Set...
             dialog.show();
-            getMainListDataQuery( this, dialog, null, categoryID, false, catIndex);
+            getMainListDataQuery( this, dialog, shopsViewRecycler, null, categoryID, false, catIndex);
         }else{
             // notifyDataSetChanged...
-            shopsViewAdaptor.notifyDataSetChanged();
+//            shopsViewAdaptor.notifyDataSetChanged();
         }
 
         // ----------------------------------------------------------------------------
@@ -146,6 +149,18 @@ public class ShopsViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setDialogVisibility(false);
+            }
+        } );
+
+        swipeRefreshLayout.setOnRefreshListener( new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing( true );
+                if (CheckInternetConnection.isInternetConnected( ShopsViewActivity.this )){
+                    getMainListDataQuery( ShopsViewActivity.this, null, shopsViewRecycler, swipeRefreshLayout, categoryID, false, catIndex);
+                }else{
+                    swipeRefreshLayout.setRefreshing( false );
+                }
             }
         } );
 

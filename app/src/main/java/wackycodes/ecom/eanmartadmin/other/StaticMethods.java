@@ -1,12 +1,25 @@
 package wackycodes.ecom.eanmartadmin.other;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.widget.Toast;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_CODE;
+
 public class StaticMethods {
+
+    public static void gotoURL(Context context, String urlLink){
+        Uri uri = Uri.parse( urlLink );
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        context.startActivity( intent );
+    }
 
     public static String getRandomNumAccordingToDate(){
         Date date =  Calendar.getInstance().getTime();
@@ -33,7 +46,41 @@ public class StaticMethods {
         randNum = String.valueOf( rand_int1 ).substring( 0, 2 );
 
         return randNum;
+    }
 
+    public static String getFiveDigitRandom(){
+        Random random = new Random();
+        // Generate random integers in range 0 to 9999
+        int rand_int1 = 0;
+        String randNum = "";
+        do {
+            rand_int1 = random.nextInt(100000);
+        }while ( rand_int1 <= 0 );
+
+        if (rand_int1<999){
+            rand_int1 = rand_int1*1000;
+        }else if (rand_int1<9999){
+            rand_int1 = rand_int1*100;
+        }else if (rand_int1<=99999){
+            rand_int1 = rand_int1*10;
+        }
+            randNum = String.valueOf( rand_int1 ).substring( 0, 5 );
+
+        return randNum;
+    }
+
+    public static String getRandomShopId(Context context){
+        String shopId = "";
+        if ( CURRENT_CITY_CODE.equals( "BHOPAL" ) ){
+            shopId = "4620" + getFiveDigitRandom();
+            return shopId;
+        }else if ( CURRENT_CITY_CODE.equals( "INDORE" ) ){
+            shopId = "4520" + getFiveDigitRandom();
+            return shopId;
+        }else{
+            Toast.makeText( context, "City not registered yet!", Toast.LENGTH_SHORT ).show();
+            return shopId;
+        }
     }
 
 

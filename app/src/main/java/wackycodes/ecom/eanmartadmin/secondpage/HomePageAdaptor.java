@@ -5,15 +5,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -21,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.gridlayout.widget.GridLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,20 +33,19 @@ import java.util.List;
 import java.util.Map;
 
 import wackycodes.ecom.eanmartadmin.R;
-import wackycodes.ecom.eanmartadmin.category.ShopsViewActivity;
+import wackycodes.ecom.eanmartadmin.multisection.ShopHomeActivity;
+import wackycodes.ecom.eanmartadmin.other.StaticMethods;
+import wackycodes.ecom.eanmartadmin.shopsgrid.ShopsViewActivity;
 import wackycodes.ecom.eanmartadmin.mainpage.ViewAllActivity;
-import wackycodes.ecom.eanmartadmin.other.CheckInternetConnection;
 import wackycodes.ecom.eanmartadmin.other.DialogsClass;
 import wackycodes.ecom.eanmartadmin.other.MyImageView;
-import wackycodes.ecom.eanmartadmin.other.StaticMethods;
-import wackycodes.ecom.eanmartadmin.other.UpdateImages;
 
-import static android.app.Activity.RESULT_OK;
 import static wackycodes.ecom.eanmartadmin.database.DBQuery.firebaseFirestore;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_CLICK_TYPE_SHOP;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_CLICK_TYPE_WEBSITE;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_SLIDER_LAYOUT_CONTAINER;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_CODE;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CATEGORY_ITEMS_LAYOUT_CONTAINER;
-import static wackycodes.ecom.eanmartadmin.other.StaticValues.GALLERY_CODE;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.STRIP_AD_LAYOUT_CONTAINER;
 import static wackycodes.ecom.eanmartadmin.database.DBQuery.homePageList;
 
@@ -180,7 +174,7 @@ public class HomePageAdaptor extends RecyclerView.Adapter {
         private void setBannerData(final String layoutID, final List<BannerAndCatModel> bannerAndCatModelList, final int index){
             layoutPosition = 1 + index;
             indexNo.setText( "position : "+ layoutPosition);
-            headTitle.setText( "Total banners " + " (" + bannerAndCatModelList.size() + ")" );
+            headTitle.setText( "Slider Banners " + " (" + bannerAndCatModelList.size() + ")" );
             if (bannerAndCatModelList.size()>=2){
                 warningText.setVisibility( View.GONE );
             }else{
@@ -279,9 +273,9 @@ public class HomePageAdaptor extends RecyclerView.Adapter {
             dialog = DialogsClass.getDialog( itemView.getContext() );
             visibleBtn.setVisibility( View.INVISIBLE );
         }
-        private void setStripAdData(String imgLink, final String layoutID, String clickID, int clickType, final int index){
+        private void setStripAdData(String imgLink, final String layoutID, final String clickID, final int clickType, final int index){
             layoutPosition = 1 + index;
-            indexNo.setText( "position : " + layoutPosition );
+            indexNo.setText( "Ad Banner position : " + layoutPosition );
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                stripAdImage.setBackgroundTintList( ColorStateList.valueOf( Color.parseColor( colorCode ) ));
 //            }
@@ -301,7 +295,17 @@ public class HomePageAdaptor extends RecyclerView.Adapter {
             itemView.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showToast( "Code Not Found!", itemView.getContext() );
+//                    showToast( "Code Not Found!", itemView.getContext() );
+                    switch ( clickType ){
+                        case BANNER_CLICK_TYPE_WEBSITE:
+                            StaticMethods.gotoURL( itemView.getContext(), clickID );
+                            break;
+                        case BANNER_CLICK_TYPE_SHOP:
+                            Intent intent = new Intent( itemView.getContext(), ShopHomeActivity.class );
+                            intent.putExtra( "SHOP_ID", clickID );
+                            itemView.getContext().startActivity( intent );
+                            break;
+                    }
                 }
             } );
 
@@ -406,13 +410,13 @@ public class HomePageAdaptor extends RecyclerView.Adapter {
                 itemLayout.setOnClickListener( new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if ( v == gridLayout.getChildAt( 0 ).findViewById( R.id.product_layout )){
+                        if ( v == gridLayout.getChildAt( 0 ).findViewById( R.id.cat_item )){
                             onCatClick(categoryList.get( 0 ).getName(), categoryList.get( 0 ).getClickID());
                         } else
-                        if ( v == gridLayout.getChildAt( 1 ).findViewById( R.id.product_layout )){
+                        if ( v == gridLayout.getChildAt( 1 ).findViewById( R.id.cat_item )){
                             onCatClick(categoryList.get( 1 ).getName(), categoryList.get( 1 ).getClickID());
                         } else
-                        if ( v == gridLayout.getChildAt( 2 ).findViewById( R.id.product_layout )){
+                        if ( v == gridLayout.getChildAt( 2 ).findViewById( R.id.cat_item )){
                             onCatClick(categoryList.get( 2 ).getName(), categoryList.get( 2 ).getClickID());
                         }
                     }

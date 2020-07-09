@@ -1,5 +1,6 @@
 package wackycodes.ecom.eanmartadmin.secondpage;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -11,8 +12,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,9 +32,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +68,7 @@ import static wackycodes.ecom.eanmartadmin.other.StaticValues.CATEGORY_ITEMS_LAY
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_CODE;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.GALLERY_CODE;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.STRIP_AD_LAYOUT_CONTAINER;
+import static wackycodes.ecom.eanmartadmin.other.UpdateImages.uploadImageLink;
 
 public class SecondActivity extends AppCompatActivity {
     public static AppCompatActivity secondActivity;
@@ -62,6 +77,7 @@ public class SecondActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView secondRecycler;
     public static HomePageAdaptor homePageAdaptor;
 
@@ -104,7 +120,7 @@ public class SecondActivity extends AppCompatActivity {
         activityViewLayout = findViewById( R.id.activity_view_layout);
         addNewLayoutBtn = findViewById( R.id.add_new_layout);
 // Refresh Progress...
-//        homeSwipeRefreshLayout = view.findViewById( R.id.home_swipe_refresh_layout );
+        swipeRefreshLayout = findViewById( R.id.home_swipe_refresh_layout );
 //        homeSwipeRefreshLayout.setColorSchemeColors( getContext().getResources().getColor( R.color.colorPrimary ),
 //                getContext().getResources().getColor( R.color.colorPrimary ),
 //                getContext().getResources().getColor( R.color.colorPrimary ));
@@ -122,7 +138,7 @@ public class SecondActivity extends AppCompatActivity {
 
         // Add new Category...
         addNewCatItemLayout = findViewById( R.id.add_new_cat_item_layout );
-        catImageView = findViewById( R.id.dialog_add_image );
+        catImageView = (ImageView) findViewById( R.id.dialog_cat_add_image );
         dialogOkBtn = findViewById( R.id.dialog_ok_btn );
         dialogCancelBtn = findViewById( R.id.dialog_cancel_btn );
         dialogAddImage = findViewById( R.id.dialog_change_image );
@@ -150,7 +166,7 @@ public class SecondActivity extends AppCompatActivity {
         homePageAdaptor.notifyDataSetChanged();
         if (homePageList.size()==0){
             dialog.show();
-            getMainListDataQuery( this, dialog, null, "HOME", true, 0);
+            getMainListDataQuery( this, dialog, null, null, "HOME", true, 0);
         }
 
         addNewLayoutBtn.setOnClickListener( new View.OnClickListener() {
@@ -199,12 +215,24 @@ public class SecondActivity extends AppCompatActivity {
         // Add New Cat....
         addNewCategoryDialog();
 
+        swipeRefreshLayout.setOnRefreshListener( new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing( true );
+                if (CheckInternetConnection.isInternetConnected( SecondActivity.this )){
+                    getMainListDataQuery( SecondActivity.this, null, null, swipeRefreshLayout, "HOME", true, 0);
+                }else{
+                    swipeRefreshLayout.setRefreshing( false );
+                }
+            }
+        } );
+
     }
 
     @Override
     public void onBackPressed() {
         if (addNewCatItemLayout.getVisibility() == View.VISIBLE){
-            if (UpdateImages.uploadImageLink != null){
+            if (uploadImageLink != null){
                 showAlertDialogForCat(newCatID );
             }else{
                 super.onBackPressed();
@@ -240,7 +268,7 @@ public class SecondActivity extends AppCompatActivity {
 
     public void addNewCategoryDialog(){
         newCatID = null;
-        UpdateImages.uploadImageLink = null;
+        uploadImageLink = null;
 //        final Dialog dialogAddCat = new Dialog( this );
 //        dialogAddCat.requestWindowFeature( Window.FEATURE_NO_TITLE );
 //        dialogAddCat.setContentView( R.layout.dialog_add_cat_one_image_item );
@@ -270,6 +298,13 @@ public class SecondActivity extends AppCompatActivity {
                     UpdateImages.uploadImageOnFirebaseStorage( SecondActivity.this, dialog, catImageUri, catImageView
                             , CURRENT_CITY_CODE + "/HOME/category"
                             , newCatID );
+
+//                    try {
+//                        uploadFromAStream(SecondActivity.this, catImageUri, CURRENT_CITY_CODE + "/HOME/category", newCatID  );
+//                    } catch (FileNotFoundException e) {
+//                        e.printStackTrace();
+//                    }
+
                 }else{
                     if (catImageUri == null){
                         DialogsClass.alertDialog( SecondActivity.this, null, "Please Add Image First!" ).show();
@@ -281,7 +316,7 @@ public class SecondActivity extends AppCompatActivity {
         dialogOkBtn.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (UpdateImages.uploadImageLink != null && isValidText(dialogName) ){
+                if (uploadImageLink != null && isValidText(dialogName) ){
                     dialog.show();
                     // Add OnDatabase..
                     Map<String, Object> catMap = new HashMap <>();
@@ -290,11 +325,11 @@ public class SecondActivity extends AppCompatActivity {
                     catMap.put( "no_of_cat", position );
                     catMap.put( "cat_id_"+position, newCatID );
                     catMap.put( "cat_name_"+position, dialogName.getText().toString()  );
-                    catMap.put( "cat_image_"+position, UpdateImages.uploadImageLink );
+                    catMap.put( "cat_image_"+position, uploadImageLink );
 
 
                     homePageList.get( layoutIndex ).getBannerAndCatModelList().add( new BannerAndCatModel(
-                            newCatID, UpdateImages.uploadImageLink, newCatID, CATEGORY_ITEMS_LAYOUT_CONTAINER,  dialogName.getText().toString(), ""
+                            newCatID, uploadImageLink, newCatID, CATEGORY_ITEMS_LAYOUT_CONTAINER,  dialogName.getText().toString(), ""
                     ) );
                     setAddCatLayoutVisibility(false);
                     DBQuery.setNewCategoryOnDataBase( SecondActivity.this, dialog, newCatID,  dialogName.getText().toString(), layoutIndex , catMap );
@@ -305,7 +340,7 @@ public class SecondActivity extends AppCompatActivity {
         dialogCancelBtn.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(UpdateImages.uploadImageLink != null){
+                if(uploadImageLink != null){
                     showAlertDialogForCat(newCatID );
                 }else{
                    setAddCatLayoutVisibility( false );
@@ -316,7 +351,8 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private String getNewCatID(String catName){
-        catName = catName.toUpperCase().trim();
+        catName = catName.toUpperCase().trim().replace( " ", "_" );
+
         if (catName.length() < 6){
             catName = catName + "_" + StaticMethods.getTwoDigitRandom();
             return catName;
@@ -340,6 +376,7 @@ public class SecondActivity extends AppCompatActivity {
         }
     }
 
+
     // Get Result of Image...
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -348,8 +385,9 @@ public class SecondActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK){
                 if (data != null){
                     catImageUri = data.getData();
-                    UpdateImages.uploadImageLink = null;
-                    Glide.with( this ).load(  data.getData().toString() ).into( catImageView );
+                    uploadImageLink = null;
+                    Glide.with( SecondActivity.this ).load(  data.getData() )
+                            .apply( new RequestOptions().placeholder( R.drawable.ic_photo_black_24dp ) ).into( catImageView );
                 }else{
                     showToast(  "Image not Found..!" );
                 }
@@ -357,6 +395,8 @@ public class SecondActivity extends AppCompatActivity {
         }
         // Get Response of cropped Image method....
     }
+
+
 
     private void showToast(String msg){
         Toast.makeText( this, msg, Toast.LENGTH_SHORT ).show();
@@ -383,6 +423,56 @@ public class SecondActivity extends AppCompatActivity {
             }
         } ).show();
     }
+
+    // Unusable...
+    private void uploadFromAStream(final Context context, final Uri imageUri, final String uploadPath, final String fileName )
+            throws FileNotFoundException {
+
+        final StorageReference storageRef = DBQuery.storageReference.child( uploadPath + "/" + fileName + ".jpg" );
+
+        InputStream stream = new FileInputStream(new File(getPath(imageUri)));
+
+        UploadTask uploadTask = storageRef.putStream(stream);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener <UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+                storageRef.getDownloadUrl().addOnCompleteListener( new OnCompleteListener <Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task <Uri> task) {
+                        if (task.isSuccessful()){
+//                            isUploadSuccess = true;
+//                                                imageUri = task.getResult();
+                            uploadImageLink = task.getResult().toString();
+                            Glide.with( context ).load( uploadImageLink ).into( catImageView );
+                            dialog.dismiss();
+                        }else{
+                            // Failed Query to getDownload Link...
+                            // TODO : Again Request to Get Download Link Or Query to Delete The Image....
+                            UpdateImages.deleteImageFromFirebase(context, dialog, uploadPath, fileName);
+                            dialog.dismiss();
+                            showToast( task.getException().getMessage().toString() );
+                        }
+                    }
+                } );
+            }
+        });
+    }
+    @SuppressWarnings("deprecation")
+    public String getPath(Uri uri) {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
+
 
 }
 
