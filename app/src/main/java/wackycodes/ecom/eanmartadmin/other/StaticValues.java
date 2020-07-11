@@ -40,13 +40,13 @@ public class StaticValues {
     public static final int UPDATE_PASS = 2;
 
     // Common Main Home Container...
-    public static final int BANNER_SLIDER_LAYOUT_CONTAINER = 0;
+    public static final int BANNER_SLIDER_LAYOUT_CONTAINER = 2;
     public static final int STRIP_AD_LAYOUT_CONTAINER = 1;
-    public static final int CATEGORY_ITEMS_LAYOUT_CONTAINER = 3;
-    public static final int SHOP_ITEMS_LAYOUT_CONTAINER = 4;
+    public static final int CATEGORY_ITEMS_LAYOUT_CONTAINER = 5;
+    public static final int SHOP_ITEMS_LAYOUT_CONTAINER = 6;
 
-    public static final int GRID_PRODUCTS_LAYOUT_CONTAINNER = 5;
-    public static final int HORIZONTAL_PRODUCTS_LAYOUT_CONTAINER = 5;
+    public static final int GRID_PRODUCTS_LAYOUT_CONTAINNER = 4;
+    public static final int HORIZONTAL_PRODUCTS_LAYOUT_CONTAINER = 3;
 
     public static final int BANNER_SLIDER_CONTAINER_ITEM = 20; // not stored in database...
 
@@ -58,6 +58,8 @@ public class StaticValues {
     // Banner Click Type...
     public static final int BANNER_CLICK_TYPE_WEBSITE = 1;
     public static final int BANNER_CLICK_TYPE_SHOP = 2;
+    public static final int BANNER_CLICK_TYPE_CATEGORY = 3;
+    public static final int BANNER_CLICK_TYPE_NONE = 4;
 
 
     // Shop Veg

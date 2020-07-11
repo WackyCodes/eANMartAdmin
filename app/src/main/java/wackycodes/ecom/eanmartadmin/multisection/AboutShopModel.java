@@ -42,6 +42,14 @@ public class AboutShopModel {
         this.shopID = shopID;
     }
 
+    public AboutShopModel(String shopID, String shopName, String shopCategory, String shopLogo, String shopRating, int shopVegType) {
+        this.shopID = shopID;
+        this.shopName = shopName;
+        this.shopCategory = shopCategory;
+        this.shopLogo = shopLogo;
+        this.shopRatingStars = shopRating;
+        this.shopVegNonCode = shopVegType;
+    }
 
 
     public String getShopID() {

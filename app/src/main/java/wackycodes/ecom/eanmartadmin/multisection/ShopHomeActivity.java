@@ -17,9 +17,7 @@ public class ShopHomeActivity extends AppCompatActivity {
         setContentView( R.layout.activity_shop_home );
 
         String shopID = getIntent().getStringExtra( "SHOP_ID" );
-
         shopIdText = findViewById( R.id.shop_id_text );
         shopIdText.setText( shopID );
-
     }
 }
