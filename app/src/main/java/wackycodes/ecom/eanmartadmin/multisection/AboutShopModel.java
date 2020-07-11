@@ -8,7 +8,10 @@ public class AboutShopModel {
     private String shopCategory;
     private String shopTagLine;
 
+    private String[] shopCategories;
+
     private int shopVegNonCode;
+    private boolean isServiceAvailable;
     private boolean isOpen;
     private String shopOpenTime;
     private String shopCloseTime;
@@ -19,10 +22,19 @@ public class AboutShopModel {
     private String shopRatingPeoples;
     private int verifyCode;
 
+    private String shopAreaCode;
+    private String shopAreaName;
+    private String shopCity;
+    private String shopLandMark;
+
     private String[] shopDaysSchedule;
 
     // Contacts...
     private String shopOwnerName;
+    private String shopOwnerAddress;
+    private String shopOwnerMobile;
+    private String shopOwnerEmail;
+
     private String shopHelpLine;
     private String shopEmail;
     private String shopWebsite;
@@ -37,6 +49,8 @@ public class AboutShopModel {
     private int shopLicenceType;
     private String shopLicenceNumber;
 
+    public AboutShopModel() {
+    }
 
     public AboutShopModel(String shopID) {
         this.shopID = shopID;
@@ -76,6 +90,46 @@ public class AboutShopModel {
         this.shopAddress = shopAddress;
     }
 
+    public String[] getShopCategories() {
+        return shopCategories;
+    }
+
+    public void setShopCategories(String[] shopCategories) {
+        this.shopCategories = shopCategories;
+    }
+
+    public String getShopAreaCode() {
+        return shopAreaCode;
+    }
+
+    public void setShopAreaCode(String shopAreaCode) {
+        this.shopAreaCode = shopAreaCode;
+    }
+
+    public String getShopAreaName() {
+        return shopAreaName;
+    }
+
+    public void setShopAreaName(String shopAreaName) {
+        this.shopAreaName = shopAreaName;
+    }
+
+    public String getShopCity() {
+        return shopCity;
+    }
+
+    public void setShopCity(String shopCity) {
+        this.shopCity = shopCity;
+    }
+
+    public String getShopLandMark() {
+        return shopLandMark;
+    }
+
+    public void setShopLandMark(String shopLandMark) {
+        this.shopLandMark = shopLandMark;
+    }
+
     public String getShopCategory() {
         return shopCategory;
     }
@@ -106,6 +160,14 @@ public class AboutShopModel {
 
     public void setOpen(boolean open) {
         isOpen = open;
+    }
+
+    public boolean isServiceAvailable() {
+        return isServiceAvailable;
+    }
+
+    public void setServiceAvailable(boolean serviceAvailable) {
+        isServiceAvailable = serviceAvailable;
     }
 
     public String getShopOpenTime() {
@@ -178,6 +240,30 @@ public class AboutShopModel {
 
     public void setShopOwnerName(String shopOwnerName) {
         this.shopOwnerName = shopOwnerName;
+    }
+
+    public String getShopOwnerAddress() {
+        return shopOwnerAddress;
+    }
+
+    public void setShopOwnerAddress(String shopOwnerAddress) {
+        this.shopOwnerAddress = shopOwnerAddress;
+    }
+
+    public String getShopOwnerMobile() {
+        return shopOwnerMobile;
+    }
+
+    public void setShopOwnerMobile(String shopOwnerMobile) {
+        this.shopOwnerMobile = shopOwnerMobile;
+    }
+
+    public String getShopOwnerEmail() {
+        return shopOwnerEmail;
+    }
+
+    public void setShopOwnerEmail(String shopOwnerEmail) {
+        this.shopOwnerEmail = shopOwnerEmail;
     }
 
     public String getShopHelpLine() {

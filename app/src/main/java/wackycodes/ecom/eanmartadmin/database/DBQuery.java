@@ -120,7 +120,7 @@ public class DBQuery {
                                 Long bannerClickType = documentSnapshot.getLong( "banner_click_type_"+ln );
                                 BannerAndCatModel bannerAndCatModel = new BannerAndCatModel(
                                         deletedId, banner_link, bannerClickID, Integer.parseInt( String.valueOf( bannerClickType ) )
-                                        , "", ""  );
+                                        , deletedId, ""  );
                                 bannerAndCatModelList.add( bannerAndCatModel );
                             }
                             // Add Data in homeList...
@@ -148,19 +148,19 @@ public class DBQuery {
                         if (viewType == STRIP_AD_LAYOUT_CONTAINER){
 //                                Boolean is_visible = documentSnapshot.getBoolean( "is_visible" );
                             String layout_id = documentSnapshot.getId();
-                            String deletedId = documentSnapshot.get("delete_id").toString(); // TODO : add a field in model
+                            String deletedId = documentSnapshot.get("delete_id").toString();
                             String banner_image = documentSnapshot.get("banner_image").toString();
                             String banner_click_id = documentSnapshot.get("banner_click_id").toString();
                             long banner_click_type = (long)documentSnapshot.get("banner_click_type");
                             // Add Data in homeList...
                             if (isHomePage){
-                                homePageList.add( new HomeListModel( STRIP_AD_LAYOUT_CONTAINER, layout_id, banner_image, banner_click_id
+                                homePageList.add( new HomeListModel( STRIP_AD_LAYOUT_CONTAINER, layout_id, banner_image, banner_click_id, deletedId
                                         , Integer.parseInt( String.valueOf( banner_click_type ))) );
                                 if (SecondActivity.homePageAdaptor != null)
                                     SecondActivity.homePageAdaptor.notifyDataSetChanged();
                             }
                             else{
-                                categoryList.get( index ).add( new HomeListModel( STRIP_AD_LAYOUT_CONTAINER, layout_id, banner_image, banner_click_id
+                                categoryList.get( index ).add( new HomeListModel( STRIP_AD_LAYOUT_CONTAINER, layout_id, banner_image, banner_click_id, deletedId
                                         , Integer.parseInt( String.valueOf( banner_click_type ))) );
                                 if (ShopsViewActivity.shopsViewAdaptor != null ){
                                     ShopsViewActivity.shopsViewAdaptor.notifyDataSetChanged();

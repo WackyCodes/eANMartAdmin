@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.gridlayout.widget.GridLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,6 +39,7 @@ import wackycodes.ecom.eanmartadmin.multisection.ShopHomeActivity;
 import wackycodes.ecom.eanmartadmin.other.DialogsClass;
 import wackycodes.ecom.eanmartadmin.other.MyImageView;
 import wackycodes.ecom.eanmartadmin.other.StaticMethods;
+import wackycodes.ecom.eanmartadmin.other.UpdateImages;
 import wackycodes.ecom.eanmartadmin.secondpage.BannerAndCatModel;
 import wackycodes.ecom.eanmartadmin.secondpage.BannerItemAdaptor;
 import wackycodes.ecom.eanmartadmin.secondpage.HomeListModel;
@@ -117,7 +119,8 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
             case BANNER_SLIDER_LAYOUT_CONTAINER:
                 List <BannerAndCatModel> bannerSliderModelList =
                         homePageList.get( position ).getBannerAndCatModelList();
-                ((BannerSliderViewHolder) holder).setBannerData( bannerSliderModelList, position );
+                String sliderLayoutID = homePageList.get( position ).getLayoutID();
+                ((BannerSliderViewHolder) holder).setBannerData( sliderLayoutID, bannerSliderModelList, position );
                 break;
 
             case STRIP_AD_LAYOUT_CONTAINER:
@@ -125,7 +128,8 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
                 String layoutID = homePageList.get( position ).getLayoutID();
                 String clickID = homePageList.get( position ).getStripAndBannerClickID();
                 int clickType = homePageList.get( position ).getStripAndBannerClickType();
-                ((StripAdViewHolder)holder).setStripAdData( stripAdImg, layoutID, clickID, clickType, position );
+                String deleteID = homePageList.get( position ).getStripBannerDeleteID();
+                ((StripAdViewHolder)holder).setStripAdData( stripAdImg, layoutID, clickID, clickType, position, deleteID );
                 break;
 
             case SHOP_ITEMS_LAYOUT_CONTAINER:
@@ -175,7 +179,7 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
             dialog = DialogsClass.getDialog( itemView.getContext() );
             visibleBtn.setVisibility( View.INVISIBLE );
         }
-        private void setBannerData(final List<BannerAndCatModel> bannerAndCatModelList, final int index){
+        private void setBannerData( final String layoutID, final List<BannerAndCatModel> bannerAndCatModelList, final int index){
             layoutPosition = 1 + index;
             indexNo.setText( "position : "+ layoutPosition);
             headTitle.setText( "Slider Banners " + " (" + bannerAndCatModelList.size() + ")" );
@@ -210,7 +214,15 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
                 @Override
                 public void onClick(View v) {
                     // delete..
-                    showToast( "Code Not Found", itemView.getContext() );
+//                    showToast( "Code Not Found", itemView.getContext() );
+                    if (bannerAndCatModelList.size() <= 1){
+                        if (bannerAndCatModelList.size() == 0)
+                            alertDialog( itemView.getContext(), index, layoutID, null,null  );
+                        else
+                            alertDialog( itemView.getContext(), index, layoutID, "/HOME/banners", bannerAndCatModelList.get( 0 ).getName()  );
+                    }else{
+                        showToast( "You have more than 1 banner in this layout!", itemView.getContext() );
+                    }
                 }
             } );
 
@@ -278,7 +290,7 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
             dialog = DialogsClass.getDialog( itemView.getContext() );
             visibleBtn.setVisibility( View.INVISIBLE );
         }
-        private void setStripAdData(String imgLink, final String layoutID, final String clickID, final int clickType, final int index){
+        private void setStripAdData(String imgLink, final String layoutID, final String clickID, final int clickType, final int index, final String deleteID){
             layoutPosition = 1 + index;
             indexNo.setText( "Ad Banner position : " + layoutPosition );
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -293,7 +305,7 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
                 @Override
                 public void onClick(View v) {
                     // Delete...
-                    alertDialog( itemView.getContext(), index, layoutID );
+                    alertDialog( itemView.getContext(), index, layoutID, "/HOME/ads", deleteID );
                     // Delete...
 //                    showToast( "Code Not Found!", itemView.getContext() );
                 }
@@ -541,7 +553,7 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
         Toast.makeText( context, msg, Toast.LENGTH_SHORT ).show();
     }
 
-    private void alertDialog(final Context context, final int index, final String layoutId){
+    private void alertDialog(final Context context, final int index, final String layoutId, @Nullable final String deletePath, @Nullable final String deleteID){
         AlertDialog.Builder alertD = new AlertDialog.Builder( context );
         alertD.setTitle( "Do You want to delete this Layout.?" );
         alertD.setMessage( "If you delete this layout, you will loose all the inside data of the layout.!" );
@@ -561,9 +573,15 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
                                 if (task.isSuccessful()){
                                     showToast( "Deleted Layout Successfully.!", context );
                                     // : Update in local list..!
-                                    homePageList.remove( index );
+//                                    homePageList.remove( index );
                                     categoryList.get( catIndex ).remove( index ); // To remove From Cat Home List...
                                     SecondActivity.homePageAdaptor.notifyDataSetChanged();
+                                    // Delete Process...
+                                    if (deleteID != null){
+                                        UpdateImages.deleteImageFromFirebase( context, null
+                                                , CURRENT_CITY_CODE + deletePath
+                                                , deleteID  );
+                                    }
                                 }else {
                                     showToast( "Failed.! Something went wrong.!", context );
                                 }

@@ -63,6 +63,7 @@ public class ShopListAdaptor  extends RecyclerView.Adapter <ShopListAdaptor.View
         private TextView shopCategory;
         private TextView shopRating;
         private ImageView shopVegType;
+        private ImageView shopNonVegType;
 
         public ViewHolder(@NonNull View itemView) {
             super( itemView );
@@ -71,6 +72,7 @@ public class ShopListAdaptor  extends RecyclerView.Adapter <ShopListAdaptor.View
             shopCategory = itemView.findViewById( R.id.shop_category );
             shopRating = itemView.findViewById( R.id.shop_rating );
             shopVegType = itemView.findViewById( R.id.shop_veg_type_image );
+            shopNonVegType = itemView.findViewById( R.id.shop_non_veg_type_image );
         }
 
         @SuppressLint("NewApi")
@@ -83,13 +85,17 @@ public class ShopListAdaptor  extends RecyclerView.Adapter <ShopListAdaptor.View
             shopCategory.setText( sCategory );
             shopRating.setText( sRating );
             if (sVegType == SHOP_TYPE_VEG){
-                shopVegType.setImageTintList( itemView.getContext().getColorStateList( R.color.colorGreen )  );
+                shopVegType.setVisibility( View.VISIBLE );
+                shopNonVegType.setVisibility( View.GONE );
             }else if(sVegType == SHOP_TYPE_NON_VEG){
-                shopVegType.setImageTintList( itemView.getContext().getColorStateList( R.color.colorRed )  );
+                shopVegType.setVisibility( View.INVISIBLE );
+                shopNonVegType.setVisibility( View.VISIBLE );
             }else if(sVegType == SHOP_TYPE_VEG_NON){
-                shopVegType.setVisibility( View.GONE );
+                shopVegType.setVisibility( View.VISIBLE );
+                shopNonVegType.setVisibility( View.VISIBLE );
             }else if(sVegType == SHOP_TYPE_NO_SHOW){
                 shopVegType.setVisibility( View.GONE );
+                shopNonVegType.setVisibility( View.GONE );
             }
 
             itemView.setOnClickListener( new View.OnClickListener() {

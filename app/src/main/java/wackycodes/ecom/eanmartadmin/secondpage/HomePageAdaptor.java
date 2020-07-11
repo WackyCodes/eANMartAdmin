@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.gridlayout.widget.GridLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,8 +34,10 @@ import java.util.List;
 import java.util.Map;
 
 import wackycodes.ecom.eanmartadmin.R;
+import wackycodes.ecom.eanmartadmin.addnewitem.AddNewLayoutActivity;
 import wackycodes.ecom.eanmartadmin.multisection.ShopHomeActivity;
 import wackycodes.ecom.eanmartadmin.other.StaticMethods;
+import wackycodes.ecom.eanmartadmin.other.UpdateImages;
 import wackycodes.ecom.eanmartadmin.shopsgrid.ShopsViewActivity;
 import wackycodes.ecom.eanmartadmin.mainpage.ViewAllActivity;
 import wackycodes.ecom.eanmartadmin.other.DialogsClass;
@@ -43,6 +46,7 @@ import wackycodes.ecom.eanmartadmin.other.MyImageView;
 import static wackycodes.ecom.eanmartadmin.database.DBQuery.firebaseFirestore;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_CLICK_TYPE_SHOP;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_CLICK_TYPE_WEBSITE;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_SLIDER_CONTAINER_ITEM;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_SLIDER_LAYOUT_CONTAINER;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_CODE;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CATEGORY_ITEMS_LAYOUT_CONTAINER;
@@ -120,7 +124,8 @@ public class HomePageAdaptor extends RecyclerView.Adapter {
                 String layoutID = homePageList.get( position ).getLayoutID();
                 String clickID = homePageList.get( position ).getStripAndBannerClickID();
                 int clickType = homePageList.get( position ).getStripAndBannerClickType();
-                ((StripAdViewHolder)holder).setStripAdData( stripAdImg, layoutID, clickID, clickType, position );
+                String deleteID = homePageList.get( position ).getStripBannerDeleteID();
+                ((StripAdViewHolder)holder).setStripAdData( stripAdImg, layoutID, clickID, clickType, deleteID, position );
                 break;
 
             case CATEGORY_ITEMS_LAYOUT_CONTAINER:
@@ -205,7 +210,15 @@ public class HomePageAdaptor extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     // delete layout
-                    alertDialog( itemView.getContext(), index, layoutID );
+                    if (bannerAndCatModelList.size() <= 1){
+                        if (bannerAndCatModelList.size() == 0)
+                            alertDialog( itemView.getContext(), index, layoutID, null,null  );
+                        else
+                            alertDialog( itemView.getContext(), index, layoutID, "/HOME/banners", bannerAndCatModelList.get( 0 ).getName()  );
+                    }else{
+                        showToast( "You have more than 1 banner in this layout!", itemView.getContext() );
+                    }
+
                 }
             } );
 
@@ -273,7 +286,7 @@ public class HomePageAdaptor extends RecyclerView.Adapter {
             dialog = DialogsClass.getDialog( itemView.getContext() );
             visibleBtn.setVisibility( View.INVISIBLE );
         }
-        private void setStripAdData(String imgLink, final String layoutID, final String clickID, final int clickType, final int index){
+        private void setStripAdData(String imgLink, final String layoutID, final String clickID, final int clickType, final String deleteID, final int index){
             layoutPosition = 1 + index;
             indexNo.setText( "Ad Banner position : " + layoutPosition );
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -288,7 +301,7 @@ public class HomePageAdaptor extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     // Delete...
-                    alertDialog( itemView.getContext(), index, layoutID );
+                    alertDialog( itemView.getContext(), index, layoutID, "/HOME/ads",  deleteID );
                 }
             } );
 
@@ -556,7 +569,7 @@ public class HomePageAdaptor extends RecyclerView.Adapter {
     private void showToast(String msg, Context context){
         Toast.makeText( context, msg, Toast.LENGTH_SHORT ).show();
     }
-    private void alertDialog(final Context context, final int index, final String layoutId){
+    private void alertDialog(final Context context, final int index, final String layoutId, @Nullable final String deletePath, @Nullable final String deleteID){
         AlertDialog.Builder alertD = new AlertDialog.Builder( context );
         alertD.setTitle( "Do You want to delete this Layout.?" );
         alertD.setMessage( "If you delete this layout, you will loose all the inside data of the layout.!" );
@@ -578,6 +591,13 @@ public class HomePageAdaptor extends RecyclerView.Adapter {
                                     // : Update in local list..!
                                     homePageList.remove( index );
                                     SecondActivity.homePageAdaptor.notifyDataSetChanged();
+
+                                    // Delete Process...
+                                    if (deleteID != null){
+                                        UpdateImages.deleteImageFromFirebase( context, null
+                                                , CURRENT_CITY_CODE + deletePath
+                                                , deleteID  );
+                                    }
                                 }else {
                                     showToast( "Failed.! Something went wrong.!", context );
                                 }

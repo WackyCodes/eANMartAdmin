@@ -125,14 +125,15 @@ public class UpdateImages {
         }
 
     }
-    public static void deleteImageFromFirebase(final Context context, final Dialog dialog, String downloadPath, String fileName){
+    public static void deleteImageFromFirebase(final Context context, @Nullable final Dialog dialog, String downloadPath, String fileName){
         isDeletedFile = false;
 //        dialog.show();
         StorageReference deleteRef = storageReference.child(  downloadPath + "/" + fileName + ".jpg" );
         deleteRef.delete().addOnSuccessListener(new OnSuccessListener <Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                dialog.dismiss();
+                if (dialog != null)
+                    dialog.dismiss();
                 isDeletedFile = true;
                 uploadImageLink = null;
                 // After Delete from Server.. We have to  update on Database...
@@ -140,7 +141,8 @@ public class UpdateImages {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                dialog.dismiss();
+                if (dialog != null)
+                    dialog.dismiss();
                 isDeletedFile = false;
                 showToast( "Failed..!! "+ exception.getMessage(),context );
             }

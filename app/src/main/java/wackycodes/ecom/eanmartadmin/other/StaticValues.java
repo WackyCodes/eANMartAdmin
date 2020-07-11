@@ -61,7 +61,6 @@ public class StaticValues {
     public static final int BANNER_CLICK_TYPE_CATEGORY = 3;
     public static final int BANNER_CLICK_TYPE_NONE = 4;
 
-
     // Shop Veg
     public static final int SHOP_TYPE_VEG = 1;
     public static final int SHOP_TYPE_NON_VEG = 2;

@@ -80,12 +80,27 @@
         android:id="@+id/shop_veg_type_image"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:background="@drawable/back_1dp_border_4dp_radius"
+        android:background="@drawable/back_1dp_border_4dp_radius_no_color"
+        android:backgroundTint="@color/colorGreen"
         android:padding="2dp"
         android:src="@drawable/dot_default"
         android:tint="@color/colorGreen"
         app:layout_constraintBottom_toBottomOf="@+id/shop_rating"
         app:layout_constraintStart_toStartOf="@+id/shop_name"
+        app:layout_constraintTop_toTopOf="@+id/shop_rating" />
+
+    <ImageView
+        android:id="@+id/shop_non_veg_type_image"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:background="@drawable/back_1dp_border_4dp_radius_no_color"
+        android:backgroundTint="@color/colorRed"
+        android:padding="2dp"
+        android:src="@drawable/dot_default"
+        android:tint="@color/colorRed"
+        android:layout_marginLeft="2dp"
+        app:layout_constraintBottom_toBottomOf="@+id/shop_rating"
+        app:layout_constraintStart_toEndOf="@+id/shop_veg_type_image"
         app:layout_constraintTop_toTopOf="@+id/shop_rating" />
 
 

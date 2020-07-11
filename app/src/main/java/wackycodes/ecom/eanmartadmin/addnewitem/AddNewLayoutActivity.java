@@ -371,6 +371,9 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
                 bSliderItem.put( "banner_click_type_"+ bannerNo, bannerClickType ); // int
                 bSliderItem.put( "delete_id_"+ bannerNo, "banner_"+fileCode ); // String
                 bSliderItem.put( "no_of_banners", bannerNo ); // int
+                if (bannerNo == 3){
+                    bSliderItem.put( "is_visible", true );
+                }
 //                    for (int bsInd = 1; bsInd <= bannerSliderModelList.size(); bsInd++){
 //                        bSliderItem.put( "banner_"+ bsInd, bannerSliderModelList.get( bsInd-1 ).getImageLink() );
 //                        bSliderItem.put( "banner_"+ bsInd + "_bg", "#20202f" );
@@ -421,7 +424,8 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
                                         break;
                                     case STRIP_AD_LAYOUT_CONTAINER:
                                         homePageList.add( new HomeListModel( view_type, documentId, layoutMap.get( "banner_image" ).toString()
-                                                , layoutMap.get( "banner_click_id").toString(), (Integer)layoutMap.get( "banner_click_type" )));
+                                                , layoutMap.get( "banner_click_id").toString(), layoutMap.get( "delete_id").toString(),
+                                                Integer.parseInt( layoutMap.get( "banner_click_type" ).toString() )));
                                         break;
                                     default:
                                         break;
@@ -472,7 +476,8 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
                                     break;
                                 case STRIP_AD_LAYOUT_CONTAINER:
                                     homePageList.add( new HomeListModel( view_type, documentId, layoutMap.get( "banner_image" ).toString()
-                                            , layoutMap.get( "banner_click_id").toString(), (Integer)layoutMap.get( "banner_click_type" )));
+                                            , layoutMap.get( "banner_click_id").toString(), layoutMap.get( "delete_id").toString(),
+                                            Integer.parseInt( layoutMap.get( "banner_click_type" ).toString() )));
                                     break;
                                 default:
                                     break;
