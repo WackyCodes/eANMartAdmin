@@ -1,4 +1,4 @@
-package wackycodes.ecom.eanmartadmin.shopsgrid;
+package wackycodes.ecom.eanmartadmin.mainpage.homesection;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -34,38 +34,32 @@ import java.util.List;
 import java.util.Map;
 
 import wackycodes.ecom.eanmartadmin.R;
-import wackycodes.ecom.eanmartadmin.mainpage.ViewAllActivity;
-import wackycodes.ecom.eanmartadmin.multisection.ShopHomeActivity;
-import wackycodes.ecom.eanmartadmin.other.DialogsClass;
-import wackycodes.ecom.eanmartadmin.other.MyImageView;
+import wackycodes.ecom.eanmartadmin.multisection.aboutshop.ShopHomeActivity;
 import wackycodes.ecom.eanmartadmin.other.StaticMethods;
 import wackycodes.ecom.eanmartadmin.other.UpdateImages;
-import wackycodes.ecom.eanmartadmin.secondpage.BannerAndCatModel;
-import wackycodes.ecom.eanmartadmin.secondpage.BannerItemAdaptor;
-import wackycodes.ecom.eanmartadmin.secondpage.HomeListModel;
-import wackycodes.ecom.eanmartadmin.secondpage.SecondActivity;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.categorysection.ShopsViewActivity;
+import wackycodes.ecom.eanmartadmin.mainpage.ViewAllActivity;
+import wackycodes.ecom.eanmartadmin.other.DialogsClass;
+import wackycodes.ecom.eanmartadmin.other.MyImageView;
 
-import static wackycodes.ecom.eanmartadmin.database.DBQuery.categoryList;
 import static wackycodes.ecom.eanmartadmin.database.DBQuery.firebaseFirestore;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_CLICK_TYPE_SHOP;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_CLICK_TYPE_WEBSITE;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_SLIDER_LAYOUT_CONTAINER;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_CODE;
-import static wackycodes.ecom.eanmartadmin.other.StaticValues.SHOP_ITEMS_LAYOUT_CONTAINER;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.CATEGORY_ITEMS_LAYOUT_CONTAINER;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.STRIP_AD_LAYOUT_CONTAINER;
+import static wackycodes.ecom.eanmartadmin.database.DBQuery.homePageList;
 
-public class ShopsViewAdaptor extends RecyclerView.Adapter  {
-    private int catIndex; // category index
+public class HomePageAdaptor extends RecyclerView.Adapter {
+    String collectionID = "HOME";
+    private int catType; // category index
     private String catTitle; // category name or title
     private RecyclerView.RecycledViewPool recycledViewPool;
-    private List <HomeListModel> homePageList;
-    private String collectionID;
 
-    public ShopsViewAdaptor(List<HomeListModel> homePageList, int catIndex, String catTitle, String catID ) {
-        this.homePageList = homePageList;
-        this.catIndex = catIndex;
+    public HomePageAdaptor( int catType, String catTitle ) {
+        this.catType = catType;
         this.catTitle = catTitle;
-        collectionID = catID;
         recycledViewPool = new RecyclerView.RecycledViewPool();
     }
 
@@ -73,12 +67,12 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
     public int getItemViewType(int position) {
         switch (homePageList.get( position ).getLayoutType()) {
 
-            case BANNER_SLIDER_LAYOUT_CONTAINER:
+            case BANNER_SLIDER_LAYOUT_CONTAINER:           //-- 1
                 return BANNER_SLIDER_LAYOUT_CONTAINER;
-            case STRIP_AD_LAYOUT_CONTAINER:
+            case STRIP_AD_LAYOUT_CONTAINER:         //-- 2
                 return STRIP_AD_LAYOUT_CONTAINER;
-            case SHOP_ITEMS_LAYOUT_CONTAINER:
-                return SHOP_ITEMS_LAYOUT_CONTAINER;
+            case CATEGORY_ITEMS_LAYOUT_CONTAINER:            //-- 5
+                return CATEGORY_ITEMS_LAYOUT_CONTAINER;
             // Add New Items...
             default:
                 return -1;
@@ -100,11 +94,11 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
                 View stripAdView = LayoutInflater.from( parent.getContext() ).inflate(
                         R.layout.strip_ad_item_layout, parent, false );
                 return new StripAdViewHolder( stripAdView );
-            case SHOP_ITEMS_LAYOUT_CONTAINER:
+            case CATEGORY_ITEMS_LAYOUT_CONTAINER:
                 // TODO : GridLayout viewHolder
                 View gridLayoutView = LayoutInflater.from( parent.getContext() ).inflate(
                         R.layout.grid_view_layout, parent, false );
-                return new ShopsViewHolder( gridLayoutView );
+                return new CategoryViewHolder( gridLayoutView );
 //                // Add New Item View...
             default:
                 return null;
@@ -129,14 +123,14 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
                 String clickID = homePageList.get( position ).getStripAndBannerClickID();
                 int clickType = homePageList.get( position ).getStripAndBannerClickType();
                 String deleteID = homePageList.get( position ).getStripBannerDeleteID();
-                ((StripAdViewHolder)holder).setStripAdData( stripAdImg, layoutID, clickID, clickType, position, deleteID );
+                ((StripAdViewHolder)holder).setStripAdData( stripAdImg, layoutID, clickID, clickType, deleteID, position );
                 break;
 
-            case SHOP_ITEMS_LAYOUT_CONTAINER:
+            case CATEGORY_ITEMS_LAYOUT_CONTAINER:
                 List <BannerAndCatModel> categoryList =
                         homePageList.get( position ).getBannerAndCatModelList();
                 String catLayoutID =   homePageList.get( position ).getLayoutID();
-                ((ShopsViewHolder)holder).setDataGridLayout( catLayoutID, categoryList,position );
+                ((CategoryViewHolder)holder).setDataGridLayout( catLayoutID, categoryList,position );
                 break;
             default:
                 return;
@@ -148,6 +142,8 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
     public int getItemCount() {
         return homePageList.size();
     }
+
+
     //____________________________ View Holder Class _______________________________________________
 
     //============  Banner Slider View Holder ============
@@ -179,7 +175,8 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
             dialog = DialogsClass.getDialog( itemView.getContext() );
             visibleBtn.setVisibility( View.INVISIBLE );
         }
-        private void setBannerData( final String layoutID, final List<BannerAndCatModel> bannerAndCatModelList, final int index){
+
+        private void setBannerData(final String layoutID, final List<BannerAndCatModel> bannerAndCatModelList, final int index){
             layoutPosition = 1 + index;
             indexNo.setText( "position : "+ layoutPosition);
             headTitle.setText( "Slider Banners " + " (" + bannerAndCatModelList.size() + ")" );
@@ -189,13 +186,18 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
                 warningText.setVisibility( View.VISIBLE );
                 warningText.setText( "Add 2 or more banner to visible this layout to the customers!!" );
             }
-            BannerItemAdaptor bannerItemAdaptor = new BannerItemAdaptor( collectionID, catIndex, bannerAndCatModelList , false, index );
+            BannerItemAdaptor bannerItemAdaptor = new BannerItemAdaptor( collectionID,0 , bannerAndCatModelList , false, index );
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager( itemView.getContext() );
             linearLayoutManager.setOrientation( RecyclerView.HORIZONTAL );
             bannerRecycler.setLayoutManager( linearLayoutManager );
             bannerRecycler.setAdapter( bannerItemAdaptor );
             bannerItemAdaptor.notifyDataSetChanged();
 
+            if (bannerAndCatModelList.size() > 0){
+                viewAllBtn.setVisibility( View.VISIBLE );
+            }else {
+                viewAllBtn.setVisibility( View.INVISIBLE );
+            }
             viewAllBtn.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -203,18 +205,16 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
                     Intent viewAllIntent = new Intent( itemView.getContext(), ViewAllActivity.class);
                     viewAllIntent.putExtra( "TYPE", BANNER_SLIDER_LAYOUT_CONTAINER );
                     viewAllIntent.putExtra( "CAT_COLL_ID", collectionID );
-                    viewAllIntent.putExtra( "CAT_INDEX", catIndex );
+                    viewAllIntent.putExtra( "CAT_INDEX", catType );
                     viewAllIntent.putExtra( "LAY_INDEX", index );
                     itemView.getContext().startActivity( viewAllIntent );
-//                    showToast( "Code Not Found", itemView.getContext() );
                 }
             } );
 
             editLayoutBtn.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // delete..
-//                    showToast( "Code Not Found", itemView.getContext() );
+                    // delete layout
                     if (bannerAndCatModelList.size() <= 1){
                         if (bannerAndCatModelList.size() == 0)
                             alertDialog( itemView.getContext(), index, layoutID, null,null  );
@@ -223,6 +223,7 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
                     }else{
                         showToast( "You have more than 1 banner in this layout!", itemView.getContext() );
                     }
+
                 }
             } );
 
@@ -240,6 +241,7 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
                     updateIndex(false, index, dialog );
                 }
             } );
+
             visibleBtn.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -290,7 +292,7 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
             dialog = DialogsClass.getDialog( itemView.getContext() );
             visibleBtn.setVisibility( View.INVISIBLE );
         }
-        private void setStripAdData(String imgLink, final String layoutID, final String clickID, final int clickType, final int index, final String deleteID){
+        private void setStripAdData(String imgLink, final String layoutID, final String clickID, final int clickType, final String deleteID, final int index){
             layoutPosition = 1 + index;
             indexNo.setText( "Ad Banner position : " + layoutPosition );
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -305,9 +307,7 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
                 @Override
                 public void onClick(View v) {
                     // Delete...
-                    alertDialog( itemView.getContext(), index, layoutID, "/HOME/ads", deleteID );
-                    // Delete...
-//                    showToast( "Code Not Found!", itemView.getContext() );
+                    alertDialog( itemView.getContext(), index, layoutID, "/HOME/ads",  deleteID );
                 }
             } );
 
@@ -368,8 +368,8 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
     }
     //============  Strip ad  View Holder ============
 
-    //==============  GridProduct Grid Layout View Holder =================
-    public class ShopsViewHolder extends  RecyclerView.ViewHolder{
+   //==============  GridProduct Grid Layout View Holder =================
+    public class CategoryViewHolder extends  RecyclerView.ViewHolder{
         private GridLayout gridLayout;
         private TextView gridLayoutTitle;
         private TextView indexNo;
@@ -382,8 +382,9 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
         private int temp = 0;
         private Dialog dialog;
         private int layoutPosition;
+
         // Layout///
-        public ShopsViewHolder(@NonNull View itemView) {
+        public CategoryViewHolder(@NonNull View itemView) {
             super( itemView );
             gridLayout = itemView.findViewById( R.id.product_grid_layout );
             gridLayoutTitle = itemView.findViewById( R.id.gridLayoutTitle );
@@ -403,10 +404,19 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
             indexNo.setText( "position : " + layoutPosition );
             gridLayoutTitle.setText( "Total Cat : " + " (" + categoryList.size() + ")" );
             warningText.setVisibility( View.GONE );
-            final int gridRange  = categoryList.size();
+            int gridRange;
 
-            for (int i = 0; i < gridRange && i < 4; i++ ){
+            if (categoryList.size()>3){
+                gridRange = 3;
+            }else{
+                gridRange = categoryList.size();
+            }
+
+            for (int i = 0; i < gridRange; i++ ){
                 BannerAndCatModel categoryModel = categoryList.get( i );
+                LinearLayout itemLayout = gridLayout.getChildAt( i ).findViewById( R.id.cat_item );
+                gridLayout.getChildAt( i ).findViewById( R.id.add_new_cat_item ).setVisibility( View.GONE );
+                itemLayout.setVisibility( View.VISIBLE );
 
                 ImageView img = gridLayout.getChildAt( i ).findViewById( R.id.cat_image );
                 TextView name = gridLayout.getChildAt( i ).findViewById( R.id.cat_name );
@@ -415,45 +425,52 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
                         .apply( new RequestOptions().placeholder( R.drawable.ic_photo_black_24dp ) ).into( img );
                 name.setText( categoryModel.getName() );
 
-            }
-            for (int i = 0; i < 4; i++ ){
-                gridLayout.getChildAt( i ).findViewById( R.id.add_new_cat_item ).setVisibility( View.GONE );
-
-                LinearLayout itemLayout = gridLayout.getChildAt( i ).findViewById( R.id.cat_item );
-                itemLayout.setVisibility( View.VISIBLE );
                 // ClickListener...
-                if ( gridRange <= i){
-                    ((TextView)gridLayout.getChildAt( i ).findViewById( R.id.cat_name )).setText( "Not Found!" );
-                }
                 itemLayout.setOnClickListener( new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if ( v == gridLayout.getChildAt( 0 ).findViewById( R.id.cat_item )){
-                            // TODO :
-                            if(gridRange>=1){
-                                setOnClick(  categoryList.get( 0 ).getClickID());
-                            }
+                            onCatClick(categoryList.get( 0 ).getName(), categoryList.get( 0 ).getClickID());
                         } else
                         if ( v == gridLayout.getChildAt( 1 ).findViewById( R.id.cat_item )){
-                            // TODO :
-                            if(gridRange>=2){
-                                setOnClick(  categoryList.get( 1 ).getClickID());
-                            }
+                            onCatClick(categoryList.get( 1 ).getName(), categoryList.get( 1 ).getClickID());
                         } else
                         if ( v == gridLayout.getChildAt( 2 ).findViewById( R.id.cat_item )){
-                            // TODO :
-                            if(gridRange>=3){
-                                setOnClick(  categoryList.get( 2 ).getClickID());
-                            }
-                        }else
-                        if ( v == gridLayout.getChildAt( 3 ).findViewById( R.id.cat_item )){
-                            // TODO :
-                            if(gridRange>=4){
-                                setOnClick(  categoryList.get( 3 ).getClickID());
-                            }
+                            onCatClick(categoryList.get( 2 ).getName(), categoryList.get( 2 ).getClickID());
                         }
                     }
                 } );
+            }
+            // Add new Product in Grid Layout...
+            for (int k = 0; k < 4; k++ ) {
+                LinearLayout itemLayout = gridLayout.getChildAt( k ).findViewById( R.id.cat_item );
+                LinearLayout addNewItemLayout = gridLayout.getChildAt( k ).findViewById( R.id.add_new_cat_item );
+                if ( k < gridRange ){
+                    itemLayout.setVisibility( View.VISIBLE );
+                    addNewItemLayout.setVisibility( View.GONE );
+                }else{
+                    itemLayout.setVisibility( View.GONE );
+                    addNewItemLayout.setVisibility( View.VISIBLE );
+                }
+
+                addNewItemLayout.setOnClickListener( new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if ( v == gridLayout.getChildAt( 0 ).findViewById( R.id.add_new_cat_item )){
+                            addNewItem( index, 0 );
+                        } else
+                        if ( v == gridLayout.getChildAt( 1 ).findViewById( R.id.add_new_cat_item )){
+                            addNewItem( index, 1 );
+                        } else
+                        if ( v == gridLayout.getChildAt( 2 ).findViewById( R.id.add_new_cat_item )){
+                            addNewItem( index, 2 );
+                        } else
+                        if ( v == gridLayout.getChildAt( 3 ).findViewById( R.id.add_new_cat_item )){
+                            addNewItem( index, 3 );
+                        }
+                    }
+                } );
+
             }
 
             gridLayoutViewAllBtn.setOnClickListener( new View.OnClickListener() {
@@ -461,7 +478,7 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
                 public void onClick(View view) {
                     ViewAllActivity.viewAllList = categoryList;
                     Intent viewAllIntent = new Intent( itemView.getContext(), ViewAllActivity.class);
-                    viewAllIntent.putExtra( "TYPE",SHOP_ITEMS_LAYOUT_CONTAINER );
+                    viewAllIntent.putExtra( "TYPE", CATEGORY_ITEMS_LAYOUT_CONTAINER );
                     itemView.getContext().startActivity( viewAllIntent );
                 }
             } );
@@ -481,17 +498,23 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
                 }
             } );
 
-
         }
-
-        private void setOnClick( String clickID){
-            Intent intent = new Intent( itemView.getContext(), ShopHomeActivity.class );
-            intent.putExtra( "SHOP_ID", clickID );
+        private void onCatClick(String catName, String catID){
+            Intent intent = new Intent( itemView.getContext(), ShopsViewActivity.class );
+            intent.putExtra( "CAT_ID", catID );
+            intent.putExtra( "CAT_NAME", catName );
             itemView.getContext().startActivity( intent );
         }
 
-    }
+       private void addNewItem(final int layoutIndex, int listIndex){
+            SecondActivity.layoutIndex = layoutIndex;
+            SecondActivity.setAddCatLayoutVisibility( true );
+       }
+
+   }
     //==============  GridProduct Grid Layout View Holder =================
+
+    //                            _________________________________________
     //___________________________ Others Methods to Updates the Layouts ____________________________
 
     private void setIndexUpDownVisibility( int index, ImageView indexUpBtn,  ImageView indexDownBtn){
@@ -535,7 +558,7 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
             updateOnDocument(dialog, tempId, updateMap);
         }
         Collections.swap( homePageList, startInd, endInd );
-//        SecondActivity.homePageAdaptor.notifyDataSetChanged();
+        SecondActivity.homePageAdaptor.notifyDataSetChanged();
 
     }
     private void updateOnDocument(final Dialog dialog, String layoutId, Map <String, Object> updateMap){
@@ -552,13 +575,12 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
     private void showToast(String msg, Context context){
         Toast.makeText( context, msg, Toast.LENGTH_SHORT ).show();
     }
-
     private void alertDialog(final Context context, final int index, final String layoutId, @Nullable final String deletePath, @Nullable final String deleteID){
         AlertDialog.Builder alertD = new AlertDialog.Builder( context );
         alertD.setTitle( "Do You want to delete this Layout.?" );
         alertD.setMessage( "If you delete this layout, you will loose all the inside data of the layout.!" );
         alertD.setCancelable( false );
-        alertD.setPositiveButton( "OK", new DialogInterface.OnClickListener() {
+        alertD.setPositiveButton( "DELETE", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -573,9 +595,9 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
                                 if (task.isSuccessful()){
                                     showToast( "Deleted Layout Successfully.!", context );
                                     // : Update in local list..!
-//                                    homePageList.remove( index );
-                                    categoryList.get( catIndex ).remove( index ); // To remove From Cat Home List...
+                                    homePageList.remove( index );
                                     SecondActivity.homePageAdaptor.notifyDataSetChanged();
+
                                     // Delete Process...
                                     if (deleteID != null){
                                         UpdateImages.deleteImageFromFirebase( context, null
@@ -591,7 +613,7 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
 
             }
         } );
-        alertD.setNegativeButton( "Cancel", new DialogInterface.OnClickListener() {
+        alertD.setNegativeButton( "CANCEL", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -600,5 +622,12 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
         alertD.show();
     }
 
+    // Add Category...
+
+
+
 
 }
+
+// WackyCodes - (Shailendra Lodhi) ... //
+

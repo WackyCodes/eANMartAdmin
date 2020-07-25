@@ -8,8 +8,6 @@
     android:elevation="3dp"
     android:paddingLeft="4dp"
     android:paddingRight="4dp"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools">
@@ -26,73 +24,105 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <com.makeramen.roundedimageview.RoundedImageView
-        android:id="@+id/banner_slider_Image"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/ic_photo_black_24dp"
-        android:scaleType="fitCenter"
-        app:riv_corner_radius="4dip"
-        app:riv_border_width="1dip"
-        app:riv_border_color="@color/colorPrimary"
-        app:riv_mutate_background="true"
-        app:riv_oval="false"
-        tools:ignore="VectorDrawableCompat" />
 <!--
         app:riv_tile_mode="repeat"
         -->
+
     <LinearLayout
-        android:visibility="gone"
-        android:id="@+id/add_new_item_Linearlayout"
         android:orientation="vertical"
-        android:gravity="center"
-        android:elevation="3dp"
-        android:padding="14dp"
-        android:background="@drawable/back_rectangle_4dp_layout"
-        android:backgroundTint="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="230dp">
+        android:layout_height="wrap_content">
 
-        <ImageView
+        <LinearLayout
+            android:id="@+id/banner_update_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:tint="@color/colorPrimary"
-            app:srcCompat="@drawable/ic_add_black_24dp"/>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/add_new_item"
+            <ImageView
+                android:id="@+id/banner_index_up_img_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginRight="8dp"
+                app:srcCompat="@drawable/ic_arrow_upward_black_24dp"
+                android:tint="@color/colorPrimary" />
+
+            <ImageView
+                android:id="@+id/banner_index_down_img_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginRight="8dp"
+                app:srcCompat="@drawable/ic_arrow_downward_black_24dp"
+                android:tint="@color/colorPrimary" />
+
+            <ImageView
+                android:id="@+id/banner_delete_img_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="4dp"
+                android:tint="@color/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_delete_black_24dp"
+                tools:ignore="VectorDrawableCompat" />
+        </LinearLayout>
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/banner_slider_Image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Add New Banner"
-            android:padding="20dp"
-            android:maxLines="2"
-            android:textAlignment="center"
-            android:paddingLeft="8dp"
-            android:textColor="@color/colorPrimary"
-            android:textSize="24dp"
-            android:textStyle="bold" />
+            android:layout_height="200dp"
+            android:src="@drawable/ic_photo_black_24dp"
+            android:scaleType="fitCenter"
+            app:riv_corner_radius="4dip"
+            app:riv_border_width="1dip"
+            app:riv_border_color="@color/colorPrimary"
+            app:riv_mutate_background="true"
+            app:riv_oval="false"
+            tools:ignore="VectorDrawableCompat" />
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/add_new_item_layout"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:elevation="3dp"
+            android:padding="14dp"
+            android:background="@drawable/back_rectangle_4dp_layout"
+            android:backgroundTint="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:tint="@color/colorPrimary"
+                app:srcCompat="@drawable/ic_add_black_24dp"/>
+
+            <TextView
+                android:id="@+id/add_new_item"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Add New Banner"
+                android:padding="20dp"
+                android:maxLines="2"
+                android:textAlignment="center"
+                android:paddingLeft="8dp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="24dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
     </LinearLayout>
-    <ImageButton
-        android:id="@+id/update_item_lay_imgBtn"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:tint="@color/colorPrimary"
-        android:elevation="3dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_more_vert_black_24dp"
-        tools:ignore="VectorDrawableCompat" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

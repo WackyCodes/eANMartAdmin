@@ -4,23 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="nav_view">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_home_black_24dp"
-            android:title="Home" />
-        <item
-            android:id="@+id/menu_my_account"
-            android:icon="@drawable/ic_account_circle_black_24dp"
-            android:iconTint="@color/colorBlack"
-            android:title="My Account" />
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="Home" />
+    
+    <item
+        android:id="@+id/menu_my_account"
+        android:icon="@drawable/ic_account_circle_black_24dp"
+        android:iconTint="@color/colorBlack"
+        android:title="My Account" />
 
-        <item
-            android:id="@+id/menu_log_out"
-            android:icon="@drawable/ic_power_settings_new_black_24dp"
-            android:iconTint="@color/colorBlack"
-            android:title="LogOut" />
+    <item
+        android:id="@+id/menu_log_out"
+        android:icon="@drawable/ic_power_settings_new_black_24dp"
+        android:iconTint="@color/colorBlack"
+        android:title="LogOut" />
 
+    <group
+        android:id="@+id/menu_communicate"
+        android:menuCategory="container">
+        <item
+            android:id="@+id/menu_share"
+            android:icon="@drawable/ic_share_black_24dp"
+            android:iconTint="@color/colorBlack"
+            android:title="Share" />
 
     </group>
 

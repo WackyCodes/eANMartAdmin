@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.common.collect.ArrayListMultimap;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -38,8 +37,8 @@ import wackycodes.ecom.eanmartadmin.cityareacode.AreaCodeCityModel;
 import wackycodes.ecom.eanmartadmin.cityareacode.SelectAreaCityAdaptor;
 import wackycodes.ecom.eanmartadmin.database.DBQuery;
 import wackycodes.ecom.eanmartadmin.other.DialogsClass;
-import wackycodes.ecom.eanmartadmin.secondpage.BannerAndCatModel;
-import wackycodes.ecom.eanmartadmin.secondpage.HomeListModel;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.BannerAndCatModel;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.HomeListModel;
 
 import static wackycodes.ecom.eanmartadmin.MainActivity.selectAreaCityAdaptor;
 import static wackycodes.ecom.eanmartadmin.database.DBQuery.firebaseFirestore;

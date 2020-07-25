@@ -1,11 +1,10 @@
-package wackycodes.ecom.eanmartadmin.secondpage;
+package wackycodes.ecom.eanmartadmin.mainpage.homesection;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -16,15 +15,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,16 +34,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import wackycodes.ecom.eanmartadmin.R;
@@ -61,8 +52,6 @@ import wackycodes.ecom.eanmartadmin.other.UpdateImages;
 
 import static wackycodes.ecom.eanmartadmin.database.DBQuery.getMainListDataQuery;
 import static wackycodes.ecom.eanmartadmin.database.DBQuery.homePageList;
-import static wackycodes.ecom.eanmartadmin.other.StaticValues.ADD_NEW_STRIP_AD_LAYOUT;
-import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_SLIDER_CONTAINER_ITEM;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_SLIDER_LAYOUT_CONTAINER;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CATEGORY_ITEMS_LAYOUT_CONTAINER;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_CODE;
@@ -101,7 +90,7 @@ public class SecondActivity extends AppCompatActivity {
     private EditText dialogName;
     private TextView dialogUploadImage;
     private ImageView catImageView;
-    private Uri catImageUri;
+    private Uri catImageUri = null;
     public static int layoutIndex;
     private String newCatID;
 
@@ -269,6 +258,7 @@ public class SecondActivity extends AppCompatActivity {
     public void addNewCategoryDialog(){
         newCatID = null;
         uploadImageLink = null;
+        catImageUri = null;
 //        final Dialog dialogAddCat = new Dialog( this );
 //        dialogAddCat.requestWindowFeature( Window.FEATURE_NO_TITLE );
 //        dialogAddCat.setContentView( R.layout.dialog_add_cat_one_image_item );
@@ -327,12 +317,17 @@ public class SecondActivity extends AppCompatActivity {
                     catMap.put( "cat_name_"+position, dialogName.getText().toString()  );
                     catMap.put( "cat_image_"+position, uploadImageLink );
 
-
                     homePageList.get( layoutIndex ).getBannerAndCatModelList().add( new BannerAndCatModel(
                             newCatID, uploadImageLink, newCatID, CATEGORY_ITEMS_LAYOUT_CONTAINER,  dialogName.getText().toString(), ""
                     ) );
-                    setAddCatLayoutVisibility(false);
+
                     DBQuery.setNewCategoryOnDataBase( SecondActivity.this, dialog, newCatID,  dialogName.getText().toString(), layoutIndex , catMap );
+                    // Clear All Data After Adding Category...
+                    dialogName.setText( "" );
+                    newCatID = null;
+                    uploadImageLink = null;
+                    catImageUri = null;
+                    setAddCatLayoutVisibility(false);
                 }
             }
         } );
@@ -375,7 +370,6 @@ public class SecondActivity extends AppCompatActivity {
             }
         }
     }
-
 
     // Get Result of Image...
     @Override

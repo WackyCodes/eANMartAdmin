@@ -92,7 +92,6 @@ public class AuthActivity extends AppCompatActivity {
                 }
             } );
 
-
     }
 
     private void userLogIn(){
@@ -148,7 +147,6 @@ public class AuthActivity extends AppCompatActivity {
                 }else{
                     deniedDialog();
                 }
-
             }
         } );
 

@@ -1,15 +1,9 @@
 package wackycodes.ecom.eanmartadmin.mainpage;
 
-import android.view.View;
-import android.view.ViewGroup;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.List;
 
-import wackycodes.ecom.eanmartadmin.secondpage.BannerAndCatModel;
-import wackycodes.ecom.eanmartadmin.secondpage.BannerItemAdaptor;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.BannerAndCatModel;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.BannerItemAdaptor;
 
 public class ViewAllRecyclerAdaptor extends BannerItemAdaptor{
 

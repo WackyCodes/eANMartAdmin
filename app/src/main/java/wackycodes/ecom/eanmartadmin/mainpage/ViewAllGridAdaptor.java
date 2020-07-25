@@ -17,8 +17,8 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.List;
 
 import wackycodes.ecom.eanmartadmin.R;
-import wackycodes.ecom.eanmartadmin.shopsgrid.ShopsViewActivity;
-import wackycodes.ecom.eanmartadmin.secondpage.BannerAndCatModel;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.categorysection.ShopsViewActivity;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.BannerAndCatModel;
 
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CATEGORY_ITEMS_LAYOUT_CONTAINER;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.SHOP_ITEMS_LAYOUT_CONTAINER;

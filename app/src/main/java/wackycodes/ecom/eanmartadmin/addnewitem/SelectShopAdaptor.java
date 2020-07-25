@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wackycodes.ecom.eanmartadmin.R;
-import wackycodes.ecom.eanmartadmin.shopsgrid.ShopListModel;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.categorysection.ShopListModel;
 
 public class SelectShopAdaptor extends ArrayAdapter <ShopListModel> {
 

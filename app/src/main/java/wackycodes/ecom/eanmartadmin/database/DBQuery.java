@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,19 +27,19 @@ import java.util.List;
 import java.util.Map;
 
 import wackycodes.ecom.eanmartadmin.MainActivity;
-import wackycodes.ecom.eanmartadmin.shopsgrid.ShopListModel;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.categorysection.ShopListModel;
 import wackycodes.ecom.eanmartadmin.cityareacode.AreaCodeCityModel;
-import wackycodes.ecom.eanmartadmin.shopsgrid.ShopsViewActivity;
-import wackycodes.ecom.eanmartadmin.secondpage.BannerAndCatModel;
-import wackycodes.ecom.eanmartadmin.secondpage.HomeListModel;
-import wackycodes.ecom.eanmartadmin.secondpage.SecondActivity;
-import wackycodes.ecom.eanmartadmin.shopsgrid.ShopsViewAdaptor;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.categorysection.ShopsViewActivity;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.BannerAndCatModel;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.HomeListModel;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.SecondActivity;
 
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_SLIDER_LAYOUT_CONTAINER;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_CODE;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CATEGORY_ITEMS_LAYOUT_CONTAINER;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.SHOP_ITEMS_LAYOUT_CONTAINER;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.STRIP_AD_LAYOUT_CONTAINER;
+import static wackycodes.ecom.eanmartadmin.other.UpdateImages.uploadImageLink;
 
 public class DBQuery {
 
@@ -120,7 +118,7 @@ public class DBQuery {
                                 Long bannerClickType = documentSnapshot.getLong( "banner_click_type_"+ln );
                                 BannerAndCatModel bannerAndCatModel = new BannerAndCatModel(
                                         deletedId, banner_link, bannerClickID, Integer.parseInt( String.valueOf( bannerClickType ) )
-                                        , deletedId, ""  );
+                                        , deletedId, deletedId  ); // Use Layout ID...
                                 bannerAndCatModelList.add( bannerAndCatModel );
                             }
                             // Add Data in homeList...
@@ -329,6 +327,7 @@ public class DBQuery {
                                         public void onComplete(@NonNull Task <Void> task1) {
                                             if (task1.isSuccessful()){
                                                 Toast.makeText( context, "Successfully added!", Toast.LENGTH_SHORT ).show();
+
                                             }else{
                                                 Toast.makeText( context, "Failed!", Toast.LENGTH_SHORT ).show();
                                                 homePageList.get( layoutIndex ).getBannerAndCatModelList().remove(

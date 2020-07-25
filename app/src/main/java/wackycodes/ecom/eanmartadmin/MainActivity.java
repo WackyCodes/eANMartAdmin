@@ -45,7 +45,7 @@ import wackycodes.ecom.eanmartadmin.cityareacode.SelectAreaCityAdaptor;
 import wackycodes.ecom.eanmartadmin.database.DBQuery;
 import wackycodes.ecom.eanmartadmin.mainpage.MainActivityAdaptor;
 import wackycodes.ecom.eanmartadmin.mainpage.MainActivityGridModel;
-import wackycodes.ecom.eanmartadmin.multisection.AboutShopModel;
+import wackycodes.ecom.eanmartadmin.multisection.aboutshop.AboutShopModel;
 import wackycodes.ecom.eanmartadmin.multisection.SearchShopAdaptor;
 import wackycodes.ecom.eanmartadmin.other.DialogsClass;
 
@@ -54,6 +54,8 @@ import static wackycodes.ecom.eanmartadmin.database.DBQuery.firebaseAuth;
 import static wackycodes.ecom.eanmartadmin.database.DBQuery.firebaseFirestore;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_CODE;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_NAME;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.ID_COPY;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.MAIN_ACTIVITY;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.REQUEST_TO_ADD_SHOP;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.REQUEST_TO_VIEW_HOME;
 
@@ -81,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // Main Page...
     private GridView homeGridView;
-    public static List <MainActivityGridModel> mainPageList = new ArrayList <>();
+    private List <MainActivityGridModel> mainPageList = new ArrayList <>();
 
     // Search Variables...
     private SearchView homeMainSearchView;
@@ -134,14 +136,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         homeGridView = findViewById( R.id.home_grid_view );
 
         if (mainPageList.size() == 0){
-            mainPageList.add( new MainActivityGridModel( R.drawable.ic_home_black_24dp, "View Home", REQUEST_TO_VIEW_HOME ) );
-            mainPageList.add( new MainActivityGridModel( R.drawable.ic_store_mall_directory_black_24dp, "Add New Shop", REQUEST_TO_ADD_SHOP ) );
-            mainPageList.add( new MainActivityGridModel( R.drawable.ic_person_pin_circle_black_24dp, "View Profile", 4 ) );
-            mainPageList.add( new MainActivityGridModel( R.drawable.ic_color_lens_black_24dp, "View Sample", 4 ) );
+            mainPageList.add( new MainActivityGridModel( R.drawable.ic_home_black_24dp, "App Home", REQUEST_TO_VIEW_HOME ) );
+            mainPageList.add( new MainActivityGridModel( R.drawable.ic_store_mall_directory_black_24dp, "+ New Shop", REQUEST_TO_ADD_SHOP ) );
+            mainPageList.add( new MainActivityGridModel( R.drawable.ic_straighten_black_24dp, "Shop List", 9 ) );
+            mainPageList.add( new MainActivityGridModel( R.drawable.ic_receipt_black_24dp, "Shop Transitions", 9 ) );
+            mainPageList.add( new MainActivityGridModel( R.drawable.ic_people_outline_black_24dp, "Employee List", 9 ) );
+            mainPageList.add( new MainActivityGridModel( R.drawable.ic_group_black_24dp, "Manager List", 9 ) );
+            mainPageList.add( new MainActivityGridModel( R.drawable.ic_assignment_black_24dp, "Employee Transitions", 9 ) );
+            mainPageList.add( new MainActivityGridModel( R.drawable.ic_contact_mail_black_24dp, "Job Request", 9 ) );
+            mainPageList.add( new MainActivityGridModel( R.drawable.ic_feedback_black_24dp, "User Feedback/Query", 9 ) );
+            mainPageList.add( new MainActivityGridModel( R.drawable.ic_sentiment_satisfied_black_24dp, "User List", 9 ) );
 
         }
 
-        MainActivityAdaptor mainActivityAdaptor = new MainActivityAdaptor();
+        // Create and Set fragment...
+        MainActivityAdaptor mainActivityAdaptor = new MainActivityAdaptor( mainPageList, MAIN_ACTIVITY );
         homeGridView.setAdapter( mainActivityAdaptor );
         mainActivityAdaptor.notifyDataSetChanged();
 
@@ -181,6 +190,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         searchAdaptor = new SearchShopAdaptor( searchShopItemList );
         homeSearchItemRecycler.setAdapter( searchAdaptor );
         getShopSearchItems( );
+
+        // Copy Service...
+        Intent intent = new Intent( String.valueOf( this.getSystemService( INPUT_SERVICE ) ) );
 
     }
 

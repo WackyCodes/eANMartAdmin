@@ -11,9 +11,8 @@ import android.widget.GridView;
 import java.util.List;
 
 import wackycodes.ecom.eanmartadmin.R;
-import wackycodes.ecom.eanmartadmin.other.MyGridView;
-import wackycodes.ecom.eanmartadmin.secondpage.BannerAndCatModel;
-import wackycodes.ecom.eanmartadmin.secondpage.BannerItemAdaptor;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.BannerAndCatModel;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.BannerItemAdaptor;
 
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_SLIDER_LAYOUT_CONTAINER;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CATEGORY_ITEMS_LAYOUT_CONTAINER;

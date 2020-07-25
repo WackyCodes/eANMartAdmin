@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".shopsgrid.ShopsViewActivity">
+    tools:context=".mainpage.homesection.categorysection.ShopsViewActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -80,10 +80,9 @@
                         android:id="@+id/title_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@color/colorWhite"
                         android:paddingLeft="4dp"
                         android:text="City : "
-                        android:textColor="@color/colorPrimary" />
+                        android:textColor="@color/colorWhite" />
 
                     <TextView
                         android:id="@+id/user_city"

@@ -26,8 +26,7 @@ import java.util.Map;
 
 import wackycodes.ecom.eanmartadmin.R;
 import wackycodes.ecom.eanmartadmin.database.DBQuery;
-import wackycodes.ecom.eanmartadmin.secondpage.BannerAndCatModel;
-import wackycodes.ecom.eanmartadmin.secondpage.SecondActivity;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.BannerAndCatModel;
 
 import static android.app.Activity.RESULT_OK;
 import static wackycodes.ecom.eanmartadmin.database.DBQuery.homePageList;
@@ -35,6 +34,9 @@ import static wackycodes.ecom.eanmartadmin.other.StaticValues.CATEGORY_ITEMS_LAY
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_CODE;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.GALLERY_CODE;
 
+/**
+ * To Add New Category...! But Not in Use...!
+ */
 public class AddNewCatActivity {
 
     private Context context;

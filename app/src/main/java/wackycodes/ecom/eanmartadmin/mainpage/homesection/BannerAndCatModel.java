@@ -1,4 +1,4 @@
-package wackycodes.ecom.eanmartadmin.secondpage;
+package wackycodes.ecom.eanmartadmin.mainpage.homesection;
 
 public class BannerAndCatModel {
 

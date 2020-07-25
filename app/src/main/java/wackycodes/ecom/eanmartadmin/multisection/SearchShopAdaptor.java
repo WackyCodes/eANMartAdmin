@@ -5,6 +5,8 @@ import android.widget.Filterable;
 
 import java.util.List;
 
+import wackycodes.ecom.eanmartadmin.multisection.aboutshop.AboutShopModel;
+
 public class SearchShopAdaptor extends ShopListAdaptor implements Filterable {
 
     public SearchShopAdaptor(List <AboutShopModel> shopItemModelList) {

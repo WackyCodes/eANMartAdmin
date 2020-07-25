@@ -49,14 +49,14 @@ import java.util.Map;
 
 import wackycodes.ecom.eanmartadmin.R;
 import wackycodes.ecom.eanmartadmin.other.UpdateImages;
-import wackycodes.ecom.eanmartadmin.shopsgrid.ShopListModel;
-import wackycodes.ecom.eanmartadmin.shopsgrid.ShopsViewActivity;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.categorysection.ShopListModel;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.categorysection.ShopsViewActivity;
 import wackycodes.ecom.eanmartadmin.database.DBQuery;
 import wackycodes.ecom.eanmartadmin.other.CheckInternetConnection;
 import wackycodes.ecom.eanmartadmin.other.DialogsClass;
-import wackycodes.ecom.eanmartadmin.secondpage.BannerAndCatModel;
-import wackycodes.ecom.eanmartadmin.secondpage.HomeListModel;
-import wackycodes.ecom.eanmartadmin.secondpage.SecondActivity;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.BannerAndCatModel;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.HomeListModel;
+import wackycodes.ecom.eanmartadmin.mainpage.homesection.SecondActivity;
 
 import static wackycodes.ecom.eanmartadmin.database.DBQuery.firebaseFirestore;
 import static wackycodes.ecom.eanmartadmin.other.StaticMethods.getRandomNumAccordingToDate;
@@ -100,7 +100,7 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
     private int layoutIndex = -1;
     private String layoutId = null;
     private boolean isTaskIsUpdate = false;
-    String fileCode = getRandomNumAccordingToDate();
+    private final String fileCode = getRandomNumAccordingToDate();
 
     List<HomeListModel> homePageList;
     public static Boolean isHomePage = false;
@@ -635,7 +635,7 @@ public class AddNewLayoutActivity extends AppCompatActivity implements View.OnCl
         if (bannerDialogType == BANNER_SLIDER_CONTAINER_ITEM){
             CropImage.activity(imageUri)
                     .setGuidelines( CropImageView.Guidelines.ON)
-                    .setAspectRatio( 3,2 )
+                    .setAspectRatio( 2,1 )
                     .setMultiTouchEnabled(true)
                     .start(this);
         }else{

@@ -1,8 +1,9 @@
-package wackycodes.ecom.eanmartadmin.multisection;
+package wackycodes.ecom.eanmartadmin.multisection.aboutshop;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.Dialog;
 import android.os.Build;
@@ -19,12 +20,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import wackycodes.ecom.eanmartadmin.R;
+import wackycodes.ecom.eanmartadmin.mainpage.MainActivityAdaptor;
+import wackycodes.ecom.eanmartadmin.mainpage.MainActivityGridModel;
 import wackycodes.ecom.eanmartadmin.other.DialogsClass;
+import wackycodes.ecom.eanmartadmin.other.MyGridView;
 
 import static wackycodes.ecom.eanmartadmin.database.DBQuery.firebaseFirestore;
-import static wackycodes.ecom.eanmartadmin.database.DBQuery.shopListModelArrayList;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.ABOUT_SHOP_ACTIVITY;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.SHOP_TYPE_NON_VEG;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.SHOP_TYPE_NO_SHOW;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.SHOP_TYPE_VEG;
@@ -55,13 +62,30 @@ public class ShopHomeActivity extends AppCompatActivity {
     private Switch shopActiveSwitch;
     private ImageView verifyTagImage;
 
+    // Report Layout...
+    private LinearLayout orderLayout;
+    private LinearLayout ratingListLayout;
+    private LinearLayout checkIncomeLayout;
+
     private Dialog dialog;
+
+
+    private Toolbar toolbar;
+    private List <MainActivityGridModel> shopHomeList = new ArrayList <>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_shop_home );
         dialog = DialogsClass.getDialog( this );
+
+        //...
+        toolbar = findViewById( R.id.appToolbar );
+        setSupportActionBar( toolbar );
+        try {
+            getSupportActionBar().setDisplayShowTitleEnabled( true );
+            getSupportActionBar().setTitle( "Shop Store" );
+        }catch (NullPointerException ignored){ }
 
         String shopID = getIntent().getStringExtra( "SHOP_ID" );
         shopIdText = findViewById( R.id.shop_id_text );
@@ -82,11 +106,18 @@ public class ShopHomeActivity extends AppCompatActivity {
         shopActiveSwitch = findViewById( R.id.shop_service_available_switch );
         verifyTagImage = findViewById( R.id.verify_tag_image );
 
+        orderLayout = findViewById( R.id.order_layout );
+        ratingListLayout = findViewById( R.id.rating_layout );
+        checkIncomeLayout = findViewById( R.id.income_report_layout );
+
 //        shopHomeActivityModel = new AboutShopModel( shopID );
 //        if (shopHomeActivityModel == null || !shopHomeActivityModel.getShopID().equals( shopID )){
 //            shopHomeActivityModel = new AboutShopModel( shopID );
 //        }
+
         getShopData(shopID);
+
+
 
     }
 
@@ -95,12 +126,12 @@ public class ShopHomeActivity extends AppCompatActivity {
     private void setShopData(){
 
         // Set Image...
-        Glide.with( this ).load( shopHomeActivityModel.getShopImage() )
-                .apply( new RequestOptions().placeholder( R.drawable.ic_account_circle_black_24dp ) )
-                .into( shopImage );
+        Glide.with( this ).load( shopHomeActivityModel.getShopImage() ).into( shopImage );
+//                .apply( new RequestOptions().placeholder( R.drawable.ic_account_circle_black_24dp ) )
+
         // Set Logo...
         Glide.with( this ).load( shopHomeActivityModel.getShopLogo() )
-                .apply( new RequestOptions().placeholder( R.drawable.ic_account_circle_black_24dp ) )
+                .apply( new RequestOptions().placeholder( R.drawable.ic_store_mall_directory_black_24dp ) )
                 .into( shopLogo );
 
         // Set Shop Information...

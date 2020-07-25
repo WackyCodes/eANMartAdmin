@@ -78,7 +78,6 @@
                         android:id="@+id/select_banner_type_spinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_color_lens_black_24dp"
                         android:drawableTint="@color/colorPrimary"
                         android:backgroundTint="@color/colorPrimary"
                         android:layout_weight="1"

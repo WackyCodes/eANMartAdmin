@@ -20,12 +20,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".multisection.ShopHomeActivity"></activity>
+        <activity android:name=".multisection.aboutshop.ShopHomeActivity"></activity>
         <activity android:name=".addnewitem.AddNewShopActivity" />
         <activity android:name=".mainpage.ViewAllActivity" />
         <activity android:name=".addnewitem.AddNewLayout" />
-        <activity android:name=".shopsgrid.ShopsViewActivity" />
-        <activity android:name=".secondpage.SecondActivity" />
+        <activity android:name=".mainpage.homesection.categorysection.ShopsViewActivity" />
+        <activity android:name=".mainpage.homesection.SecondActivity" />
         <activity android:name=".launching.AuthActivity" />
         <activity android:name=".launching.WelcomeActivity">
             <intent-filter>

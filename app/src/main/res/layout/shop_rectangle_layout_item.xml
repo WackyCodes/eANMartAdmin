@@ -32,7 +32,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:maxLines="3"
+        android:maxLines="2"
         android:padding="2dp"
         android:text="@string/sample_name"
         android:textColor="@color/colorPrimary"
@@ -42,66 +42,90 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/shop_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:maxLines="2"
+        android:padding="2dp"
+        android:text="462022121"
+        android:textColor="@color/colorDarkViolet"
+        app:layout_constraintStart_toStartOf="@+id/shop_name"
+        app:layout_constraintTop_toBottomOf="@+id/shop_name" />
+
+    <TextView
         android:id="@+id/shop_category"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="2dp"
+        android:layout_marginTop="2dp"
         android:layout_marginBottom="4dp"
-        android:maxLines="2"
+        android:maxLines="1"
         android:padding="2dp"
         android:text="Electronics"
-        android:textColor="@color/colorSecondary"
+        android:textColor="@color/colorBlack"
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/shop_name"
-        app:layout_constraintTop_toBottomOf="@+id/shop_name" />
+        app:layout_constraintStart_toStartOf="@+id/shop_id"
+        app:layout_constraintTop_toBottomOf="@+id/shop_id" />
 
     <TextView
         android:id="@+id/shop_rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:padding="2dp"
+        android:layout_marginTop="4dp"
         android:drawableLeft="@drawable/ic_star_black_24dp"
         android:drawableTint="@color/colorDarkViolet"
-        android:textColor="@color/colorDarkViolet"
         android:gravity="center"
-        android:textAlignment="center"
-        android:textSize="16dp"
+        android:padding="2dp"
         android:text="4.5"
-        app:layout_constraintBottom_toBottomOf="@+id/shop_category"
-        app:layout_constraintEnd_toStartOf="@+id/shop_category"
-        app:layout_constraintTop_toTopOf="@+id/shop_category" />
+        android:textAlignment="center"
+        android:textColor="@color/colorDarkViolet"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/shop_name"
+        app:layout_constraintTop_toBottomOf="@+id/shop_name" />
 
+    <ImageView
+        android:id="@+id/copy_shop_img_view"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:elevation="2dp"
+        android:padding="2dp"
+        android:tint="@color/colorSecondary"
+        app:layout_constraintBottom_toBottomOf="@+id/shop_id"
+        app:layout_constraintStart_toEndOf="@+id/shop_id"
+        app:layout_constraintTop_toTopOf="@+id/shop_id"
+        app:srcCompat="@drawable/ic_content_copy_black_24dp" />
 
     <ImageView
         android:id="@+id/shop_veg_type_image"
         android:layout_width="16dp"
         android:layout_height="16dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
         android:background="@drawable/back_1dp_border_4dp_radius_no_color"
         android:backgroundTint="@color/colorGreen"
         android:padding="2dp"
         android:src="@drawable/dot_default"
         android:tint="@color/colorGreen"
-        app:layout_constraintBottom_toBottomOf="@+id/shop_rating"
-        app:layout_constraintStart_toStartOf="@+id/shop_name"
-        app:layout_constraintTop_toTopOf="@+id/shop_rating" />
+        app:layout_constraintBottom_toBottomOf="@+id/shop_non_veg_type_image"
+        app:layout_constraintEnd_toStartOf="@+id/shop_non_veg_type_image" />
 
     <ImageView
         android:id="@+id/shop_non_veg_type_image"
         android:layout_width="16dp"
         android:layout_height="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:background="@drawable/back_1dp_border_4dp_radius_no_color"
         android:backgroundTint="@color/colorRed"
         android:padding="2dp"
         android:src="@drawable/dot_default"
         android:tint="@color/colorRed"
-        android:layout_marginLeft="2dp"
         app:layout_constraintBottom_toBottomOf="@+id/shop_rating"
-        app:layout_constraintStart_toEndOf="@+id/shop_veg_type_image"
-        app:layout_constraintTop_toTopOf="@+id/shop_rating" />
+        app:layout_constraintEnd_toStartOf="@+id/shop_rating" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

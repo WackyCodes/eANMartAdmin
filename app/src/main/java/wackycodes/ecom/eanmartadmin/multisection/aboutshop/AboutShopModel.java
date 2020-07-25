@@ -1,4 +1,4 @@
-package wackycodes.ecom.eanmartadmin.multisection;
+package wackycodes.ecom.eanmartadmin.multisection.aboutshop;
 
 public class AboutShopModel {
 

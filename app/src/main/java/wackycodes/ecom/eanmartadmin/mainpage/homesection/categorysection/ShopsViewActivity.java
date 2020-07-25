@@ -1,4 +1,4 @@
-package wackycodes.ecom.eanmartadmin.shopsgrid;
+package wackycodes.ecom.eanmartadmin.mainpage.homesection.categorysection;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,7 +18,6 @@ import wackycodes.ecom.eanmartadmin.R;
 import wackycodes.ecom.eanmartadmin.addnewitem.AddNewLayoutActivity;
 import wackycodes.ecom.eanmartadmin.other.CheckInternetConnection;
 import wackycodes.ecom.eanmartadmin.other.DialogsClass;
-import wackycodes.ecom.eanmartadmin.secondpage.SecondActivity;
 
 import static wackycodes.ecom.eanmartadmin.database.DBQuery.categoryIDList;
 import static wackycodes.ecom.eanmartadmin.database.DBQuery.categoryList;

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,8 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.List;
 
 import wackycodes.ecom.eanmartadmin.R;
+import wackycodes.ecom.eanmartadmin.multisection.aboutshop.AboutShopModel;
+import wackycodes.ecom.eanmartadmin.multisection.aboutshop.ShopHomeActivity;
 
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.SHOP_TYPE_NON_VEG;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.SHOP_TYPE_NO_SHOW;
@@ -60,19 +63,23 @@ public class ShopListAdaptor  extends RecyclerView.Adapter <ShopListAdaptor.View
 
         private ImageView shopLogo;
         private TextView shopName;
+        private TextView shopIdText;
         private TextView shopCategory;
         private TextView shopRating;
         private ImageView shopVegType;
         private ImageView shopNonVegType;
+        private ImageView shopIdCpyBtn;
 
         public ViewHolder(@NonNull View itemView) {
             super( itemView );
             shopLogo = itemView.findViewById( R.id.shop_logo );
             shopName = itemView.findViewById( R.id.shop_name );
+            shopIdText = itemView.findViewById( R.id.shop_id );
             shopCategory = itemView.findViewById( R.id.shop_category );
             shopRating = itemView.findViewById( R.id.shop_rating );
             shopVegType = itemView.findViewById( R.id.shop_veg_type_image );
             shopNonVegType = itemView.findViewById( R.id.shop_non_veg_type_image );
+            shopIdCpyBtn = itemView.findViewById( R.id.copy_shop_img_view );
         }
 
         @SuppressLint("NewApi")
@@ -82,6 +89,7 @@ public class ShopListAdaptor  extends RecyclerView.Adapter <ShopListAdaptor.View
                     .placeholder( R.drawable.ic_photo_black_24dp ) ).into( shopLogo );
 
             shopName.setText( sName );
+            shopIdText.setText( shopID );
             shopCategory.setText( sCategory );
             shopRating.setText( sRating );
             if (sVegType == SHOP_TYPE_VEG){
@@ -109,6 +117,15 @@ public class ShopListAdaptor  extends RecyclerView.Adapter <ShopListAdaptor.View
 
                 }
             } );
+
+            shopIdCpyBtn.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText( itemView.getContext(), "Code Not Found!", Toast.LENGTH_SHORT ).show();
+                    //
+                }
+            } );
+
 
         }
 

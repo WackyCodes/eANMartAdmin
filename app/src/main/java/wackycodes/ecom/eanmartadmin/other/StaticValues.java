@@ -12,7 +12,6 @@ public class StaticValues {
     public static String CURRENT_CITY_CODE ;
 
 
-    public static final int STORAGE_PERMISSION = 1;
 
     public static final AdminDataModel ADMIN_DATA_MODEL = new AdminDataModel();
 
@@ -30,6 +29,7 @@ public class StaticValues {
     public static final int ID_MOVE = 54;
     public static final int ID_COPY = 55;
 
+    public static final int STORAGE_PERMISSION = 1;
     // File Code
     public static final int GALLERY_CODE = 121;
     public static final int READ_EXTERNAL_MEMORY_CODE = 122;
@@ -73,5 +73,9 @@ public class StaticValues {
     public static final int REQUEST_TO_VIEW_SHOP = 3;
     public static final int REQUEST_TO_VIEW_HOME = 4;
 
+    // Not Used for database...
+    // Used for local...
+    public static final int MAIN_ACTIVITY = 11;
+    public static final int ABOUT_SHOP_ACTIVITY = 11;
 
 }
