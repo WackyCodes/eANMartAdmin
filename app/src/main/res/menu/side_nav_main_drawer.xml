@@ -16,10 +16,17 @@
         android:title="My Account" />
 
     <item
+        android:id="@+id/menu_service_area"
+        android:icon="@drawable/ic_location_city_black_24dp"
+        android:iconTint="@color/colorBlack"
+        android:title="Service City" />
+
+    <item
         android:id="@+id/menu_log_out"
         android:icon="@drawable/ic_power_settings_new_black_24dp"
         android:iconTint="@color/colorBlack"
         android:title="LogOut" />
+
 
     <group
         android:id="@+id/menu_communicate"

@@ -3,6 +3,8 @@ package wackycodes.ecom.eanmartadmin.other;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.TextUtils;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -10,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_CODE;
 
@@ -27,6 +30,13 @@ public class StaticMethods {
 
         String crrDateDay = simpleDateFormat.format(new Date());
 
+        return crrDateDay;
+    }
+
+    public static String getCurrentDateAndTime(){
+//        Date date =  Calendar.getInstance().getTime();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault());
+        String crrDateDay = simpleDateFormat.format(new Date());
         return crrDateDay;
     }
 
@@ -83,6 +93,26 @@ public class StaticMethods {
         }
     }
 
+    public static boolean isValidEmail( EditText wReference ){
+        String wEmail = wReference.getText().toString().trim();
+        String emailRegex =
+                "^[a-zA-Z0-9_+&*-]+(?:\\."+
+                        "[a-zA-Z0-9_+&*-]+)*@" +
+                        "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                        "A-Z]{2,7}$";
+        Pattern pat = Pattern.compile(emailRegex);
+        boolean bool = pat.matcher(wEmail).matches();
+
+        if (TextUtils.isEmpty( wEmail )) {
+            wReference.setError( "Please Enter Email! " );
+            return false;
+        } else if (!bool){
+            wReference.setError( "Please Enter Valid Email! " );
+            return false;
+        }
+
+        return true;
+    }
 
     /*
         // TODO : List...

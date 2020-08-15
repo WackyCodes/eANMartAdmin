@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -91,6 +92,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static List <AboutShopModel> searchShopItemList = new ArrayList <>();
     private List<String> searchShopTags = new ArrayList <>();
     private SearchShopAdaptor searchAdaptor;
+
+    // ClipBoard..
+    public static ClipboardManager clipboardManager;
 
     private Dialog dialog;
     @Override
@@ -194,6 +198,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Copy Service...
         Intent intent = new Intent( String.valueOf( this.getSystemService( INPUT_SERVICE ) ) );
 
+        clipboardManager = (ClipboardManager)getSystemService( this.CLIPBOARD_SERVICE );
+        // Text ..
+//        ClipData clipData = ClipData.newPlainText( "TEXT", "WackyCodes" );
+//        clipboardManager.setPrimaryClip( clipData );
+//        if (clipboardManager.hasPrimaryClip()){
+//            String data = clipboardManager.getPrimaryClip().getItemAt( 0 ).getText().toString();
+//        }
+
     }
 
     @Override
@@ -270,6 +282,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // Select City Dialog...
     private AreaCodeCityModel tempAreaCodeCityModel = null;
+    private String tempAreaPinCode = "00";
     private void selectCityDialog(){
         // TODO :
         tempAreaCodeCityModel=null;
@@ -297,6 +310,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 AreaCodeCityModel areaCodeCityModel = (AreaCodeCityModel) adapterView.getItemAtPosition(i);
                 cityText.setText( areaCodeCityModel.getAreaCode() );
+                tempAreaPinCode = areaCodeCityModel.getAreaCode();
                 tempAreaCodeCityModel = areaCodeCityModel;
             }
         });
@@ -305,7 +319,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
                 // Check
-                if (tempAreaCodeCityModel!=null){
+                if (tempAreaCodeCityModel!=null && !tempAreaPinCode.equals( tempAreaCodeCityModel.getAreaCode() )){
                     cityDialog.dismiss();
                     drawerCityTitle.setText( "Your City" );
                     drawerCityName.setText( tempAreaCodeCityModel.getAreaCode() + ", " + tempAreaCodeCityModel.getCityName() );

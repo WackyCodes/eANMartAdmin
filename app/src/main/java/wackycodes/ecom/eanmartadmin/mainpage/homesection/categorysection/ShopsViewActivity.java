@@ -1,5 +1,6 @@
 package wackycodes.ecom.eanmartadmin.mainpage.homesection.categorysection;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -10,6 +11,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -78,7 +80,8 @@ public class ShopsViewActivity extends AppCompatActivity {
         setSupportActionBar( toolbar );
         try {
             getSupportActionBar().setDisplayShowTitleEnabled( true );
-            getSupportActionBar().setTitle( catName );
+            getSupportActionBar().setDisplayHomeAsUpEnabled( true );
+            getSupportActionBar().setTitle( "Category : "+ catName );
         }catch (NullPointerException ignored){ }
 
         // -------------
@@ -163,6 +166,17 @@ public class ShopsViewActivity extends AppCompatActivity {
             }
         } );
 
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home){
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected( item );
     }
 
     private void setDialogVisibility(boolean isVisible){

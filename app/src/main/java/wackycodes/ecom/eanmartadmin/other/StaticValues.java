@@ -11,8 +11,6 @@ public class StaticValues {
     public static String CURRENT_CITY_NAME ;
     public static String CURRENT_CITY_CODE ;
 
-
-
     public static final AdminDataModel ADMIN_DATA_MODEL = new AdminDataModel();
 
     public static final int ADMIN_ROOT_FOUNDER = 11;
@@ -77,5 +75,9 @@ public class StaticValues {
     // Used for local...
     public static final int MAIN_ACTIVITY = 11;
     public static final int ABOUT_SHOP_ACTIVITY = 11;
+
+    // Code for OPEN_CLOSE Service...
+    public static final int OPEN_SERVICE = 1;
+    public static final int CLOSE_SERVICE = 2;
 
 }

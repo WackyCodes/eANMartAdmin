@@ -32,6 +32,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="ToolTheme1" parent="Widget.AppCompat.Light.PopupMenu">
+        <!-- Customize your theme here. -->
+        <item name="android:homeAsUpIndicator">@drawable/ic_arrow_back_black_24dp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:popupBackground">@drawable/back_gradient_grid_item</item>
+    </style>
 
 
 </resources>

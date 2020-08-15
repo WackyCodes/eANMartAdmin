@@ -109,10 +109,11 @@ public class AddNewCatActivity {
                     catMap.put( "cat_id_"+position, newCatID );
                     catMap.put( "cat_name_"+position, dialogName.getText().toString()  );
                     catMap.put( "cat_image_"+position, UpdateImages.uploadImageLink );
+                    catMap.put( "cat_visibility_"+position, false );
 
                     DBQuery.setNewCategoryOnDataBase( context, dialog, newCatID,  dialogName.getText().toString(), layoutIndex , catMap );
                     homePageList.get( layoutIndex ).getBannerAndCatModelList().add( new BannerAndCatModel(
-                            newCatID, UpdateImages.uploadImageLink, newCatID, CATEGORY_ITEMS_LAYOUT_CONTAINER,  dialogName.getText().toString(), ""
+                            newCatID, UpdateImages.uploadImageLink, newCatID, CATEGORY_ITEMS_LAYOUT_CONTAINER,  dialogName.getText().toString(), "0"
                     ) );
                 }
             }

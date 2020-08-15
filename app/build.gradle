@@ -9,8 +9,8 @@ android {
         applicationId "wackycodes.ecom.eanmartadmin"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 201
+        versionName "1.207.01"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true

@@ -417,6 +417,9 @@ public class HomePageAdaptor extends RecyclerView.Adapter {
                 LinearLayout itemLayout = gridLayout.getChildAt( i ).findViewById( R.id.cat_item );
                 gridLayout.getChildAt( i ).findViewById( R.id.add_new_cat_item ).setVisibility( View.GONE );
                 itemLayout.setVisibility( View.VISIBLE );
+                // Set Update Visibility Gone For Home....
+                gridLayout.getChildAt( i ).findViewById( R.id.update_category_layout ).setVisibility( View.GONE );
+                gridLayout.getChildAt( i ).findViewById( R.id.visibility_layout ).setVisibility( View.GONE );
 
                 ImageView img = gridLayout.getChildAt( i ).findViewById( R.id.cat_image );
                 TextView name = gridLayout.getChildAt( i ).findViewById( R.id.cat_name );

@@ -138,6 +138,7 @@ public class AuthActivity extends AppCompatActivity {
                         CURRENT_CITY_NAME = current_city_name;
                         Intent intent = new Intent( AuthActivity.this, MainActivity.class );
                         startActivity( intent );
+                        dialog.dismiss();
                         finish();
                     }else{
                         // SignOut...

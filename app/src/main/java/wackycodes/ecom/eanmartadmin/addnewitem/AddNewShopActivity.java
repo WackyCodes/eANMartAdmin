@@ -39,6 +39,7 @@ import wackycodes.ecom.eanmartadmin.database.DBQuery;
 import wackycodes.ecom.eanmartadmin.other.DialogsClass;
 import wackycodes.ecom.eanmartadmin.mainpage.homesection.BannerAndCatModel;
 import wackycodes.ecom.eanmartadmin.mainpage.homesection.HomeListModel;
+import wackycodes.ecom.eanmartadmin.other.StaticMethods;
 
 import static wackycodes.ecom.eanmartadmin.MainActivity.selectAreaCityAdaptor;
 import static wackycodes.ecom.eanmartadmin.database.DBQuery.firebaseFirestore;
@@ -169,8 +170,10 @@ public class AddNewShopActivity extends AppCompatActivity {
     }
 
     private String shopAreaName;
+    private String shopAreaPinCode = "00";
 //    private String shopAreaCityCode;
     private String shopAreaCityName;
+
     private void addShopAreaCode(){
         ArrayList<AreaCodeCityModel> areaCodeCityModelArrayList = new ArrayList <>();
         areaCodeCityModelArrayList.addAll( DBQuery.areaCodeCityModelList );
@@ -186,6 +189,7 @@ public class AddNewShopActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 AreaCodeCityModel areaCodeCityModel = (AreaCodeCityModel) adapterView.getItemAtPosition(i);
                 shopAreaCode.setText( areaCodeCityModel.getAreaCode() );
+                shopAreaPinCode = areaCodeCityModel.getAreaCode();
                 shopAreaName = areaCodeCityModel.getAreaName();
 //                shopAreaCityCode = areaCodeCityModel.getCityCode();
                 shopAreaCityName = areaCodeCityModel.getCityName();
@@ -264,6 +268,9 @@ public class AddNewShopActivity extends AppCompatActivity {
         }else if (shopAreaCode.getText().toString().trim().length() != 6 ){
             shopAreaCode.setError( "Wrong pin Code!" );
             return false;
+        }else if ( !shopAreaPinCode.equals( shopAreaCode.getText().toString() )){
+            shopAreaCode.setError( "Not Exist On Database!" );
+            return false;
         }else if(CategoryID == null){
             DialogsClass.alertDialog( this, null, "Please Select Category!" ).show();
             return false;
@@ -285,7 +292,6 @@ public class AddNewShopActivity extends AppCompatActivity {
     }
 
     private void queryToAddShop(){
-
         String shopId =  shopID.getText().toString().trim();
         String sAreaCode = shopAreaCode.getText().toString().trim();
         String sName = shopName.getText().toString();
@@ -294,6 +300,9 @@ public class AddNewShopActivity extends AppCompatActivity {
         String tagString = CategoryID + " " + sCatName + " " + shopAreaName + " " + shopId + " " + sName + " " + shopVegNonType ;
         String[] categories = {CategoryID};
         String[] tags = tagString.toLowerCase().split( " " );
+
+        // get Current Time..
+        String addShopDateTime = StaticMethods.getCurrentDateAndTime();
 
 //        ArrayList<String> tagList = new ArrayList <>();
 //        tagList.addAll( Arrays.asList( tags ) );
@@ -324,6 +333,7 @@ public class AddNewShopActivity extends AppCompatActivity {
         shopMap.put( "shop_veg_non_type", String.valueOf( shopVegNonType ) );
         shopMap.put( "shop_image", "" );
         shopMap.put( "shop_rating", "" );
+        shopMap.put( "shop_add_on_date", addShopDateTime );
         shopMap.put( "tags", Arrays.asList( tags ) );
 
         Map<String, Object> shopHomeMap = new HashMap <>();
@@ -336,6 +346,7 @@ public class AddNewShopActivity extends AppCompatActivity {
         shopHomeMap.put( "shop_name", sName );
         shopHomeMap.put( "shop_logo", "" );
         shopHomeMap.put( "shop_rating", "" );
+        shopHomeMap.put( "shop_add_on_date", addShopDateTime );
         shopHomeMap.put( "shop_veg_non_type", String.valueOf( shopVegNonType ) );
         shopHomeMap.put( "shop_categories", Arrays.asList( categories ));
         shopHomeMap.put( "shop_category_name", sCatName );
@@ -391,7 +402,6 @@ public class AddNewShopActivity extends AppCompatActivity {
                 }
             }
         } );
-
 
     }
 

@@ -20,7 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".multisection.aboutshop.ShopHomeActivity"></activity>
+        <activity android:name=".cityareacode.servicecity.ServiceCityActivity"></activity>
+        <activity android:name=".multisection.aboutshop.ShopHomeActivity" />
         <activity android:name=".addnewitem.AddNewShopActivity" />
         <activity android:name=".mainpage.ViewAllActivity" />
         <activity android:name=".addnewitem.AddNewLayout" />

@@ -75,7 +75,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void checkCurrentUser(){
         // Load Area List...
-        DBQuery.getCityListQuery();
+        DBQuery.getCityListQuery( null );
         // Load Shop List.. > In main Activity...
         if (currentUser != null){
             checkAdminPermission();

@@ -9,6 +9,7 @@ public class BannerAndCatModel {
     private int clickType;
     private String name;
     private String extraText;
+    private boolean visibility;
 
     public BannerAndCatModel(String layoutId, String imageLink, String clickID, int clickType, String name, String extraText) {
         this.layoutId = layoutId;
@@ -18,6 +19,16 @@ public class BannerAndCatModel {
         this.name = name;
         this.extraText = extraText;
     }
+
+    // For Future...
+//    public BannerAndCatModel(String layoutId, String imageLink, String clickID, int clickType, String name, boolean visibility) {
+//        this.layoutId = layoutId;
+//        this.imageLink = imageLink;
+//        this.clickID = clickID;
+//        this.clickType = clickType;
+//        this.name = name;
+//        this.visibility = visibility;
+//    }
 
     public String getImageLink() {
         return imageLink;
@@ -65,5 +76,13 @@ public class BannerAndCatModel {
 
     public void setExtraText(String extraText) {
         this.extraText = extraText;
+    }
+
+    public boolean isVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(boolean visibility) {
+        this.visibility = visibility;
     }
 }

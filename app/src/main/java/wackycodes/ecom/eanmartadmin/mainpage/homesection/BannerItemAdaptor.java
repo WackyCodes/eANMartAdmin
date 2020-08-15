@@ -175,6 +175,21 @@ public class BannerItemAdaptor extends RecyclerView.Adapter<BannerItemAdaptor.Vi
                             Map<String, Object > updateMap = new HashMap <>();
 //                          updateMap.put( "delete_id_"+ (index + 1), bannerAndCatModelList.get( index ).getLayoutId() ); // String
                             updateMap.put( "no_of_banners", (bannerAndCatModelList.size() - 1) ); // int
+
+                            // update... For list
+                            int tempIndex = 0;
+                            for (int pos = 0; pos < bannerAndCatModelList.size(); pos++){
+                                if (pos == index ){
+                                    continue;
+                                }else{
+                                    tempIndex = tempIndex + 1;
+                                }
+                                updateMap.put( "banner_"+  tempIndex,  bannerAndCatModelList.get( ( pos ) ).getImageLink()  ); // String image
+                                updateMap.put( "banner_click_id_"+ tempIndex,  bannerAndCatModelList.get( ( pos ) ).getClickID()  ); // String
+                                updateMap.put( "banner_click_type_"+ tempIndex,  bannerAndCatModelList.get( ( pos ) ).getClickType() ); // int
+                                updateMap.put( "delete_id_"+ tempIndex, bannerAndCatModelList.get( ( pos ) ).getLayoutId() ); // String
+                            }
+
                             if (bannerAndCatModelList.size() <= 2){
                                 updateMap.put( "is_visible", false );
                             }

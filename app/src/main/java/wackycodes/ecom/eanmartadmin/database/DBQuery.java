@@ -27,12 +27,16 @@ import java.util.List;
 import java.util.Map;
 
 import wackycodes.ecom.eanmartadmin.MainActivity;
+import wackycodes.ecom.eanmartadmin.addnewitem.AddNewShopActivity;
+import wackycodes.ecom.eanmartadmin.cityareacode.servicecity.CityViewAdaptor;
+import wackycodes.ecom.eanmartadmin.cityareacode.servicecity.CityViewFragment;
 import wackycodes.ecom.eanmartadmin.mainpage.homesection.categorysection.ShopListModel;
 import wackycodes.ecom.eanmartadmin.cityareacode.AreaCodeCityModel;
 import wackycodes.ecom.eanmartadmin.mainpage.homesection.categorysection.ShopsViewActivity;
 import wackycodes.ecom.eanmartadmin.mainpage.homesection.BannerAndCatModel;
 import wackycodes.ecom.eanmartadmin.mainpage.homesection.HomeListModel;
 import wackycodes.ecom.eanmartadmin.mainpage.homesection.SecondActivity;
+import wackycodes.ecom.eanmartadmin.multisection.aboutshop.ShopHomeActivity;
 
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.BANNER_SLIDER_LAYOUT_CONTAINER;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_CODE;
@@ -51,6 +55,7 @@ public class DBQuery {
     public  static StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
     public static final ArrayList<AreaCodeCityModel> areaCodeCityModelList = new ArrayList <>();
+    public static final ArrayList<AreaCodeCityModel> cityCodeAndNameList = new ArrayList <>();
     public static final ArrayList<ShopListModel> shopListModelArrayList = new ArrayList <>();
 
     public static List<HomeListModel> homePageList = new ArrayList <>();
@@ -92,10 +97,16 @@ public class DBQuery {
                                 String catID = documentSnapshot.get("cat_id_"+ln).toString();
                                 String catName = documentSnapshot.get( "cat_name_"+ln ).toString();
                                 String catImage = documentSnapshot.get( "cat_image_"+ln ).toString();
+                                String visibleText = "0";
+                                if (documentSnapshot.get( "cat_visibility_"+ ln )!=null){
+                                    if ((boolean)documentSnapshot.get( "cat_visibility_"+ ln )){
+                                        visibleText = "1";
+                                    }
+                                }
 
                                 BannerAndCatModel bannerAndCatModel = new BannerAndCatModel(
                                         catID, catImage, catID, 0
-                                        , catName, ""  );
+                                        , catName, visibleText  );
                                 categoryIDList.add( catID );
                                 categoryList.add( new ArrayList <HomeListModel>() );
                                 bannerAndCatModelList.add( bannerAndCatModel );
@@ -257,7 +268,7 @@ public class DBQuery {
         } );
     }
 
-    public static void getCityListQuery(){
+    public static void getCityListQuery(@Nullable final Dialog dialog){
         areaCodeCityModelList.clear();
         firebaseFirestore.collection( "AREA_CODE" ).orderBy( "area_code" )
                 .get().addOnCompleteListener( new OnCompleteListener <QuerySnapshot>() {
@@ -275,13 +286,59 @@ public class DBQuery {
                     if (MainActivity.selectAreaCityAdaptor != null){
                         MainActivity.selectAreaCityAdaptor.notifyDataSetChanged();
                     }
+                    if (dialog != null)
+                        dialog.dismiss();
 
                 }else{
-
+                    if (dialog != null)
+                        dialog.dismiss();
                 }
             }
         } );
 
+    }
+
+    public static void getCityAndCityCode(){
+        firebaseFirestore.collection( "HOME_PAGE" )
+                .orderBy( "city_id" )
+                .get()
+                .addOnCompleteListener( new OnCompleteListener <QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task <QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            // : Assign Data into List
+                            AreaCodeCityModel areaCodeCityModel;
+                            for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()){
+//                                String city_image = documentSnapshot.get( "city_image" ).toString();
+                                String city_name = documentSnapshot.get( "city_name" ).toString();
+                                String city_id = documentSnapshot.get( "city_id" ).toString();
+                                String public_message_text = documentSnapshot.get( "public_message_text" ).toString();
+                                String public_message_image = documentSnapshot.get( "public_message_image" ).toString();
+                                String service_alert_text = documentSnapshot.get( "service_alert_text" ).toString();
+                                String service_alert_image = documentSnapshot.get( "service_alert_image" ).toString();
+
+                                long service_alert_type = (long)documentSnapshot.get( "service_alert_type" );
+                                long public_message_type = (long)documentSnapshot.get( "public_message_type" );
+
+                                boolean available_service = (boolean)documentSnapshot.get( "available_service" );
+                                boolean public_message_activate = (boolean)documentSnapshot.get( "public_message_activate" );
+
+                                areaCodeCityModel = new AreaCodeCityModel( null, city_name, city_id, available_service, public_message_activate
+                                        , Integer.parseInt( String.valueOf( service_alert_type ) )
+                                        , Integer.parseInt( String.valueOf( public_message_type ) )
+                                        , service_alert_text, service_alert_image, public_message_text, public_message_image );
+
+                                cityCodeAndNameList.add( areaCodeCityModel );
+
+                                if (CityViewFragment.cityViewAdaptor!=null){
+                                    CityViewFragment.cityViewAdaptor.notifyDataSetChanged();
+                                }
+                            }
+                        }else{
+
+                        }
+                    }
+                } );
     }
 
     public static void getShopListOfCurrentCity(){
@@ -350,6 +407,59 @@ public class DBQuery {
 
 
 
+    // Update Shop Activate / Deactivate ...
+
+    public static void queryToActivateShop(final Context context, final Dialog dialog, final String shopId, final Boolean activateVal){
+        firebaseFirestore.collection( "SHOPS" ).document( shopId )
+                .update( "available_service", activateVal )
+                .addOnCompleteListener( new OnCompleteListener <Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task <Void> task) {
+                        if (task.isSuccessful()){
+                            DBQuery.getCollectionRef( "SHOPS" ).document( shopId )
+                                    .update( "available_service", activateVal )
+                                    .addOnCompleteListener( new OnCompleteListener <Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task <Void> task1) {
+                                            if (task1.isSuccessful()){
+                                                Toast.makeText( context, "Update Successfully!", Toast.LENGTH_SHORT ).show();
+                                                ShopHomeActivity.shopHomeActivityModel.setServiceAvailable( activateVal );
+                                            }else{
+                                                Toast.makeText( context, "Failed!", Toast.LENGTH_SHORT ).show();
+                                            }
+                                            dialog.dismiss();
+                                        }
+                                    } );
+                        }else{
+                            Toast.makeText( context, "Failed!", Toast.LENGTH_SHORT ).show();
+                            dialog.dismiss();
+                        }
+                    }
+                } );
+    }
+
+    public static void queryAddShopMember(final Context context, final Dialog dialog, Map<String, Object> updateMap){
+
+        String shopId = updateMap.get( "shop_id" ).toString();
+        String adminMobile = updateMap.get( "admin_mobile" ).toString();
+
+        firebaseFirestore.collection( "SHOPS" ).document( shopId )
+                .collection( "ADMINS" )
+                .document( adminMobile ).set( updateMap )
+                .addOnCompleteListener( new OnCompleteListener <Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task <Void> task) {
+                        if (task.isSuccessful()){
+                            Toast.makeText( context, "successfully Added!", Toast.LENGTH_SHORT ).show();
+                            dialog.dismiss();
+                        }else{
+                            Toast.makeText( context, "Failed.! Something Went Wrong!", Toast.LENGTH_SHORT ).show();
+                            dialog.dismiss();
+                        }
+                    }
+                } );
+
+    }
 
 
 }

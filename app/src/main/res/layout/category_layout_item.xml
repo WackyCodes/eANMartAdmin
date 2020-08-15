@@ -11,6 +11,8 @@
         android:id="@+id/cat_item"
         android:orientation="vertical"
         android:gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +26,6 @@
             android:layout_height="140dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:gravity="center"
@@ -39,9 +40,8 @@
             android:layout_marginLeft="2dp"
             android:layout_marginEnd="2dp"
             android:layout_marginRight="2dp"
-            android:layout_marginBottom="8dp"
-            android:maxLines="2"
-            android:lines="2"
+            android:maxLines="1"
+            android:singleLine="true"
             android:padding="2dp"
             android:textSize="12dp"
             android:text="Cat Name"
@@ -49,8 +49,66 @@
             android:textStyle="bold"
             android:textColor="@color/colorPrimary"/>
 
-    </LinearLayout>
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/update_category_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/update_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:lines="2"
+                android:textSize="12sp"
+                android:text="Update\nImage"
+                android:textAlignment="center"
+                android:textColor="@color/colorSecondary"/>
+            <TextView
+                android:id="@+id/update_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:lines="2"
+                android:textSize="12sp"
+                android:text="Update\nName"
+                android:textAlignment="center"
+                android:textColor="@color/colorSecondary"/>
 
+        </LinearLayout>
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/visibility_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/back_rectangle_4dp_layout"
+            android:backgroundTint="@color/colorYellow"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:layout_marginTop="2dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/update_visibility_image"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                app:srcCompat="@drawable/ic_visibility_off_black_24dp"
+                android:layout_gravity="center_vertical"
+                android:textAlignment="center"
+                android:textColor="@color/colorSecondary"/>
+            <TextView
+                android:id="@+id/update_visibility_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="4dp"
+                android:textSize="12dp"
+                android:text="Hide Category"
+                android:textAlignment="center"
+                android:textColor="@color/colorBlack"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:visibility="gone"

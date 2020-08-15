@@ -1,6 +1,7 @@
 package wackycodes.ecom.eanmartadmin.multisection;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import wackycodes.ecom.eanmartadmin.R;
 import wackycodes.ecom.eanmartadmin.multisection.aboutshop.AboutShopModel;
 import wackycodes.ecom.eanmartadmin.multisection.aboutshop.ShopHomeActivity;
 
+import static wackycodes.ecom.eanmartadmin.MainActivity.clipboardManager;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.SHOP_TYPE_NON_VEG;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.SHOP_TYPE_NO_SHOW;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.SHOP_TYPE_VEG;
@@ -91,7 +93,13 @@ public class ShopListAdaptor  extends RecyclerView.Adapter <ShopListAdaptor.View
             shopName.setText( sName );
             shopIdText.setText( shopID );
             shopCategory.setText( sCategory );
-            shopRating.setText( sRating );
+            if(sRating != null){
+                shopRating.setVisibility( View.VISIBLE );
+                shopRating.setText( sRating );
+            }else{
+                shopRating.setVisibility( View.INVISIBLE );
+            }
+
             if (sVegType == SHOP_TYPE_VEG){
                 shopVegType.setVisibility( View.VISIBLE );
                 shopNonVegType.setVisibility( View.GONE );
@@ -121,8 +129,18 @@ public class ShopListAdaptor  extends RecyclerView.Adapter <ShopListAdaptor.View
             shopIdCpyBtn.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText( itemView.getContext(), "Code Not Found!", Toast.LENGTH_SHORT ).show();
-                    //
+
+                    // Set Data
+                    ClipData clipData = ClipData.newPlainText( "TEXT", shopID );
+                    clipboardManager.setPrimaryClip( clipData );
+                    // Get Data ...
+//                    if (clipboardManager.hasPrimaryClip()){
+//                        String data = clipboardManager.getPrimaryClip().getItemAt( 0 ).getText().toString();
+//                    }
+                    if (clipboardManager.hasPrimaryClip()){
+                        Toast.makeText( itemView.getContext(), "Copied Shop ID!", Toast.LENGTH_SHORT ).show();
+                    }
+
                 }
             } );
 

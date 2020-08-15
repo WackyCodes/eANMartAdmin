@@ -25,7 +25,7 @@
             android:scaleType="center"
             app:elevation="4dp"
             app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:popupTheme="@style/ToolTheme"
+            app:popupTheme="@style/ToolTheme1"
             app:titleMarginStart="40dp"
             app:titleTextColor="@color/colorWhite">
 
@@ -51,28 +51,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/shop_image"
-                    android:layout_width="0dp"
-                    android:layout_height="250dp"
-                    android:background="@color/colorGray"
-                    android:scaleType="fitCenter"
+                <LinearLayout
+                    android:id="@+id/linearLayoutForShopImage"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_panorama_black_24dp" />
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp">
+                    <wackycodes.ecom.eanmartadmin.other.MyImageView
+                        android:id="@+id/shop_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorGray"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/ic_panorama_black_24dp" />
+                </LinearLayout>
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/shop_logo_circle_imageView"
                     android:layout_width="140dp"
                     android:layout_height="140dp"
-                    android:elevation="6dp"
-                    app:civ_border_color="@color/colorWhite"
+                    android:elevation="4dp"
+                    app:civ_border_color="@color/colorPrimary"
                     app:civ_border_width="2dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/shop_image"
+                    app:layout_constraintBottom_toBottomOf="@+id/linearLayoutForShopImage"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/shop_image"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayoutForShopImage"
                     app:srcCompat="@drawable/ic_store_mall_directory_black_24dp" />
 
                 <ImageView
@@ -80,6 +85,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:elevation="8dp"
+                    android:background="@drawable/back_rectangle_4dp_layout"
+                    android:backgroundTint="@color/colorWhite"
                     android:padding="2dp"
                     android:textAlignment="center"
                     android:tint="@color/colorGreen"
@@ -99,7 +106,7 @@
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/shop_image">
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayoutForShopImage">
 
                     <TextView
                         android:id="@+id/shop_rating_text"
@@ -178,7 +185,7 @@
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/shop_image">
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayoutForShopImage">
 
                     <TextView
                         android:id="@+id/shop_open_close_text"
@@ -299,6 +306,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:padding="2dp"
                 android:orientation="vertical">
 
                 <LinearLayout

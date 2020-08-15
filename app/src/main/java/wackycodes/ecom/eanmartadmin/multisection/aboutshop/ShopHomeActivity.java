@@ -5,14 +5,28 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -21,17 +35,21 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import wackycodes.ecom.eanmartadmin.R;
-import wackycodes.ecom.eanmartadmin.mainpage.MainActivityAdaptor;
+import wackycodes.ecom.eanmartadmin.database.DBQuery;
 import wackycodes.ecom.eanmartadmin.mainpage.MainActivityGridModel;
 import wackycodes.ecom.eanmartadmin.other.DialogsClass;
-import wackycodes.ecom.eanmartadmin.other.MyGridView;
+import wackycodes.ecom.eanmartadmin.other.MyImageView;
 
 import static wackycodes.ecom.eanmartadmin.database.DBQuery.firebaseFirestore;
-import static wackycodes.ecom.eanmartadmin.other.StaticValues.ABOUT_SHOP_ACTIVITY;
+import static wackycodes.ecom.eanmartadmin.other.StaticMethods.isValidEmail;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.ADMIN_SHOP_FOUNDER;
+import static wackycodes.ecom.eanmartadmin.other.StaticValues.ADMIN_SHOP_MANAGER;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.SHOP_TYPE_NON_VEG;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.SHOP_TYPE_NO_SHOW;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.SHOP_TYPE_VEG;
@@ -40,9 +58,9 @@ import static wackycodes.ecom.eanmartadmin.other.StaticValues.SHOP_TYPE_VEG_NON;
 public class ShopHomeActivity extends AppCompatActivity {
 
 
-    private static AboutShopModel shopHomeActivityModel = new AboutShopModel();
+    public static AboutShopModel shopHomeActivityModel = new AboutShopModel();
 
-    private ImageView shopImage;
+    private MyImageView shopImage;
     private CircleImageView shopLogo;
     private TextView shopIdText;
     private TextView shopName;
@@ -69,6 +87,7 @@ public class ShopHomeActivity extends AppCompatActivity {
 
     private Dialog dialog;
 
+    private boolean switchAction = false;
 
     private Toolbar toolbar;
     private List <MainActivityGridModel> shopHomeList = new ArrayList <>();
@@ -84,6 +103,7 @@ public class ShopHomeActivity extends AppCompatActivity {
         setSupportActionBar( toolbar );
         try {
             getSupportActionBar().setDisplayShowTitleEnabled( true );
+            getSupportActionBar().setDisplayHomeAsUpEnabled( true );
             getSupportActionBar().setTitle( "Shop Store" );
         }catch (NullPointerException ignored){ }
 
@@ -117,8 +137,86 @@ public class ShopHomeActivity extends AppCompatActivity {
 
         getShopData(shopID);
 
+        // shopActiveSwitch Action....
+        shopActiveSwitch.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+                // Request to Database...
+                if ( switchAction ){
+                    String msg = "Do You Want to DeActivate Service of this Shop?";
+                    if (isChecked){
+                        msg = "Do You want to Activate Service?";
+                    }
+                    AlertDialog.Builder alertDialog = DialogsClass.alertDialog( ShopHomeActivity.this,  "Alert!", msg );
+                    switchAction = false;
+                    alertDialog.setCancelable( false );
+                    alertDialog.setPositiveButton( "YES", new DialogInterface.OnClickListener() {
+                        @SuppressLint("NewApi")
+                        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int which) {
+                            dialogInterface.dismiss();
+                            dialog.show();
+                            DBQuery.queryToActivateShop( ShopHomeActivity.this, dialog, shopHomeActivityModel.getShopID(), isChecked );
+                            // Service Active...
+                            if (isChecked){
+//                                shopActiveSwitch.setChecked( true );
+                                shopActiveSwitch.setText( "Active" );
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    shopActiveSwitch.setBackgroundTintList( getResources().getColorStateList( R.color.colorGreen ) );
+                                }
+                            }else{
+//                                shopActiveSwitch.setChecked( false );
+                                shopActiveSwitch.setText( "DeActive" );
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    shopActiveSwitch.setBackgroundTintList( getResources().getColorStateList( R.color.colorRed ) );
+                                }
+                            }
 
+                            switchAction = true;
 
+                        }
+                    } ).setNegativeButton( "NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int which) {
+                            dialogInterface.dismiss();
+                            shopActiveSwitch.setChecked( !isChecked );
+
+                            switchAction = true;
+                        }
+                    } );
+                    alertDialog.show();
+
+                }
+
+            }
+        } );
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+//        return super.onCreateOptionsMenu( menu );
+        getMenuInflater().inflate( R.menu.menu_options_for_shop, menu);
+
+//        MenuItem addMember = menu.findItem( R.id.menu_add_shop_member );
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home){
+            finish();
+            return true;
+        }else if ( id == R.id.menu_add_shop_member ){
+            // Add ClickListener...
+            addNewMemberDialog();
+            return true;
+        }
+
+        return true;
     }
 
     // Set Shop data...
@@ -177,6 +275,91 @@ public class ShopHomeActivity extends AppCompatActivity {
             shopActiveSwitch.setText( "DeActive" );
             shopActiveSwitch.setBackgroundTintList( getResources().getColorStateList( R.color.colorRed ) );
         }
+
+        // Action Activate...
+        switchAction = true;
+    }
+
+    private void addNewMemberDialog(){
+        final Dialog memberDialog = new Dialog( this );
+        memberDialog.requestWindowFeature( Window.FEATURE_NO_TITLE );
+        memberDialog.setContentView( R.layout.dialog_add_new_shop_member );
+        memberDialog.getWindow().setLayout( ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT );
+        memberDialog.setCancelable( false );
+
+        TextView shopName = memberDialog.findViewById( R.id.dialog_shop_name );
+        TextView shopIdText = memberDialog.findViewById( R.id.dialog_shop_id_text );
+        final EditText memberName = memberDialog.findViewById( R.id.dialog_shop_member_name );
+        final EditText memberEmail = memberDialog.findViewById( R.id.dialog_shop_member_email );
+        final EditText memberMobile = memberDialog.findViewById( R.id.dialog_member_mobile );
+        final RadioGroup typeRadioGroup = memberDialog.findViewById( R.id.dialog_radio_group );
+        final RadioButton shopOwner = memberDialog.findViewById( R.id.shop_owner );
+        final RadioButton shopManager = memberDialog.findViewById( R.id.shop_manager );
+        shopName.setText( shopHomeActivityModel.getShopName() );
+        shopIdText.setText( "(" + shopHomeActivityModel.getShopID() + ")" );
+        memberName.setText( "" );
+        memberEmail.setText( "" );
+        memberMobile.setText( "" );
+
+        Button addButton = memberDialog.findViewById( R.id.dialog_add_btn );
+        Button cancelButton = memberDialog.findViewById( R.id.dialog_cancel_btn );
+        ImageView closeButton = memberDialog.findViewById( R.id.dialog_close_image_view );
+
+        addButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.show();
+                int memberType = -1;
+                if (typeRadioGroup.getCheckedRadioButtonId() == shopOwner.getId()){
+                    memberType = ADMIN_SHOP_FOUNDER;
+                }
+                else if(typeRadioGroup.getCheckedRadioButtonId() == shopManager.getId()){
+                    memberType = ADMIN_SHOP_MANAGER;
+                }
+
+                if (isValid( memberName ) && isValidEmail( memberEmail ) && isValid( memberMobile ) && memberType != -1 ){
+                    //  Request
+                    Map <String, Object> updateMap = new HashMap <>();
+                    updateMap.put( "admin_email", memberEmail.getText().toString() );
+                    updateMap.put( "admin_mobile", memberMobile.getText().toString() );
+                    updateMap.put( "admin_name", memberName.getText().toString() );
+                    updateMap.put( "admin_code", String.valueOf( memberType ) );
+                    updateMap.put( "admin_photo", "" );
+                    updateMap.put( "is_allowed", true );
+                    updateMap.put( "admin_address", "" );
+                    updateMap.put( "shop_id", shopHomeActivityModel.getShopID() );
+
+                    DBQuery.queryAddShopMember( ShopHomeActivity.this, dialog, updateMap);
+                    memberDialog.dismiss();
+                }
+                else{
+                    Toast.makeText( ShopHomeActivity.this, "Something went Wrong!", Toast.LENGTH_SHORT ).show();
+                    dialog.dismiss();
+                }
+            }
+        } );
+        cancelButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                memberDialog.dismiss();
+            }
+        } );
+        closeButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                memberDialog.dismiss();
+            }
+        } );
+        memberDialog.show();
+    }
+
+    private boolean isValid(EditText ref){
+        if (TextUtils.isEmpty( ref.getText().toString() )){
+            ref.setError( "Required..!" );
+            return false;
+        }else{
+            return true;
+        }
     }
 
     private void getShopData(final String shopID){
@@ -193,7 +376,8 @@ public class ShopHomeActivity extends AppCompatActivity {
                     String shop_address = documentSnapshot.get( "shop_address" ).toString();
                     String shop_area_code = documentSnapshot.get( "shop_area_code" ).toString();
 //                    String shop_area_name = documentSnapshot.get( "shop_area_name" ).toString();
-                    String shop_cat_main = documentSnapshot.get( "shop_cat_main" ).toString();
+//                    String shop_cat_main = documentSnapshot.get( "shop_cat_main" ).toString();
+                    String shop_category_name = documentSnapshot.get( "shop_category_name" ).toString();
 
                     // shop_categories
 
@@ -230,7 +414,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                     shopHomeActivityModel.setOpen( is_open );
                     shopHomeActivityModel.setShopAddress( shop_address );
                     shopHomeActivityModel.setShopAreaCode( shop_area_code );
-                    shopHomeActivityModel.setShopCategory( shop_cat_main );
+                    shopHomeActivityModel.setShopCategory( shop_category_name );
                     shopHomeActivityModel.setShopCity( shop_city_name );
 //                    shopHomeActivityModel.setShopCloseTime( shop_close_msg );
                     shopHomeActivityModel.setShopLandMark( shop_landmark );
@@ -314,5 +498,6 @@ public class ShopHomeActivity extends AppCompatActivity {
      *
      *
      */
+
 
 }

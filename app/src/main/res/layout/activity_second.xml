@@ -27,22 +27,6 @@
             app:titleMarginStart="40dp"
             app:titleTextColor="@color/colorWhite">
 
-            <androidx.appcompat.widget.SearchView
-                android:visibility="gone"
-                android:id="@+id/home_shop_search_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:elevation="4dp"
-                android:background="@drawable/back_rectangle_4dp_layout"
-                app:closeIcon="@drawable/ic_close_black_24dp"
-                app:defaultQueryHint="search shop name here..."
-                app:iconifiedByDefault="false"
-                app:searchIcon="@drawable/ic_search_black_24dp" />
-
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -62,6 +46,8 @@
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:elevation="4dp"
+            android:visibility="gone"
             android:background="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

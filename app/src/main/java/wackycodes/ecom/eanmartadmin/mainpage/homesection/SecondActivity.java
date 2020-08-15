@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -135,11 +136,12 @@ public class SecondActivity extends AppCompatActivity {
         dialogUploadImage = findViewById( R.id.dialog_upload_image );
 
         //...
-        String toolTitle = "Title";
+        String toolTitle = "Home Page";
         toolbar = findViewById( R.id.appToolbar );
         setSupportActionBar( toolbar );
         try {
             getSupportActionBar().setDisplayShowTitleEnabled( true );
+            getSupportActionBar().setDisplayHomeAsUpEnabled( true );
             getSupportActionBar().setTitle( toolTitle );
         }catch (NullPointerException ignored){ }
 
@@ -231,6 +233,16 @@ public class SecondActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home){
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected( item );
+    }
+
     private void setDialogVisibility(boolean isVisible){
         if(!isVisible){
             activityViewLayout.setVisibility( View.VISIBLE );
@@ -316,9 +328,10 @@ public class SecondActivity extends AppCompatActivity {
                     catMap.put( "cat_id_"+position, newCatID );
                     catMap.put( "cat_name_"+position, dialogName.getText().toString()  );
                     catMap.put( "cat_image_"+position, uploadImageLink );
+                    catMap.put( "cat_visibility_"+position, false );
 
                     homePageList.get( layoutIndex ).getBannerAndCatModelList().add( new BannerAndCatModel(
-                            newCatID, uploadImageLink, newCatID, CATEGORY_ITEMS_LAYOUT_CONTAINER,  dialogName.getText().toString(), ""
+                            newCatID, uploadImageLink, newCatID, CATEGORY_ITEMS_LAYOUT_CONTAINER,  dialogName.getText().toString(), "0"
                     ) );
 
                     DBQuery.setNewCategoryOnDataBase( SecondActivity.this, dialog, newCatID,  dialogName.getText().toString(), layoutIndex , catMap );
@@ -327,6 +340,7 @@ public class SecondActivity extends AppCompatActivity {
                     newCatID = null;
                     uploadImageLink = null;
                     catImageUri = null;
+                    catImageView.setImageResource( R.drawable.ic_photo_black_24dp );
                     setAddCatLayoutVisibility(false);
                 }
             }
@@ -389,8 +403,6 @@ public class SecondActivity extends AppCompatActivity {
         }
         // Get Response of cropped Image method....
     }
-
-
 
     private void showToast(String msg){
         Toast.makeText( this, msg, Toast.LENGTH_SHORT ).show();
