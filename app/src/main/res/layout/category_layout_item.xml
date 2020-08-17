@@ -44,7 +44,7 @@
             android:singleLine="true"
             android:padding="2dp"
             android:textSize="12dp"
-            android:text="Cat Name"
+            android:text="Not Found"
             android:textAlignment="center"
             android:textStyle="bold"
             android:textColor="@color/colorPrimary"/>
@@ -115,12 +115,14 @@
         android:id="@+id/add_new_cat_item"
         android:orientation="vertical"
         android:gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="208dp">
 
         <ImageView
             android:layout_width="110dp"

@@ -33,7 +33,7 @@ public class CityViewFragment extends Fragment {
         //city_grid_view
         GridView cityGridView = view.findViewById( R.id.city_grid_view );
 
-        cityViewAdaptor = new CityViewAdaptor( DBQuery.cityCodeAndNameList );
+        cityViewAdaptor = new CityViewAdaptor( ); // DBQuery.cityCodeAndNameList
         cityGridView.setAdapter( cityViewAdaptor );
         cityViewAdaptor.notifyDataSetChanged();
 

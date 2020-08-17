@@ -340,6 +340,21 @@ public class DBQuery {
                     }
                 } );
     }
+    public static void updateCityService( final String cityCode, final Map <String, Object> uploadMap){
+        firebaseFirestore.collection( "HOME_PAGE" )
+                .document( cityCode )
+                .update( uploadMap )
+                .addOnCompleteListener( new OnCompleteListener <Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task <Void> task) {
+                        if (task.isSuccessful()){
+
+                        }else{
+
+                        }
+                    }
+                } );
+    }
 
     public static void getShopListOfCurrentCity(){
         shopListModelArrayList.clear();
@@ -366,6 +381,7 @@ public class DBQuery {
     public static void setNewCategoryOnDataBase(final Context context, final Dialog dialog, String categoryID, String categoryName, final int layoutIndex
             , final Map <String, Object> uploadMap ){
 
+        // Create A Category and Assign Default Shop_layout Page...
         Map<String, Object> firstMap = new HashMap <>();
         firstMap.put( "category_id", categoryID );
         firstMap.put( "category_name", categoryName );
@@ -378,6 +394,7 @@ public class DBQuery {
                     @Override
                     public void onComplete(@NonNull Task <Void> task) {
                         if (task.isSuccessful()){
+                            // This is Update On Main Page Category.. Which is Home Page of Customer App.!
                             getCollectionRef("HOME").document( "cat_layout" ).update( uploadMap )
                                     .addOnCompleteListener( new OnCompleteListener <Void>() {
                                         @Override
@@ -404,7 +421,32 @@ public class DBQuery {
 
 
     }
+    public static void updateCategoryOnDatabase(@Nullable final Context context, @Nullable final Dialog dialog,@NonNull String layoutID, final Map <String, Object> uploadMap ){
 
+//        layoutID = "cat_layout";
+
+        // This is Update On Main Page Category.. Which is Home Page of Customer App.!
+        getCollectionRef("HOME").document( layoutID ).update( uploadMap )
+                .addOnCompleteListener( new OnCompleteListener <Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task <Void> task1) {
+                        if (task1.isSuccessful()){
+                            if (context!=null)
+                                Toast.makeText( context, "Successfully Updated!", Toast.LENGTH_SHORT ).show();
+                        }else{
+                            if (context!=null)
+                                Toast.makeText( context, "Failed!", Toast.LENGTH_SHORT ).show();
+                        }
+                        if (dialog!=null)
+                            dialog.dismiss();
+                        if (SecondActivity.homePageAdaptor != null){
+                            SecondActivity.homePageAdaptor.notifyDataSetChanged();
+                        }
+
+                    }
+                } );
+
+    }
 
 
     // Update Shop Activate / Deactivate ...

@@ -3,6 +3,9 @@ package wackycodes.ecom.eanmartadmin.cityareacode.servicecity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -44,6 +48,9 @@ public class ServiceCityActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
 
+    private FrameLayout cityFrameLayout;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
@@ -57,6 +64,10 @@ public class ServiceCityActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled( true );
         }catch (NullPointerException ignored){ }
 
+        // Assign...
+        cityFrameLayout = findViewById( R.id.frameLayout );
+
+        setCityFrameLayout(new CityViewFragment());
 
     }
 
@@ -148,6 +159,14 @@ public class ServiceCityActivity extends AppCompatActivity {
             }
         } );
         serviceDialog.show();
+    }
+
+    private void setCityFrameLayout(Fragment fragment){
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add( cityFrameLayout.getId(), fragment );
+        fragmentTransaction.commit();
+
     }
 
 

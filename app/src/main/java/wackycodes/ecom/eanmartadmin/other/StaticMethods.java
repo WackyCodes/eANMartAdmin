@@ -93,6 +93,10 @@ public class StaticMethods {
         }
     }
 
+    public static void showToast( Context context, String msg){
+        Toast.makeText( context, msg, Toast.LENGTH_SHORT ).show();
+    }
+
     public static boolean isValidEmail( EditText wReference ){
         String wEmail = wReference.getText().toString().trim();
         String emailRegex =

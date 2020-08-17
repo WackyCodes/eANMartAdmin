@@ -431,25 +431,25 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
                         if ( v == gridLayout.getChildAt( 0 ).findViewById( R.id.cat_item )){
                             // TODO :
                             if(gridRange>=1){
-                                setOnClick(  categoryList.get( 0 ).getClickID());
+                                setOnClick(  categoryList.get( 0 ).getClickID(), index);
                             }
                         } else
                         if ( v == gridLayout.getChildAt( 1 ).findViewById( R.id.cat_item )){
                             // TODO :
                             if(gridRange>=2){
-                                setOnClick(  categoryList.get( 1 ).getClickID());
+                                setOnClick(  categoryList.get( 1 ).getClickID(), index);
                             }
                         } else
                         if ( v == gridLayout.getChildAt( 2 ).findViewById( R.id.cat_item )){
                             // TODO :
                             if(gridRange>=3){
-                                setOnClick(  categoryList.get( 2 ).getClickID());
+                                setOnClick(  categoryList.get( 2 ).getClickID(), index);
                             }
                         }else
                         if ( v == gridLayout.getChildAt( 3 ).findViewById( R.id.cat_item )){
                             // TODO :
                             if(gridRange>=4){
-                                setOnClick(  categoryList.get( 3 ).getClickID());
+                                setOnClick(  categoryList.get( 3 ).getClickID(), index);
                             }
                         }
                     }
@@ -484,9 +484,10 @@ public class ShopsViewAdaptor extends RecyclerView.Adapter  {
 
         }
 
-        private void setOnClick( String clickID){
+        private void setOnClick( String clickID, int index){
             Intent intent = new Intent( itemView.getContext(), ShopHomeActivity.class );
             intent.putExtra( "SHOP_ID", clickID );
+            intent.putExtra( "LAY_INDEX", index );
             itemView.getContext().startActivity( intent );
         }
 

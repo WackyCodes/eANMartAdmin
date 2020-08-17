@@ -67,8 +67,9 @@ public class ViewAllActivity extends AppCompatActivity {
                 // Case 2.
                 viewAllRecycler.setVisibility( View.GONE );
                 viewAllGridView.setVisibility( View.VISIBLE );
+                layoutIndex = getIntent().getIntExtra( "LAY_INDEX", -1);
 
-                viewAllGridAdaptor = new ViewAllGridAdaptor( type, viewAllList );
+                viewAllGridAdaptor = new ViewAllGridAdaptor( type, layoutIndex, viewAllList );
                 viewAllGridView.setAdapter( viewAllGridAdaptor );
                 viewAllGridAdaptor.notifyDataSetChanged();
                 break;
@@ -78,8 +79,6 @@ public class ViewAllActivity extends AppCompatActivity {
 
 
     }
-
-
 
 
 }

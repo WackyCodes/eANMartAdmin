@@ -406,8 +406,8 @@ public class HomePageAdaptor extends RecyclerView.Adapter {
             warningText.setVisibility( View.GONE );
             int gridRange;
 
-            if (categoryList.size()>3){
-                gridRange = 3;
+            if (categoryList.size()>4){
+                gridRange = 4;
             }else{
                 gridRange = categoryList.size();
             }
@@ -440,20 +440,25 @@ public class HomePageAdaptor extends RecyclerView.Adapter {
                         } else
                         if ( v == gridLayout.getChildAt( 2 ).findViewById( R.id.cat_item )){
                             onCatClick(categoryList.get( 2 ).getName(), categoryList.get( 2 ).getClickID());
+                        } else
+                        if ( v == gridLayout.getChildAt( 3 ).findViewById( R.id.cat_item )){
+                            onCatClick(categoryList.get( 3 ).getName(), categoryList.get( 3 ).getClickID());
                         }
                     }
                 } );
             }
             // Add new Product in Grid Layout...
-            for (int k = 0; k < 4; k++ ) {
+           /** for (int k = 0; k < 4; k++ ) {
                 LinearLayout itemLayout = gridLayout.getChildAt( k ).findViewById( R.id.cat_item );
                 LinearLayout addNewItemLayout = gridLayout.getChildAt( k ).findViewById( R.id.add_new_cat_item );
+
+                itemLayout.setVisibility( View.VISIBLE );
+                addNewItemLayout.setVisibility( View.GONE );
+
                 if ( k < gridRange ){
-                    itemLayout.setVisibility( View.VISIBLE );
-                    addNewItemLayout.setVisibility( View.GONE );
+
                 }else{
-                    itemLayout.setVisibility( View.GONE );
-                    addNewItemLayout.setVisibility( View.VISIBLE );
+
                 }
 
                 addNewItemLayout.setOnClickListener( new View.OnClickListener() {
@@ -474,7 +479,7 @@ public class HomePageAdaptor extends RecyclerView.Adapter {
                     }
                 } );
 
-            }
+            } */
 
             gridLayoutViewAllBtn.setOnClickListener( new View.OnClickListener() {
                 @Override
@@ -482,6 +487,7 @@ public class HomePageAdaptor extends RecyclerView.Adapter {
                     ViewAllActivity.viewAllList = categoryList;
                     Intent viewAllIntent = new Intent( itemView.getContext(), ViewAllActivity.class);
                     viewAllIntent.putExtra( "TYPE", CATEGORY_ITEMS_LAYOUT_CONTAINER );
+                    viewAllIntent.putExtra( "LAY_INDEX", index );
                     itemView.getContext().startActivity( viewAllIntent );
                 }
             } );
@@ -508,11 +514,6 @@ public class HomePageAdaptor extends RecyclerView.Adapter {
             intent.putExtra( "CAT_NAME", catName );
             itemView.getContext().startActivity( intent );
         }
-
-       private void addNewItem(final int layoutIndex, int listIndex){
-            SecondActivity.layoutIndex = layoutIndex;
-            SecondActivity.setAddCatLayoutVisibility( true );
-       }
 
    }
     //==============  GridProduct Grid Layout View Holder =================

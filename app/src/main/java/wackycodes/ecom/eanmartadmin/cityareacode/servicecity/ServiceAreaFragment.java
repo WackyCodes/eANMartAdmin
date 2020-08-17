@@ -28,8 +28,6 @@ import wackycodes.ecom.eanmartadmin.other.DialogsClass;
 import wackycodes.ecom.eanmartadmin.other.StaticValues;
 
 import static wackycodes.ecom.eanmartadmin.database.DBQuery.areaCodeCityModelList;
-import static wackycodes.ecom.eanmartadmin.database.DBQuery.getCityAndCityCode;
-import static wackycodes.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_CODE;
 
 /**
  * A simple {@link Fragment} subclass.

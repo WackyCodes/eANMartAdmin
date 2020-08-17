@@ -2,7 +2,6 @@ package wackycodes.ecom.eanmartadmin.cityareacode.servicecity;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.os.Build;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +22,9 @@ import java.util.Map;
 
 import wackycodes.ecom.eanmartadmin.R;
 import wackycodes.ecom.eanmartadmin.cityareacode.AreaCodeCityModel;
-import wackycodes.ecom.eanmartadmin.mainpage.MainActivityGridModel;
 
+import static wackycodes.ecom.eanmartadmin.database.DBQuery.cityCodeAndNameList;
+import static wackycodes.ecom.eanmartadmin.database.DBQuery.updateCityService;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.CLOSE_SERVICE;
 import static wackycodes.ecom.eanmartadmin.other.StaticValues.OPEN_SERVICE;
 
@@ -34,15 +34,12 @@ import static wackycodes.ecom.eanmartadmin.other.StaticValues.OPEN_SERVICE;
  */
 public class CityViewAdaptor extends BaseAdapter {
 
-    private List <AreaCodeCityModel> cityModelList;
-
-    public CityViewAdaptor(List <AreaCodeCityModel> cityModelList) {
-        this.cityModelList = cityModelList;
+    public CityViewAdaptor() {
     }
 
     @Override
     public int getCount() {
-        return cityModelList.size();
+        return cityCodeAndNameList.size() + 1;
     }
 
     @Override
@@ -56,11 +53,11 @@ public class CityViewAdaptor extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         View view = LayoutInflater.from( parent.getContext() ).inflate( R.layout.city_view_item, null );
         LinearLayout contentLayout = view.findViewById( R.id.city_item_content_layout );
         LinearLayout addNewLayout = view.findViewById( R.id.new_city_layout );
-        if (position < cityModelList.size()){
+        if (position < cityCodeAndNameList.size()){
             contentLayout.setVisibility( View.VISIBLE );
             addNewLayout.setVisibility( View.GONE );
             ImageView cityImage = view.findViewById( R.id.city_image );
@@ -69,10 +66,10 @@ public class CityViewAdaptor extends BaseAdapter {
             TextView serviceAvailable =  view.findViewById( R.id.service_open_close_text );
             TextView publicMessage =  view.findViewById( R.id.public_message_activate_text );
 
-            cityName.setText( cityModelList.get( position ).getCityName() );
-            cityID.setText( cityModelList.get( position ).getCityCode() );
+            cityName.setText( cityCodeAndNameList.get( position ).getCityName() );
+            cityID.setText( cityCodeAndNameList.get( position ).getCityCode() );
 
-            if (cityModelList.get( position ).isServiceAvailable()){
+            if (cityCodeAndNameList.get( position ).isServiceAvailable()){
                 serviceAvailable.setText( "OPEN" );
                 serviceAvailable.setBackgroundColor( parent.getResources().getColor( R.color.colorGreen ) );
             }else{
@@ -80,13 +77,22 @@ public class CityViewAdaptor extends BaseAdapter {
                 serviceAvailable.setBackgroundColor( parent.getResources().getColor( R.color.colorRed ) );
             }
 
-            if (cityModelList.get( position ).isPublicMessage()){
+            if (cityCodeAndNameList.get( position ).isPublicMessage()){
                 publicMessage.setText( "Shown" );
                 publicMessage.setBackgroundColor( parent.getResources().getColor( R.color.colorDarkViolet ) );
             }else{
                 publicMessage.setText( "NONE" );
                 publicMessage.setBackgroundColor( parent.getResources().getColor( R.color.colorGreen ) );
             }
+
+            // Change Service.
+            serviceAvailable.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    updateService( parent.getContext(), position);
+                }
+            } );
+
         }else{
             contentLayout.setVisibility( View.GONE );
             addNewLayout.setVisibility( View.VISIBLE );
@@ -104,7 +110,7 @@ public class CityViewAdaptor extends BaseAdapter {
     }
 
     // Change City Service Status...
-    private void updateService(final Context context){
+    private void updateService(final Context context, final int position){
         /// Single Ok Button ...
         final Dialog serviceDialog = new Dialog( context );
         serviceDialog.requestWindowFeature( Window.FEATURE_NO_TITLE );
@@ -141,22 +147,31 @@ public class CityViewAdaptor extends BaseAdapter {
                     memberType = CLOSE_SERVICE;
                 }
 
-                if (memberType != -1 ){
+                if (memberType != -1 && !TextUtils.isEmpty( closeMessageEt.getText().toString() ) ) {
                     Map <String, Object> updateMap = new HashMap <>();
                     updateMap.clear();
                     if ( memberType == OPEN_SERVICE ){
                         updateMap.put( "available_service", true );
-                    }else if ( !TextUtils.isEmpty( closeMessageEt.getText().toString() )){
+                    }else {
                         updateMap.put( "available_service", false );
                         updateMap.put( "service_alert_type", "1" );
                         updateMap.put( "service_alert_text", closeMessageEt.getText().toString() );
-                    }else{
+                        // Update On Database,...
+                        updateCityService( cityCodeAndNameList.get( position ).getCityCode(), updateMap );
+                    }
+                    // Request...
+                    cityCodeAndNameList.get( position ).setServiceAvailable( false );
+                    cityCodeAndNameList.get( position ).setServiceAlertType( 1 );
+                    cityCodeAndNameList.get( position ).setServiceAlertText(  closeMessageEt.getText().toString() );
+                    CityViewAdaptor.this.notifyDataSetChanged();
+                    serviceDialog.dismiss();
+                }else {
+                    if (memberType != -1){
+                        Toast.makeText( context, "Please Choose Option!", Toast.LENGTH_SHORT ).show();
+                    }
+                    if (TextUtils.isEmpty( closeMessageEt.getText().toString())){
                         closeMessageEt.setError( "Required!" );
                     }
-                    //  Request
-                    serviceDialog.dismiss();
-                }else{
-                    Toast.makeText( context, "Please Choose Option!", Toast.LENGTH_SHORT ).show();
                 }
 
             }
@@ -172,6 +187,7 @@ public class CityViewAdaptor extends BaseAdapter {
         serviceDialog.show();
 
     }
+
 
 
 

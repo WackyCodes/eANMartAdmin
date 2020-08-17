@@ -5,13 +5,17 @@
     android:layout_height="match_parent"
     tools:context=".cityareacode.servicecity.CityViewFragment">
 
-
     <GridView
         android:id="@+id/city_grid_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:numColumns="2"
         android:columnWidth="@dimen/default_gap"
+        android:layout_weight="1"
+        android:layout_margin="1dp"
+        android:horizontalSpacing="1dp"
+        android:overScrollMode="never"
+        android:verticalSpacing="1dp"
         />
 
 </FrameLayout>

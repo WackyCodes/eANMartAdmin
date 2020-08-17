@@ -93,4 +93,5 @@ public class ServiceAreaAdaptor extends RecyclerView.Adapter<ServiceAreaAdaptor.
 
 
 
+
 }

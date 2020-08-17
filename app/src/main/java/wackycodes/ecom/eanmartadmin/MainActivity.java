@@ -43,6 +43,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import wackycodes.ecom.eanmartadmin.cityareacode.AreaCodeCityModel;
 import wackycodes.ecom.eanmartadmin.cityareacode.SelectAreaCityAdaptor;
+import wackycodes.ecom.eanmartadmin.cityareacode.servicecity.ServiceCityActivity;
 import wackycodes.ecom.eanmartadmin.database.DBQuery;
 import wackycodes.ecom.eanmartadmin.mainpage.MainActivityAdaptor;
 import wackycodes.ecom.eanmartadmin.mainpage.MainActivityGridModel;
@@ -276,6 +277,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     return false;
                 }
+            }
+        else
+            if (mainNavItemId == R.id.menu_service_area){
+                Intent intent = new Intent( MainActivity.this, ServiceCityActivity.class );
+                startActivity( intent );
             }
         return false;
     }
