@@ -8,7 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".multisection.aboutshop.ShopHomeActivity">
 
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -58,7 +57,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_width="match_parent"
                     android:layout_height="200dp">
-                    <wackycodes.ecom.eanmartadmin.other.MyImageView
+                    <ean.ecom.eanmartadmin.other.MyImageView
                         android:id="@+id/shop_image"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -103,7 +102,6 @@
                     android:layout_marginTop="4dp"
                     android:background="@drawable/back_rectangle_4dp_layout"
                     android:backgroundTint="@color/colorWhite"
-                    android:gravity="center_horizontal"
                     android:orientation="vertical"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/linearLayoutForShopImage">
@@ -116,6 +114,7 @@
                         android:drawableTint="@color/colorBlue"
                         android:paddingRight="2dp"
                         android:text="4.3"
+                        android:gravity="center_horizontal"
                         android:textAlignment="center"
                         android:textColor="@color/colorBlack"
                         android:textSize="14dp" />

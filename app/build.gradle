@@ -6,7 +6,7 @@ android {
     compileSdkVersion 30
     buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId "wackycodes.ecom.eanmartadmin"
+        applicationId "ean.ecom.eanmartadmin"
         minSdkVersion 16
         targetSdkVersion 30
         versionCode 201

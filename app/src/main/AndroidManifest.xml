@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="wackycodes.ecom.eanmartadmin">
+    package="ean.ecom.eanmartadmin">
 
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
@@ -20,27 +20,27 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".cityareacode.servicecity.ServiceCityActivity"></activity>
-        <activity android:name=".multisection.aboutshop.ShopHomeActivity" />
-        <activity android:name=".addnewitem.AddNewShopActivity" />
-        <activity android:name=".mainpage.ViewAllActivity" />
-        <activity android:name=".addnewitem.AddNewLayout" />
-        <activity android:name=".mainpage.homesection.categorysection.ShopsViewActivity" />
-        <activity android:name=".mainpage.homesection.SecondActivity" />
-        <activity android:name=".launching.AuthActivity" />
-        <activity android:name=".launching.WelcomeActivity">
+        <activity android:name="ean.ecom.eanmartadmin.cityareacode.servicecity.ServiceCityActivity"></activity>
+        <activity android:name="ean.ecom.eanmartadmin.multisection.aboutshop.ShopHomeActivity" />
+        <activity android:name="ean.ecom.eanmartadmin.addnewitem.AddNewShopActivity" />
+        <activity android:name="ean.ecom.eanmartadmin.mainpage.ViewAllActivity" />
+        <activity android:name="ean.ecom.eanmartadmin.addnewitem.AddNewLayout" />
+        <activity android:name="ean.ecom.eanmartadmin.mainpage.homesection.categorysection.ShopsViewActivity" />
+        <activity android:name="ean.ecom.eanmartadmin.mainpage.homesection.SecondActivity" />
+        <activity android:name="ean.ecom.eanmartadmin.launching.AuthActivity" />
+        <activity android:name="ean.ecom.eanmartadmin.launching.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name="ean.ecom.eanmartadmin.MainActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name=".addnewitem.AddNewLayoutActivity" />
-        <activity android:name=".addnewitem.AddNewImageActivity" />
+        <activity android:name="ean.ecom.eanmartadmin.addnewitem.AddNewLayoutActivity" />
+        <activity android:name="ean.ecom.eanmartadmin.addnewitem.AddNewImageActivity" />
     </application>
 
 </manifest>

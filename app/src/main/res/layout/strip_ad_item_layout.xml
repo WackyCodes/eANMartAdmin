@@ -78,7 +78,7 @@
 
     </LinearLayout>
 
-    <wackycodes.ecom.eanmartadmin.other.MyImageView
+    <ean.ecom.eanmartadmin.other.MyImageView
         android:id="@+id/strip_ad_image"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

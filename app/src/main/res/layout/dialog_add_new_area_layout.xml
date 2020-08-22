@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/back_rectangle_4dp_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="Add New Area"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/layout1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@drawable/back_no_back_color_1dp_border"
+        android:backgroundTint="@color/colorPrimary"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/heading">
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="Select City"
+            android:textSize="16dp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <Spinner
+            android:layout_weight="1"
+            android:id="@+id/select_city_spinner"
+            android:backgroundTint="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/new_area_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:ems="10"
+        android:inputType="text"
+        android:singleLine="true"
+        android:textSize="18dp"
+        android:hint="Enter Area Name"
+        android:padding="10dp"
+        android:background="@drawable/back_no_back_color_1dp_border"
+        android:backgroundTint="@color/colorPrimary"
+        android:drawableLeft="@drawable/ic_location_city_black_24dp"
+        android:drawableTint="@color/colorPrimary"
+        android:drawablePadding="4dp"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout1" />
+
+    <EditText
+        android:id="@+id/new_area_pin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:ems="10"
+        android:inputType="number"
+        android:maxLength="6"
+        android:singleLine="true"
+        android:textSize="20dp"
+        android:hint="Enter Area Pin Code"
+        android:padding="10dp"
+        android:background="@drawable/back_no_back_color_1dp_border"
+        android:backgroundTint="@color/colorPrimary"
+        android:drawableLeft="@drawable/ic_pin_drop_black_24dp"
+        android:drawableTint="@color/colorPrimary"
+        android:drawablePadding="4dp"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/new_area_name" />
+
+    <Button
+        android:id="@+id/dialog_cancel_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/back_1dp_border_4dp_radius"
+        android:backgroundTint="@color/colorWhite"
+        android:text="Cancel"
+        android:textColor="@color/colorRed"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/divider13"
+        app:layout_constraintStart_toStartOf="@+id/new_area_pin"
+        app:layout_constraintTop_toBottomOf="@+id/new_area_pin" />
+
+    <Button
+        android:id="@+id/dialog_ok_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Ok"
+        android:textColor="@color/colorPrimary"
+        android:background="@drawable/back_1dp_border_4dp_radius"
+        android:backgroundTint="@color/colorWhite"
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_cancel_btn"
+        app:layout_constraintEnd_toEndOf="@+id/new_area_pin"
+        app:layout_constraintStart_toEndOf="@+id/divider13" />
+
+    <View
+        android:id="@+id/divider13"
+        android:layout_width="1dp"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_cancel_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider14" />
+
+    <View
+        android:id="@+id/divider14"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="@+id/new_area_pin"
+        app:layout_constraintStart_toStartOf="@+id/new_area_pin"
+        app:layout_constraintTop_toBottomOf="@+id/new_area_pin" />
+</androidx.constraintlayout.widget.ConstraintLayout>
