@@ -171,7 +171,7 @@ public class AddNewShopActivity extends AppCompatActivity {
 
     private String shopAreaName;
     private String shopAreaPinCode = "00";
-//    private String shopAreaCityCode;
+    private String shopAreaCityCode;
     private String shopAreaCityName;
 
     private void addShopAreaCode(){
@@ -191,7 +191,7 @@ public class AddNewShopActivity extends AppCompatActivity {
                 shopAreaCode.setText( areaCodeCityModel.getAreaCode() );
                 shopAreaPinCode = areaCodeCityModel.getAreaCode();
                 shopAreaName = areaCodeCityModel.getAreaName();
-//                shopAreaCityCode = areaCodeCityModel.getCityCode();
+                shopAreaCityCode = areaCodeCityModel.getCityCode();
                 shopAreaCityName = areaCodeCityModel.getCityName();
             }
         });
@@ -314,10 +314,11 @@ public class AddNewShopActivity extends AppCompatActivity {
         shopMap.put( "shop_address", " " );
         shopMap.put( "shop_area_code", sAreaCode );
         shopMap.put( "shop_area_name", shopAreaName );
+        shopMap.put( "shop_city_name", shopAreaCityName );
+        shopMap.put( "shop_city_code", shopAreaCityCode );
         shopMap.put( "shop_cat_main", CategoryID );
         shopMap.put( "shop_categories",  Arrays.asList( categories ) );
         shopMap.put( "shop_category_name", sCatName );
-        shopMap.put( "shop_city_name", shopAreaCityName );
         shopMap.put( "shop_close_msg", "Shop is temporary close!" );
         shopMap.put( "shop_id",shopId );
         shopMap.put( "shop_landmark", "" );
