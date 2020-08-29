@@ -168,7 +168,7 @@ public class ViewAllGridAdaptor extends BaseAdapter {
         updateName.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialogToChangeName( parent.getContext(), position+1, catModelList.get( layoutIndex ).getName(), false, catModelList.get( layoutIndex ).getLayoutId() );
+                dialogToChangeName( parent.getContext(), position+1, catModelList.get( position ).getName(), false, homePageList.get( layoutIndex ).getLayoutID() );
             }
         } );
         updateVisibilityLayout.setOnClickListener( new View.OnClickListener() {
@@ -335,9 +335,9 @@ public class ViewAllGridAdaptor extends BaseAdapter {
                 adaptor.notifyDataSetChanged();
                 // Update on Database...
                 Map<String, Object> updateMap = new HashMap <>();
-                updateMap.put( "cat_visibility_"+ catIndex, visible );
+                updateMap.put( "cat_visibility_"+ (catIndex+1), visible );
 
-                DBQuery.updateCategoryOnDatabase(null, null, homePageList.get( catIndex ).getLayoutID(), updateMap );
+                DBQuery.updateCategoryOnDatabase(null, null, homePageList.get( layoutIndex ).getLayoutID(), updateMap );
                 dialog.dismiss();
             }
         });
@@ -352,6 +352,7 @@ public class ViewAllGridAdaptor extends BaseAdapter {
 
         builder.show();
     }
+
 
 
 }
