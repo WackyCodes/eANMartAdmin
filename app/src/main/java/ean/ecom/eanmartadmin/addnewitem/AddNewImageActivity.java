@@ -237,6 +237,9 @@ public class AddNewImageActivity extends AppCompatActivity implements View.OnCli
                                             uploadImageLink = task.getResult().toString();
                                             Glide.with( context ).load( uploadImageLink ).into( imageView );
 
+                                            // Update In Local List...
+                                            homePageList.get( layoutIndex ).getBannerAndCatModelList().get( categoryIndex ).setImageLink( uploadImageLink );
+
                                             // Create Map And Update On Database...
                                             Map <String, Object> catMap = new HashMap <>();
                                             categoryIndex = categoryIndex+1; // Cause this is start from 1 .. not 0
@@ -244,9 +247,6 @@ public class AddNewImageActivity extends AppCompatActivity implements View.OnCli
                                             catMap.put( "cat_image_" + categoryIndex, uploadImageLink );
 //                                            catMap.put( "cat_visibility_"+categoryIndex, false );
                                             DBQuery.updateCategoryOnDatabase( null, null, layoutID, catMap );
-
-                                            // Update In Local List...
-                                            homePageList.get( layoutIndex ).getBannerAndCatModelList().get( categoryIndex ).setImageLink( uploadImageLink );
 
                                             dialog.dismiss();
                                             finish();
