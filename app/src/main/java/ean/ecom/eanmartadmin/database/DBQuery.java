@@ -36,6 +36,7 @@ import ean.ecom.eanmartadmin.mainpage.homesection.BannerAndCatModel;
 import ean.ecom.eanmartadmin.mainpage.homesection.HomeListModel;
 import ean.ecom.eanmartadmin.mainpage.homesection.SecondActivity;
 import ean.ecom.eanmartadmin.multisection.aboutshop.ShopHomeActivity;
+import ean.ecom.eanmartadmin.multisection.aboutshop.UpdateShopListener;
 
 import static ean.ecom.eanmartadmin.other.StaticValues.BANNER_SLIDER_LAYOUT_CONTAINER;
 import static ean.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_CODE;
@@ -486,61 +487,6 @@ public class DBQuery {
                             SecondActivity.homePageAdaptor.notifyDataSetChanged();
                         }
 
-                    }
-                } );
-
-    }
-
-
-    // Update Shop Activate / Deactivate ...
-
-    public static void queryToActivateShop(final Context context, final Dialog dialog, final String shopId, final Boolean activateVal){
-        firebaseFirestore.collection( "SHOPS" ).document( shopId )
-                .update( "available_service", activateVal )
-                .addOnCompleteListener( new OnCompleteListener <Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task <Void> task) {
-                        if (task.isSuccessful()){
-                            DBQuery.getCollectionRef( "SHOPS" ).document( shopId )
-                                    .update( "available_service", activateVal )
-                                    .addOnCompleteListener( new OnCompleteListener <Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task <Void> task1) {
-                                            if (task1.isSuccessful()){
-                                                Toast.makeText( context, "Update Successfully!", Toast.LENGTH_SHORT ).show();
-                                                ShopHomeActivity.shopHomeActivityModel.setServiceAvailable( activateVal );
-                                            }else{
-                                                Toast.makeText( context, "Failed!", Toast.LENGTH_SHORT ).show();
-                                            }
-                                            dialog.dismiss();
-                                        }
-                                    } );
-                        }else{
-                            Toast.makeText( context, "Failed!", Toast.LENGTH_SHORT ).show();
-                            dialog.dismiss();
-                        }
-                    }
-                } );
-    }
-
-    public static void queryAddShopMember(final Context context, final Dialog dialog, Map<String, Object> updateMap){
-
-        String shopId = updateMap.get( "shop_id" ).toString();
-        String adminMobile = updateMap.get( "admin_mobile" ).toString();
-
-        firebaseFirestore.collection( "SHOPS" ).document( shopId )
-                .collection( "ADMINS" )
-                .document( adminMobile ).set( updateMap )
-                .addOnCompleteListener( new OnCompleteListener <Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task <Void> task) {
-                        if (task.isSuccessful()){
-                            Toast.makeText( context, "successfully Added!", Toast.LENGTH_SHORT ).show();
-                            dialog.dismiss();
-                        }else{
-                            Toast.makeText( context, "Failed.! Something Went Wrong!", Toast.LENGTH_SHORT ).show();
-                            dialog.dismiss();
-                        }
                     }
                 } );
 

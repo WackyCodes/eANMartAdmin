@@ -9,5 +9,18 @@
         android:iconTint="@color/colorWhite"
         android:title="Add New Member"/>
 
+    <item
+        android:id="@+id/menu_assign_product_version"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_library_books_black_24dp"
+        android:iconTint="@color/colorWhite"
+        android:title="Assign Version Options"/>
+
+    <item
+        android:id="@+id/menu_change_veg_non_option"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_check_circle_black_24dp"
+        android:iconTint="@color/colorWhite"
+        android:title="Change Veg-NonVeg"/>
 
 </menu>

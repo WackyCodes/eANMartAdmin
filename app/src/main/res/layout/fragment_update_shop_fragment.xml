@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="4dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <ImageView
+        android:id="@+id/iv_close_dialog_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:padding="2dp"
+        android:layout_margin="4dp"
+        android:background="@drawable/back_round_layout"
+        android:tint="@color/colorWhite"
+        app:srcCompat="@drawable/ic_close_black_24dp" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_version_weight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:id="@+id/relative_layout_add_new_member"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/dialog_add_new_shop_member" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relative_layout_show_veg_non"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioGroup
+                android:id="@+id/dialog_radio_group_veg_non"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/radio_btn_show"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/back_rectangle_4dp_layout"
+                    android:backgroundTint="@color/colorYellow"
+                    android:checked="true"
+                    android:drawableTint="@color/colorSecondary"
+                    android:text="Show Veg Non Options"
+                    android:textColor="@color/colorBlack" />
+
+                <RadioButton
+                    android:id="@+id/radio_btn_hide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/back_rectangle_4dp_layout"
+                    android:backgroundTint="@color/colorRecyclerBack"
+                    android:drawableTint="@color/colorSecondary"
+                    android:text="Hide Veg Non Options"
+                    android:textColor="@color/colorBlack" />
+
+            </RadioGroup>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_add_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@drawable/back_rectangle_layout"
+        android:backgroundTint="@color/colorPrimary"
+        android:gravity="center"
+        android:padding="4dp"
+        android:text="Assign Version/Weight"
+        android:textColor="@color/colorWhite"
+        android:textSize="16dp" />
+
+</LinearLayout>

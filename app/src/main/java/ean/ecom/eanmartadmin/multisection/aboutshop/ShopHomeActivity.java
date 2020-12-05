@@ -4,6 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -42,11 +46,13 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 import ean.ecom.eanmartadmin.R;
 import ean.ecom.eanmartadmin.database.DBQuery;
+import ean.ecom.eanmartadmin.database.ShopQuery;
 import ean.ecom.eanmartadmin.mainpage.MainActivityGridModel;
 import ean.ecom.eanmartadmin.other.DialogsClass;
 import ean.ecom.eanmartadmin.other.MyImageView;
 
 import static ean.ecom.eanmartadmin.database.DBQuery.firebaseFirestore;
+import static ean.ecom.eanmartadmin.multisection.aboutshop.UpdateShopFragment.DIALOG_ADD_NEW_MEMBER;
 import static ean.ecom.eanmartadmin.other.StaticMethods.isValidEmail;
 import static ean.ecom.eanmartadmin.other.StaticValues.ADMIN_SHOP_FOUNDER;
 import static ean.ecom.eanmartadmin.other.StaticValues.ADMIN_SHOP_MANAGER;
@@ -55,7 +61,7 @@ import static ean.ecom.eanmartadmin.other.StaticValues.SHOP_TYPE_NO_SHOW;
 import static ean.ecom.eanmartadmin.other.StaticValues.SHOP_TYPE_VEG;
 import static ean.ecom.eanmartadmin.other.StaticValues.SHOP_TYPE_VEG_NON;
 
-public class ShopHomeActivity extends AppCompatActivity {
+public class ShopHomeActivity extends AppCompatActivity implements UpdateShopListener{
 
 
     public static AboutShopModel shopHomeActivityModel = new AboutShopModel();
@@ -157,7 +163,7 @@ public class ShopHomeActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialogInterface, int which) {
                             dialogInterface.dismiss();
                             dialog.show();
-                            DBQuery.queryToActivateShop( ShopHomeActivity.this, dialog, shopHomeActivityModel.getShopID(), isChecked );
+                            ShopQuery.queryToActivateShop( ShopHomeActivity.this, dialog, shopHomeActivityModel.getShopID(), isChecked );
                             // Service Active...
                             if (isChecked){
 //                                shopActiveSwitch.setChecked( true );
@@ -198,7 +204,6 @@ public class ShopHomeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 //        return super.onCreateOptionsMenu( menu );
         getMenuInflater().inflate( R.menu.menu_options_for_shop, menu);
-
 //        MenuItem addMember = menu.findItem( R.id.menu_add_shop_member );
 
         return true;
@@ -212,7 +217,8 @@ public class ShopHomeActivity extends AppCompatActivity {
             return true;
         }else if ( id == R.id.menu_add_shop_member ){
             // Add ClickListener...
-            addNewMemberDialog();
+//            DialogFragment newFragment = new UpdateShopFragment( DIALOG_ADD_NEW_MEMBER, ShopHomeActivity.this, this, shopHomeActivityModel.getShopID()  );
+            showUpdateDialog( new UpdateShopFragment( DIALOG_ADD_NEW_MEMBER, ShopHomeActivity.this, this, shopHomeActivityModel.getShopID()  ) );
             return true;
         }
 
@@ -280,86 +286,30 @@ public class ShopHomeActivity extends AppCompatActivity {
         switchAction = true;
     }
 
-    private void addNewMemberDialog(){
-        final Dialog memberDialog = new Dialog( this );
-        memberDialog.requestWindowFeature( Window.FEATURE_NO_TITLE );
-        memberDialog.setContentView( R.layout.dialog_add_new_shop_member );
-        memberDialog.getWindow().setLayout( ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT );
-        memberDialog.setCancelable( false );
-
-        TextView shopName = memberDialog.findViewById( R.id.dialog_shop_name );
-        TextView shopIdText = memberDialog.findViewById( R.id.dialog_shop_id_text );
-        final EditText memberName = memberDialog.findViewById( R.id.dialog_shop_member_name );
-        final EditText memberEmail = memberDialog.findViewById( R.id.dialog_shop_member_email );
-        final EditText memberMobile = memberDialog.findViewById( R.id.dialog_member_mobile );
-        final RadioGroup typeRadioGroup = memberDialog.findViewById( R.id.dialog_radio_group );
-        final RadioButton shopOwner = memberDialog.findViewById( R.id.shop_owner );
-        final RadioButton shopManager = memberDialog.findViewById( R.id.shop_manager );
-        shopName.setText( shopHomeActivityModel.getShopName() );
-        shopIdText.setText( "(" + shopHomeActivityModel.getShopID() + ")" );
-        memberName.setText( "" );
-        memberEmail.setText( "" );
-        memberMobile.setText( "" );
-
-        Button addButton = memberDialog.findViewById( R.id.dialog_add_btn );
-        Button cancelButton = memberDialog.findViewById( R.id.dialog_cancel_btn );
-        ImageView closeButton = memberDialog.findViewById( R.id.dialog_close_image_view );
-
-        addButton.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.show();
-                int memberType = -1;
-                if (typeRadioGroup.getCheckedRadioButtonId() == shopOwner.getId()){
-                    memberType = ADMIN_SHOP_FOUNDER;
-                }
-                else if(typeRadioGroup.getCheckedRadioButtonId() == shopManager.getId()){
-                    memberType = ADMIN_SHOP_MANAGER;
-                }
-
-                if (isValid( memberName ) && isValidEmail( memberEmail ) && isValid( memberMobile ) && memberType != -1 ){
-                    //  Request
-                    Map <String, Object> updateMap = new HashMap <>();
-                    updateMap.put( "admin_email", memberEmail.getText().toString() );
-                    updateMap.put( "admin_mobile", memberMobile.getText().toString() );
-                    updateMap.put( "admin_name", memberName.getText().toString() );
-                    updateMap.put( "admin_code", String.valueOf( memberType ) );
-                    updateMap.put( "admin_photo", "" );
-                    updateMap.put( "is_allowed", true );
-                    updateMap.put( "admin_address", "" );
-                    updateMap.put( "shop_id", shopHomeActivityModel.getShopID() );
-
-                    DBQuery.queryAddShopMember( ShopHomeActivity.this, dialog, updateMap);
-                    memberDialog.dismiss();
-                }
-                else{
-                    Toast.makeText( ShopHomeActivity.this, "Something went Wrong!", Toast.LENGTH_SHORT ).show();
-                    dialog.dismiss();
-                }
-            }
-        } );
-        cancelButton.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                memberDialog.dismiss();
-            }
-        } );
-        closeButton.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                memberDialog.dismiss();
-            }
-        } );
-        memberDialog.show();
+    private void showUpdateDialog( DialogFragment dialogFragment){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        // Create and show the dialog.
+        dialogFragment.show( ft,"dialog");
     }
 
-    private boolean isValid(EditText ref){
-        if (TextUtils.isEmpty( ref.getText().toString() )){
-            ref.setError( "Required..!" );
-            return false;
-        }else{
-            return true;
-        }
+
+    @Override
+    public void showToast(String msg) {
+        Toast.makeText( this, msg, Toast.LENGTH_SHORT ).show();
+    }
+
+    @Override
+    public void showDialog() {
+        dialog.show();
+    }
+
+    @Override
+    public void dismissDialog() {
+        dialog.dismiss();
     }
 
     private void getShopData(final String shopID){

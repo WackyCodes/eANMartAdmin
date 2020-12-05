@@ -118,6 +118,15 @@ public class StaticMethods {
         return true;
     }
 
+    public static boolean isValid(EditText ref){
+        if (TextUtils.isEmpty( ref.getText().toString() )){
+            ref.setError( "Required..!" );
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     /*
         // TODO : List...
         1. Add Shop View Page

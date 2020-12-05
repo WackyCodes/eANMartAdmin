@@ -5,7 +5,7 @@ import ean.ecom.eanmartadmin.admin.AdminDataModel;
 public class StaticValues {
 
 
-    public static String APP_VERSION = "em-1-01"; // root-v-01
+    public static String APP_VERSION = "root-v-01";
 
     public static final String DEFAULT_CITY_NAME = "BHOPAL";
     public static String CURRENT_CITY_NAME ;
