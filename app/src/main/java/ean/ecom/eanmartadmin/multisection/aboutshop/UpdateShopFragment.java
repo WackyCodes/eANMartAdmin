@@ -3,6 +3,7 @@ package ean.ecom.eanmartadmin.multisection.aboutshop;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,37 +48,37 @@ import static ean.ecom.eanmartadmin.other.StaticValues.ADMIN_SHOP_MANAGER;
 public class UpdateShopFragment extends DialogFragment implements UpdateShopListener.UpdateListener,
         UpdateShopListener.LoadListListener {
     public static final int DIALOG_ADD_NEW_MEMBER = 1;
-    public static final int DIALOG_VERSION_OPTIONS = 2;
-    public static final int DIALOG_VEG_NON_OPTIONS = 3;
+    public static final int DIALOG_PRODUCT_OPTIONS = 2;
 
     private int DIALOG_CODE;
     private UpdateShopListener listener;
-    private Context context;
 
     private String shopID;
+    private String shopName;
 
     //Add New Member...
-    public UpdateShopFragment(int DIALOG_CODE, Context context, UpdateShopListener listener, String shopID) {
+    public UpdateShopFragment(int DIALOG_CODE, UpdateShopListener listener, String shopID, String shopName) {
         this.DIALOG_CODE = DIALOG_CODE;
-        this.context = context;
         this.listener = listener;
         this.shopID = shopID;
+        this.shopName = shopName;
     }
-    // Version Code...
-    public UpdateShopFragment(int DIALOG_CODE, Context context, UpdateShopListener listener ) {
+
+    //Add New Member...
+    public UpdateShopFragment(int DIALOG_CODE, UpdateShopListener listener, String shopID) {
         this.DIALOG_CODE = DIALOG_CODE;
-        this.context = context;
         this.listener = listener;
+        this.shopID = shopID;
     }
 
     private ImageView imageViewCloseBtn;
     private TextView btnAdd;
     private RecyclerView recyclerViewVersionType;
     private RelativeLayout relativeLayoutAddNewMember;
-    private RelativeLayout relativeLayoutVegNon;
+    private RelativeLayout relativeLayoutProductOptions;
 
     ///
-    private TextView shopName;
+    private TextView shopNameText;
     private TextView shopIdText;
     private EditText memberName;
     private EditText memberEmail;
@@ -84,9 +87,7 @@ public class UpdateShopFragment extends DialogFragment implements UpdateShopList
     private RadioButton shopOwner;
     private RadioButton shopManager;
     ///
-    private RadioGroup radioGroupVegNon;
-    private RadioButton radioButtonShowVeg;
-    private RadioButton radioButtonHideVeg;
+    private Switch showVegNonOptions;
 
     private Dialog updateDialog;
 
@@ -95,6 +96,7 @@ public class UpdateShopFragment extends DialogFragment implements UpdateShopList
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate( R.layout.fragment_update_shop_fragment, container );
         updateDialog = getDialog();
+        updateDialog.setCancelable( false );
         updateDialog.requestWindowFeature( Window.FEATURE_NO_TITLE );
         updateDialog.getWindow().setLayout( ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT );
 
@@ -102,7 +104,7 @@ public class UpdateShopFragment extends DialogFragment implements UpdateShopList
         btnAdd = view.findViewById( R.id.tv_add_btn );
         recyclerViewVersionType = view.findViewById( R.id.recycler_view_version_weight );
         relativeLayoutAddNewMember = view.findViewById( R.id.relative_layout_add_new_member );
-        relativeLayoutVegNon = view.findViewById( R.id.relative_layout_show_veg_non );
+        relativeLayoutProductOptions = view.findViewById( R.id.relative_layout_product_options );
         setLayoutVisibility( view );
 
         imageViewCloseBtn.setOnClickListener( new View.OnClickListener() {
@@ -124,11 +126,10 @@ public class UpdateShopFragment extends DialogFragment implements UpdateShopList
     private void setLayoutVisibility(View view){
         switch (DIALOG_CODE){
             case DIALOG_ADD_NEW_MEMBER:
-                recyclerViewVersionType.setVisibility( View.GONE );
                 relativeLayoutAddNewMember.setVisibility( View.VISIBLE );
-                relativeLayoutVegNon.setVisibility( View.GONE );
+                relativeLayoutProductOptions.setVisibility( View.GONE );
                 /// Add New Member...
-                shopName = view.findViewById( R.id.dialog_shop_name );
+                shopNameText = view.findViewById( R.id.dialog_shop_name );
                 shopIdText = view.findViewById( R.id.dialog_shop_id_text );
                 memberName = view.findViewById( R.id.dialog_shop_member_name );
                 memberEmail = view.findViewById( R.id.dialog_shop_member_email );
@@ -137,13 +138,16 @@ public class UpdateShopFragment extends DialogFragment implements UpdateShopList
                 shopOwner = view.findViewById( R.id.shop_owner );
                 shopManager = view.findViewById( R.id.shop_manager );
 
+                shopNameText.setText( shopName );
+                shopIdText.setText( "("+shopID+")" );
                 btnAdd.setText( "Add Member" );
                 break;
-            case DIALOG_VERSION_OPTIONS:
-                recyclerViewVersionType.setVisibility( View.VISIBLE );
+            case DIALOG_PRODUCT_OPTIONS:
                 relativeLayoutAddNewMember.setVisibility( View.GONE );
-                relativeLayoutVegNon.setVisibility( View.GONE );
-                btnAdd.setText( "Add Version/Weight" );
+                relativeLayoutProductOptions.setVisibility( View.VISIBLE );
+                btnAdd.setText( "Update Options" );
+                /// Veg Non...
+                showVegNonOptions = view.findViewById( R.id.switch_show_veg_non_option );
 
                 /// Recycler...
                 LinearLayoutManager layoutManager = new LinearLayoutManager( view.getContext() );
@@ -151,15 +155,6 @@ public class UpdateShopFragment extends DialogFragment implements UpdateShopList
                 recyclerViewVersionType.setLayoutManager( layoutManager );
 
                 setVersionModelList();
-                break;
-            case DIALOG_VEG_NON_OPTIONS:
-                recyclerViewVersionType.setVisibility( View.GONE );
-                relativeLayoutAddNewMember.setVisibility( View.GONE );
-                relativeLayoutVegNon.setVisibility( View.VISIBLE );
-                /// Veg Non...
-                radioGroupVegNon = view.findViewById( R.id.dialog_radio_group_veg_non );
-                radioButtonShowVeg = view.findViewById( R.id.radio_btn_show );
-                radioButtonHideVeg = view.findViewById( R.id.radio_btn_hide );
 
                 btnAdd.setText( "Update" );
                 break;
@@ -180,7 +175,8 @@ public class UpdateShopFragment extends DialogFragment implements UpdateShopList
                     memberType = ADMIN_SHOP_MANAGER;
                 }
 
-                if (isValid( memberName ) && isValidEmail( memberEmail ) && isValid( memberMobile ) && memberType != -1 ){
+                if (isValid( memberName ) && isValidEmail( memberEmail ) && isValidMobile( memberMobile )
+                        && memberType != -1 ){
                     //  Request
                     Map <String, Object> updateMap = new HashMap <>();
                     updateMap.put( "admin_email", memberEmail.getText().toString() );
@@ -199,22 +195,30 @@ public class UpdateShopFragment extends DialogFragment implements UpdateShopList
                     listener.dismissDialog();
                 }
                 break;
-            case DIALOG_VERSION_OPTIONS:
+            case DIALOG_PRODUCT_OPTIONS:
                 // Check: How many is checked from list..
-                // Then Check if any item selected or not.
-            case DIALOG_VEG_NON_OPTIONS:
-                boolean isShow;
-                if (radioGroupVegNon.getCheckedRadioButtonId() == radioButtonShowVeg.getId()){
-                    isShow = true;
-                }
-                else if(radioGroupVegNon.getCheckedRadioButtonId() == radioButtonHideVeg.getId()){
-                    isShow = false;
+                // Then Check if any item selected or not. VARIANT_LIST
+                listener.showDialog();
+                List<String> variant_list = new ArrayList <>();
+                for (int i = 0; i < versionModelList.size(); i++){
+                    if (versionModelList.get( i ).isChecked()){
+                        variant_list.add( versionModelList.get( i ).getVersionName() );
+                    }
                 }
 
+                if (variant_list.size()>0){
+                    Map<String, Object> updateMap = new HashMap <>();
+                    updateMap.put( "variant_list",  variant_list);
+                    updateMap.put( "is_show_veg_non_label",  showVegNonOptions.isChecked() );
+                    ShopQuery.queryToAssignProductOptions( this, shopID, updateMap );
+                }else{
+                    listener.showToast( "Please select any option" );
+                    listener.dismissDialog();
+                }
+                break;
             default:
                 break;
         }
-
     }
 
     @Override
@@ -223,14 +227,16 @@ public class UpdateShopFragment extends DialogFragment implements UpdateShopList
     }
 
     @Override
-    public void onUpdateResponseVersion(boolean isSuccess) {
+    public void onUpdateProductOptions(boolean isSuccess) {
+        if (isSuccess){
+            for (int i = 0; i < versionModelList.size(); i++){
+                // Set UnChecked!
+                versionModelList.get( i ).setChecked( false );
+            }
+        }
         updateResponse( isSuccess );
     }
 
-    @Override
-    public void onUpdateResponseOther(boolean isSuccess) {
-        updateResponse( isSuccess );
-    }
 
     private void updateResponse(boolean isSuccess){
         if (isSuccess){
@@ -257,6 +263,16 @@ public class UpdateShopFragment extends DialogFragment implements UpdateShopList
         else{
             listener.showDialog();
             ShopQuery.getProductVariant( this );
+        }
+    }
+    private boolean isValidMobile( EditText ref){
+        if (!isValid( ref )){
+            return false;
+        }else if (ref.getText().toString().length() != 10){
+            ref.setError( "Wrong Mobile!" );
+            return false;
+        }else{
+            return true;
         }
     }
 
@@ -302,6 +318,7 @@ public class UpdateShopFragment extends DialogFragment implements UpdateShopList
                         boolean isChecked = versionModelList.get( position ).isChecked();
                         versionModelList.get( position ).setChecked( !isChecked );
                         setImageViewCheck( !isChecked );
+                        VersionAdaptor.this.notifyItemChanged( position );
                     }
                 } );
             }

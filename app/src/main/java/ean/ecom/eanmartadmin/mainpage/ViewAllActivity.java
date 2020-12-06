@@ -1,10 +1,13 @@
 package ean.ecom.eanmartadmin.mainpage;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
 
@@ -39,6 +42,12 @@ public class ViewAllActivity extends AppCompatActivity {
 
         type = getIntent().getIntExtra( "TYPE", -1 );
 
+        Toolbar toolbar = findViewById( R.id.appToolbar );
+        setSupportActionBar( toolbar );
+        try {
+            getSupportActionBar().setDisplayHomeAsUpEnabled( true );
+        }catch (NullPointerException ignored){ }
+
         // assign..
         viewAllGridView =  findViewById( R.id.view_all_grid_view );
         viewAllRecycler =  findViewById( R.id.view_all_recycler );
@@ -47,6 +56,22 @@ public class ViewAllActivity extends AppCompatActivity {
         LinearLayoutManager homeCatLayoutManager = new LinearLayoutManager( this );
         homeCatLayoutManager.setOrientation( RecyclerView.VERTICAL );
         viewAllRecycler.setLayoutManager( homeCatLayoutManager );
+
+        setLayout( type );
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home){
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected( item );
+    }
+
+    private void setLayout( int type ){
 
         switch (type){
             case BANNER_SLIDER_LAYOUT_CONTAINER:
@@ -77,8 +102,6 @@ public class ViewAllActivity extends AppCompatActivity {
                 break;
         }
 
-
     }
-
 
 }

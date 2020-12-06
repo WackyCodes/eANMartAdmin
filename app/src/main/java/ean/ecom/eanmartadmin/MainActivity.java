@@ -58,6 +58,7 @@ import static ean.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_CODE;
 import static ean.ecom.eanmartadmin.other.StaticValues.CURRENT_CITY_NAME;
 import static ean.ecom.eanmartadmin.other.StaticValues.MAIN_ACTIVITY;
 import static ean.ecom.eanmartadmin.other.StaticValues.REQUEST_TO_ADD_SHOP;
+import static ean.ecom.eanmartadmin.other.StaticValues.REQUEST_TO_SHOP_LIST;
 import static ean.ecom.eanmartadmin.other.StaticValues.REQUEST_TO_VIEW_HOME;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -90,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SearchView homeMainSearchView;
     private RecyclerView homeSearchItemRecycler;
     private static List <AboutShopModel> searchShopItemList = new ArrayList <>();
-    private List<String> searchShopTags = new ArrayList <>();
     private SearchShopAdaptor searchAdaptor;
 
     // ClipBoard..
@@ -123,7 +123,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerCityTitle = navigationView.getHeaderView( 0 ).findViewById( R.id.drawer_title_text );
         drawerCityName = navigationView.getHeaderView( 0 ).findViewById( R.id.drawer_user_city );
 
-
         // setNavigationItemSelectedListener()...
         navigationView.setNavigationItemSelectedListener( MainActivity.this );
         navigationView.getMenu().getItem( 0 ).setChecked( true );
@@ -142,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (mainPageList.size() == 0){
             mainPageList.add( new MainActivityGridModel( R.drawable.ic_home_black_24dp, "App Home", REQUEST_TO_VIEW_HOME ) );
             mainPageList.add( new MainActivityGridModel( R.drawable.ic_store_mall_directory_black_24dp, "+ New Shop", REQUEST_TO_ADD_SHOP ) );
-            mainPageList.add( new MainActivityGridModel( R.drawable.ic_straighten_black_24dp, "Shop List", 9 ) );
+            mainPageList.add( new MainActivityGridModel( R.drawable.ic_straighten_black_24dp, "Shop List", REQUEST_TO_SHOP_LIST ) );
             mainPageList.add( new MainActivityGridModel( R.drawable.ic_receipt_black_24dp, "Shop Transitions", 9 ) );
             mainPageList.add( new MainActivityGridModel( R.drawable.ic_people_outline_black_24dp, "Employee List", 9 ) );
             mainPageList.add( new MainActivityGridModel( R.drawable.ic_group_black_24dp, "Manager List", 9 ) );
@@ -374,58 +373,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public boolean onQueryTextSubmit(final String query) {
                 dialog.show();
                 searchShopItemList.clear();
-                searchShopTags.clear();
                 final String [] tags = query.toLowerCase().split( " " );
-                for ( final String tag : tags ){
-                    firebaseFirestore
-                            .collection( "HOME_PAGE" )
-                            .document( CURRENT_CITY_CODE.toUpperCase() )
-                            .collection( "SHOPS" )
-                            .whereArrayContainsAny( "tags", Arrays.asList( tags ) )
+                firebaseFirestore
+                        .collection( "HOME_PAGE" )
+                        .document( CURRENT_CITY_CODE.toUpperCase() )
+                        .collection( "SHOPS" )
+                        .whereArrayContainsAny( "tags", Arrays.asList( tags ) )
 //                            .whereArrayContains( "tags", tag.trim() )
-                            .get().addOnCompleteListener( new OnCompleteListener <QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task <QuerySnapshot> task) {
-                            if (task.isSuccessful()){
-                                for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()){
-                                    AboutShopModel model = new AboutShopModel(
-                                            documentSnapshot.getId(),
-                                            documentSnapshot.get( "shop_name" ).toString(),
-                                            documentSnapshot.get( "shop_category_name" ).toString(),
-                                            documentSnapshot.get( "shop_logo" ).toString(),
-                                            documentSnapshot.get( "shop_rating" ).toString(),
-                                            Integer.parseInt( documentSnapshot.get( "shop_veg_non_type" ).toString() )
-                                    );
-                                    if ( !searchShopTags.contains( model.getShopID() )){
-                                        searchShopItemList.add( model );
-                                        searchShopTags.add( model.getShopID() );
-                                    }
+                        .get().addOnCompleteListener( new OnCompleteListener <QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task <QuerySnapshot> task) {
+                        if (task.isSuccessful()){
 
-                                }
-                                if (searchShopItemList.size()>0){
-                                    setFrameVisibility(false);
-                                }else{
-                                    setFrameVisibility(true);
-                                }
-                                if (tag.equals(tags[tags.length - 1])){
-                                    if (searchShopTags.isEmpty()){
-                                        DialogsClass.alertDialog( MainActivity.this, null, "No Shop found.!" ).show();
-                                        setFrameVisibility(true);
-                                    }else{
-                                        searchAdaptor.getFilter().filter( query );
-                                    }
-                                    dialog.dismiss();
-                                }
-                                dialog.dismiss();
+                            for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()){
+                                searchShopItemList.add( documentSnapshot.toObject( AboutShopModel.class ) );
+                                searchAdaptor.notifyDataSetChanged();
+                            }
+
+                            if (searchShopItemList.size()>0){
+                                setFrameVisibility(false);
+                                searchAdaptor.getFilter().filter( query );
+                                searchAdaptor.notifyDataSetChanged();
                             }else{
-                                // error...
-                                dialog.dismiss();
-                                Toast.makeText( MainActivity.this, "Failed ! Product Not found.!", Toast.LENGTH_SHORT ).show();
+                                DialogsClass.alertDialog( MainActivity.this, null, "No Shop found.!" ).show();
                                 setFrameVisibility(true);
                             }
+//                            if (tag.equals(tags[tags.length - 1])){
+//                                if (searchShopTags.isEmpty()){
+//                                    DialogsClass.alertDialog( MainActivity.this, null, "No Shop found.!" ).show();
+//                                    setFrameVisibility(true);
+//                                }else{
+//                                    searchAdaptor.getFilter().filter( query );
+//                                }
+//                                dialog.dismiss();
+//                            }
+                            dialog.dismiss();
+                        }else{
+                            // error...
+                            dialog.dismiss();
+                            Toast.makeText( MainActivity.this, "Failed ! Product Not found.!", Toast.LENGTH_SHORT ).show();
+                            setFrameVisibility(true);
                         }
-                    } );
-                }
+                    }
+                } );
                 return false;
             }
 

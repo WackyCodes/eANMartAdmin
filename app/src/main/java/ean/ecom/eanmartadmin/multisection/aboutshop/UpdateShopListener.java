@@ -13,8 +13,7 @@ public interface UpdateShopListener {
 
     interface UpdateListener{
         void onUpdateResponseAddMember(boolean isSuccess);
-        void onUpdateResponseVersion(boolean isSuccess);
-        void onUpdateResponseOther(boolean isSuccess);
+        void onUpdateProductOptions(boolean isSuccess);
     }
 
     interface LoadListListener{

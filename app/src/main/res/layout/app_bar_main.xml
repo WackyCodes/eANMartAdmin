@@ -9,29 +9,9 @@
     android:padding="0dp"
     tools:context=".MainActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/appToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:scaleType="center"
-            app:elevation="4dp"
-            app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:popupTheme="@style/ToolTheme"
-            app:titleMarginStart="40dp"
-            app:titleTextColor="@color/colorWhite">
-
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
+    <include
+        android:id="@+id/include2"
+        layout="@layout/layout_toolbar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -40,14 +20,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+        app:layout_constraintTop_toBottomOf="@+id/include2">
 
         <RelativeLayout
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:elevation="4dp"
             android:background="@color/colorPrimary"
+            app:elevation="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -62,34 +42,37 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="4dp"
-                        android:textColor="@color/colorWhite"
-                        android:text="City : "/>
+                        android:text="City : "
+                        android:textColor="@color/colorWhite" />
+
                     <TextView
                         android:id="@+id/tool_user_city"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorWhite"
-                        android:textStyle="bold"
-                        android:padding="2dp"
                         android:drawableRight="@drawable/ic_keyboard_arrow_down_black_24dp"
                         android:drawableTint="@color/colorWhite"
-                        android:text="Bhopal, M.P."/>
+                        android:padding="2dp"
+                        android:text="Bhopal, M.P."
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
+
                 <TextView
                     android:id="@+id/tool_user_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:textColor="@color/colorWhite"
-                    android:textStyle="bold"
                     android:padding="2dp"
-                    android:text="WackyCodes"/>
+                    android:text="WackyCodes"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -131,19 +114,19 @@
             app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
 
         <GridView
+            android:id="@+id/home_grid_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:id="@+id/home_grid_view"
+            android:layout_marginStart="1dp"
+            android:layout_marginLeft="1dp"
+            android:horizontalSpacing="1dp"
             android:numColumns="auto_fit"
             android:padding="1dp"
             android:verticalSpacing="1dp"
-            android:horizontalSpacing="1dp"
-            android:layout_marginLeft="1dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/home_shop_search_view"
-            android:layout_marginStart="1dp" />
+            app:layout_constraintTop_toBottomOf="@+id/home_shop_search_view" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

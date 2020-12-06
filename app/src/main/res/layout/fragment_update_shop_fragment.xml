@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:padding="4dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <ImageView
         android:id="@+id/iv_close_dialog_btn"
+        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
@@ -21,15 +20,11 @@
 
     <LinearLayout
         android:id="@+id/linearLayout2"
+        android:layout_below="@+id/iv_close_dialog_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:orientation="vertical">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_version_weight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
         <RelativeLayout
             android:id="@+id/relative_layout_add_new_member"
@@ -40,56 +35,57 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/relative_layout_show_veg_non"
+            android:id="@+id/relative_layout_product_options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <RadioGroup
-                android:id="@+id/dialog_radio_group_veg_non"
+            <TextView
+                android:id="@+id/title_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:orientation="vertical">
+                android:padding="6dp"
+                android:text="Select Weight/Version"
+                android:textColor="@color/colorBlack"
+                />
 
-                <RadioButton
-                    android:id="@+id/radio_btn_show"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="6dp"
-                    android:background="@drawable/back_rectangle_4dp_layout"
-                    android:backgroundTint="@color/colorYellow"
-                    android:checked="true"
-                    android:drawableTint="@color/colorSecondary"
-                    android:text="Show Veg Non Options"
-                    android:textColor="@color/colorBlack" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_version_weight"
+                android:layout_below="@+id/title_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-                <RadioButton
-                    android:id="@+id/radio_btn_hide"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="6dp"
-                    android:background="@drawable/back_rectangle_4dp_layout"
-                    android:backgroundTint="@color/colorRecyclerBack"
-                    android:drawableTint="@color/colorSecondary"
-                    android:text="Hide Veg Non Options"
-                    android:textColor="@color/colorBlack" />
+            <Switch
+                android:id="@+id/switch_show_veg_non_option"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/recycler_view_version_weight"
+                android:background="@drawable/back_1dp_border_4dp_radius_no_color"
+                android:backgroundTint="@color/colorPrimary"
+                android:layout_margin="4dp"
+                android:text="Show Veg/NonVeg Options"
+                android:textColor="@color/colorBlack"
+                android:checked="true"
+                android:drawableTint="@color/colorPrimary"
+                android:padding="6dp"
+                />
 
-            </RadioGroup>
         </RelativeLayout>
 
     </LinearLayout>
 
     <TextView
         android:id="@+id/tv_add_btn"
+        android:layout_below="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:background="@drawable/back_rectangle_layout"
         android:backgroundTint="@color/colorPrimary"
+        android:foregroundTint="@color/colorGray"
         android:gravity="center"
         android:padding="4dp"
         android:text="Assign Version/Weight"
         android:textColor="@color/colorWhite"
         android:textSize="16dp" />
 
-</LinearLayout>
+</RelativeLayout>

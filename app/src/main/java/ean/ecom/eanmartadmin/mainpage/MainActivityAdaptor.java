@@ -13,6 +13,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import ean.ecom.eanmartadmin.R;
+import ean.ecom.eanmartadmin.ShowFragmentActivity;
 import ean.ecom.eanmartadmin.addnewitem.AddNewShopActivity;
 import ean.ecom.eanmartadmin.mainpage.homesection.SecondActivity;
 
@@ -20,6 +21,7 @@ import static ean.ecom.eanmartadmin.other.StaticValues.ABOUT_SHOP_ACTIVITY;
 import static ean.ecom.eanmartadmin.other.StaticValues.MAIN_ACTIVITY;
 import static ean.ecom.eanmartadmin.other.StaticValues.REQUEST_TO_ADD_SHOP;
 import static ean.ecom.eanmartadmin.other.StaticValues.REQUEST_TO_EDIT_SHOP;
+import static ean.ecom.eanmartadmin.other.StaticValues.REQUEST_TO_SHOP_LIST;
 import static ean.ecom.eanmartadmin.other.StaticValues.REQUEST_TO_VIEW_HOME;
 import static ean.ecom.eanmartadmin.other.StaticValues.REQUEST_TO_VIEW_SHOP;
 
@@ -36,7 +38,8 @@ public class MainActivityAdaptor extends BaseAdapter {
     /** public MainActivityAdaptor() {
         // ABOUT_SHOP_ACTIVITY
         // MAIN_ACTIVITY
-    } */
+    }
+     */
 
     @Override
     public int getCount() {
@@ -86,6 +89,11 @@ public class MainActivityAdaptor extends BaseAdapter {
                 case REQUEST_TO_VIEW_HOME:
                     Intent viewHomeIntent = new Intent( context, SecondActivity.class );
                     context.startActivity( viewHomeIntent );
+                    break;
+                case REQUEST_TO_SHOP_LIST:
+                    Intent showFragmentActivity1 = new Intent( context, ShowFragmentActivity.class );
+                    showFragmentActivity1.putExtra( "FRAGMENT_CODE", REQUEST_TO_SHOP_LIST );
+                    context.startActivity( showFragmentActivity1 );
                     break;
                 default:
                     Toast.makeText( context, "Code not found!", Toast.LENGTH_SHORT ).show();

@@ -9,7 +9,6 @@
     android:elevation="6dp"
     android:background="@drawable/back_rectangle_4dp_layout">
 
-
     <ImageView
         android:id="@+id/shop_logo"
         android:layout_width="100dp"

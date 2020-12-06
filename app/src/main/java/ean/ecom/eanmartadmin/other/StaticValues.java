@@ -70,6 +70,8 @@ public class StaticValues {
     public static final int REQUEST_TO_EDIT_SHOP = 2;
     public static final int REQUEST_TO_VIEW_SHOP = 3;
     public static final int REQUEST_TO_VIEW_HOME = 4;
+    public static final int REQUEST_TO_SHOP_LIST = 5;
+    public static final int REQUEST_TO_SHOP_TRANSACTION = 6;
 
     // Not Used for database...
     // Used for local...

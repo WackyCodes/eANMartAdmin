@@ -1,340 +1,153 @@
 package ean.ecom.eanmartadmin.multisection.aboutshop;
 
-public class AboutShopModel {
 
-    private String shopID;
-    private String shopName;
-    private String shopAddress;
-    private String shopCategory;
-    private String shopTagLine;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-    private String[] shopCategories;
+public class AboutShopModel implements Parcelable {
 
-    private int shopVegNonCode;
-    private boolean isServiceAvailable;
-    private boolean isOpen;
-    private String shopOpenTime;
-    private String shopCloseTime;
-    private String shopLogo;
-    private String shopImage;
+    private String shop_id; // shopID
+    private String shop_name; //  shopName
+    private String shop_category_name; // shopSubTitle
+    private String shop_address; //  shopAddress
+//    private String shop_cat_main; //  shopCategory
 
-    private String shopRatingStars;
-    private String shopRatingPeoples;
-    private int verifyCode;
+    private double shop_ratings_stars;
+    private int shop_ratings_peoples;
 
-    private String shopAreaCode;
-    private String shopAreaName;
-    private String shopCity;
-    private String shopLandMark;
+    private String shop_logo; //  shopLogo
+//    private String shop_image; //  shopImage
 
-    private String[] shopDaysSchedule;
+    private boolean available_service; //  isServiceAvailable
+    private boolean is_open; //  isOpen
 
-    // Contacts...
-    private String shopOwnerName;
-    private String shopOwnerAddress;
-    private String shopOwnerMobile;
-    private String shopOwnerEmail;
+    private String shop_veg_non_type; //  shopVegNonCode
 
-    private String shopHelpLine;
-    private String shopEmail;
-    private String shopWebsite;
-
-    // Social Media Accounts...
-    private String shopFacebook;
-    private String shopInstagram;
-    private String shopTwitter;
-
-    // Licence...
-    private boolean isLicenceAvailable;
-    private int shopLicenceType;
-    private String shopLicenceNumber;
 
     public AboutShopModel() {
     }
 
-    public AboutShopModel(String shopID) {
-        this.shopID = shopID;
+    protected AboutShopModel(Parcel in) {
+        shop_id = in.readString();
+        shop_name = in.readString();
+        shop_category_name = in.readString();
+        shop_address = in.readString();
+        shop_ratings_stars = in.readDouble();
+        shop_ratings_peoples = in.readInt();
+        shop_logo = in.readString();
+        available_service = in.readByte() != 0;
+        is_open = in.readByte() != 0;
+        shop_veg_non_type = in.readString();
     }
 
-    public AboutShopModel(String shopID, String shopName, String shopCategory, String shopLogo, String shopRating, int shopVegType) {
-        this.shopID = shopID;
-        this.shopName = shopName;
-        this.shopCategory = shopCategory;
-        this.shopLogo = shopLogo;
-        this.shopRatingStars = shopRating;
-        this.shopVegNonCode = shopVegType;
-    }
-
-
-    public String getShopID() {
-        return shopID;
-    }
-
-    public void setShopID(String shopID) {
-        this.shopID = shopID;
-    }
-
-    public String getShopName() {
-        return shopName;
-    }
-
-    public void setShopName(String shopName) {
-        this.shopName = shopName;
-    }
-
-    public String getShopAddress() {
-        return shopAddress;
-    }
-
-    public void setShopAddress(String shopAddress) {
-        this.shopAddress = shopAddress;
-    }
-
-    public String[] getShopCategories() {
-        return shopCategories;
-    }
-
-    public void setShopCategories(String[] shopCategories) {
-        this.shopCategories = shopCategories;
-    }
-
-    public String getShopAreaCode() {
-        return shopAreaCode;
-    }
-
-    public void setShopAreaCode(String shopAreaCode) {
-        this.shopAreaCode = shopAreaCode;
-    }
-
-    public String getShopAreaName() {
-        return shopAreaName;
-    }
-
-    public void setShopAreaName(String shopAreaName) {
-        this.shopAreaName = shopAreaName;
-    }
-
-    public String getShopCity() {
-        return shopCity;
-    }
-
-    public void setShopCity(String shopCity) {
-        this.shopCity = shopCity;
-    }
-
-    public String getShopLandMark() {
-        return shopLandMark;
-    }
-
-    public void setShopLandMark(String shopLandMark) {
-        this.shopLandMark = shopLandMark;
-    }
-
-    public String getShopCategory() {
-        return shopCategory;
-    }
-
-    public void setShopCategory(String shopCategory) {
-        this.shopCategory = shopCategory;
-    }
-
-    public String getShopTagLine() {
-        return shopTagLine;
-    }
-
-    public void setShopTagLine(String shopTagLine) {
-        this.shopTagLine = shopTagLine;
-    }
-
-    public int getShopVegNonCode() {
-        return shopVegNonCode;
-    }
-
-    public void setShopVegNonCode(int shopVegNonCode) {
-        this.shopVegNonCode = shopVegNonCode;
-    }
-
-    public boolean isOpen() {
-        return isOpen;
-    }
+    public static final Creator <AboutShopModel> CREATOR = new Creator <AboutShopModel>() {
+        @Override
+        public AboutShopModel createFromParcel(Parcel in) {
+            return new AboutShopModel( in );
+        }
 
-    public void setOpen(boolean open) {
-        isOpen = open;
-    }
-
-    public boolean isServiceAvailable() {
-        return isServiceAvailable;
-    }
-
-    public void setServiceAvailable(boolean serviceAvailable) {
-        isServiceAvailable = serviceAvailable;
-    }
-
-    public String getShopOpenTime() {
-        return shopOpenTime;
-    }
-
-    public void setShopOpenTime(String shopOpenTime) {
-        this.shopOpenTime = shopOpenTime;
-    }
-
-    public String getShopCloseTime() {
-        return shopCloseTime;
-    }
-
-    public void setShopCloseTime(String shopCloseTime) {
-        this.shopCloseTime = shopCloseTime;
-    }
-
-    public String getShopLogo() {
-        return shopLogo;
-    }
-
-    public void setShopLogo(String shopLogo) {
-        this.shopLogo = shopLogo;
-    }
-
-    public String getShopImage() {
-        return shopImage;
-    }
-
-    public void setShopImage(String shopImage) {
-        this.shopImage = shopImage;
-    }
-
-    public String getShopRatingStars() {
-        return shopRatingStars;
-    }
-
-    public void setShopRatingStars(String shopRatingStars) {
-        this.shopRatingStars = shopRatingStars;
-    }
-
-    public String getShopRatingPeoples() {
-        return shopRatingPeoples;
-    }
-
-    public void setShopRatingPeoples(String shopRatingPeoples) {
-        this.shopRatingPeoples = shopRatingPeoples;
-    }
-
-    public int getVerifyCode() {
-        return verifyCode;
-    }
-
-    public void setVerifyCode(int verifyCode) {
-        this.verifyCode = verifyCode;
-    }
-
-    public String[] getShopDaysSchedule() {
-        return shopDaysSchedule;
-    }
-
-    public void setShopDaysSchedule(String[] shopDaysSchedule) {
-        this.shopDaysSchedule = shopDaysSchedule;
-    }
-
-    public String getShopOwnerName() {
-        return shopOwnerName;
-    }
-
-    public void setShopOwnerName(String shopOwnerName) {
-        this.shopOwnerName = shopOwnerName;
-    }
-
-    public String getShopOwnerAddress() {
-        return shopOwnerAddress;
-    }
-
-    public void setShopOwnerAddress(String shopOwnerAddress) {
-        this.shopOwnerAddress = shopOwnerAddress;
-    }
-
-    public String getShopOwnerMobile() {
-        return shopOwnerMobile;
-    }
-
-    public void setShopOwnerMobile(String shopOwnerMobile) {
-        this.shopOwnerMobile = shopOwnerMobile;
-    }
+        @Override
+        public AboutShopModel[] newArray(int size) {
+            return new AboutShopModel[size];
+        }
+    };
 
-    public String getShopOwnerEmail() {
-        return shopOwnerEmail;
+    public String getShop_id() {
+        return shop_id;
     }
 
-    public void setShopOwnerEmail(String shopOwnerEmail) {
-        this.shopOwnerEmail = shopOwnerEmail;
+    public void setShop_id(String shop_id) {
+        this.shop_id = shop_id;
     }
 
-    public String getShopHelpLine() {
-        return shopHelpLine;
+    public String getShop_name() {
+        return shop_name;
     }
 
-    public void setShopHelpLine(String shopHelpLine) {
-        this.shopHelpLine = shopHelpLine;
+    public void setShop_name(String shop_name) {
+        this.shop_name = shop_name;
     }
 
-    public String getShopEmail() {
-        return shopEmail;
+    public String getShop_category_name() {
+        return shop_category_name;
     }
 
-    public void setShopEmail(String shopEmail) {
-        this.shopEmail = shopEmail;
+    public void setShop_category_name(String shop_category_name) {
+        this.shop_category_name = shop_category_name;
     }
 
-    public String getShopWebsite() {
-        return shopWebsite;
+    public String getShop_address() {
+        return shop_address;
     }
 
-    public void setShopWebsite(String shopWebsite) {
-        this.shopWebsite = shopWebsite;
+    public void setShop_address(String shop_address) {
+        this.shop_address = shop_address;
     }
 
-    public String getShopFacebook() {
-        return shopFacebook;
+    public double getShop_ratings_stars() {
+        return shop_ratings_stars;
     }
 
-    public void setShopFacebook(String shopFacebook) {
-        this.shopFacebook = shopFacebook;
+    public void setShop_ratings_stars(double shop_ratings_stars) {
+        this.shop_ratings_stars = shop_ratings_stars;
     }
 
-    public String getShopInstagram() {
-        return shopInstagram;
+    public int getShop_ratings_peoples() {
+        return shop_ratings_peoples;
     }
 
-    public void setShopInstagram(String shopInstagram) {
-        this.shopInstagram = shopInstagram;
+    public void setShop_ratings_peoples(int shop_ratings_peoples) {
+        this.shop_ratings_peoples = shop_ratings_peoples;
     }
 
-    public String getShopTwitter() {
-        return shopTwitter;
+    public String getShop_logo() {
+        return shop_logo;
     }
 
-    public void setShopTwitter(String shopTwitter) {
-        this.shopTwitter = shopTwitter;
+    public void setShop_logo(String shop_logo) {
+        this.shop_logo = shop_logo;
     }
 
-    public boolean isLicenceAvailable() {
-        return isLicenceAvailable;
+    public boolean isAvailable_service() {
+        return available_service;
     }
 
-    public void setLicenceAvailable(boolean licenceAvailable) {
-        isLicenceAvailable = licenceAvailable;
+    public void setAvailable_service(boolean available_service) {
+        this.available_service = available_service;
     }
 
-    public int getShopLicenceType() {
-        return shopLicenceType;
+    public boolean isIs_open() {
+        return is_open;
     }
 
-    public void setShopLicenceType(int shopLicenceType) {
-        this.shopLicenceType = shopLicenceType;
+    public void setIs_open(boolean is_open) {
+        this.is_open = is_open;
     }
 
-    public String getShopLicenceNumber() {
-        return shopLicenceNumber;
+    public String getShop_veg_non_type() {
+        return shop_veg_non_type;
     }
 
-    public void setShopLicenceNumber(String shopLicenceNumber) {
-        this.shopLicenceNumber = shopLicenceNumber;
+    public void setShop_veg_non_type(String shop_veg_non_type) {
+        this.shop_veg_non_type = shop_veg_non_type;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString( shop_id );
+        dest.writeString( shop_name );
+        dest.writeString( shop_category_name );
+        dest.writeString( shop_address );
+        dest.writeDouble( shop_ratings_stars );
+        dest.writeInt( shop_ratings_peoples );
+        dest.writeString( shop_logo );
+        dest.writeByte( (byte) (available_service ? 1 : 0) );
+        dest.writeByte( (byte) (is_open ? 1 : 0) );
+        dest.writeString( shop_veg_non_type );
     }
 }

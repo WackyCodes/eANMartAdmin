@@ -41,6 +41,7 @@
             android:theme="@style/Base.Theme.AppCompat" />
         <activity android:name="ean.ecom.eanmartadmin.addnewitem.AddNewLayoutActivity" />
         <activity android:name="ean.ecom.eanmartadmin.addnewitem.AddNewImageActivity" />
+        <activity android:name=".ShowFragmentActivity" />
     </application>
 
 </manifest>

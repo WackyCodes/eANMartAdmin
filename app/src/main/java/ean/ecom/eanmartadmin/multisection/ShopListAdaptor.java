@@ -46,12 +46,12 @@ public class ShopListAdaptor  extends RecyclerView.Adapter <ShopListAdaptor.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         AboutShopModel shopItemModel = shopItemModelList.get( position );
-        String sID = shopItemModel.getShopID();
-        String sName = shopItemModel.getShopName();
-        String sLogo = shopItemModel.getShopLogo();
-        String sCategory = shopItemModel.getShopCategory();
-        String sRating = shopItemModel.getShopRatingStars();
-        int sVegType = shopItemModel.getShopVegNonCode();
+        String sID = shopItemModel.getShop_id();
+        String sName = shopItemModel.getShop_name();
+        String sLogo = shopItemModel.getShop_logo();
+        String sCategory = shopItemModel.getShop_category_name();
+        String sRating = String.valueOf( shopItemModel.getShop_ratings_stars() );
+        int sVegType = Integer.parseInt( shopItemModel.getShop_veg_non_type() );
         holder.setData( sID, sLogo, sName, sCategory, sRating, sVegType );
     }
 
@@ -59,7 +59,6 @@ public class ShopListAdaptor  extends RecyclerView.Adapter <ShopListAdaptor.View
     public int getItemCount() {
         return shopItemModelList.size();
     }
-
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -148,5 +147,6 @@ public class ShopListAdaptor  extends RecyclerView.Adapter <ShopListAdaptor.View
         }
 
     }
+
 
 }
